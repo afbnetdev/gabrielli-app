@@ -1,8 +1,19 @@
 {
-    "name": "Gabrielli App Test NON_FUNZIONANANTE",
-    "version": "1.0.0",
-    "keywords": ["util", "functional", "server", "client", "browser"],
-    "author": "theloz",
-    "contributors": [],
-    "dependencies": {}
+  "name": "Gabrielli App Test NON_FUNZIONANANTE",
+  "version": "1.0.0",
+  "keywords": [
+    "util",
+    "functional",
+    "server",
+    "client",
+    "browser"
+  ],
+  "author": "theloz",
+  "contributors": [],
+  "dependencies": {},
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-camera": {}
+    }
+  }
 }
