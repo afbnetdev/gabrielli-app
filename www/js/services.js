@@ -398,14 +398,15 @@ function newTicket(){
 
        tktdata.description = tkttitle;
        tktdata.description_longdescription = tktdetails;
+       tktdata.reportedby = window.sessionStorage.username;
+       
        //call for new ticket service
        $$.ajax({
            headers:{
                'Authorization': 'Bearer 102-token',
                'Access-Control-Allow-Origin': '*',
             //    'Content-type': 'application/x-www-form-urlencoded',
-               'jSessionID': window.sessionStorage.jsessionid,
-               'reportedby' : window.sessionStorage.username
+               'jSessionID': window.sessionStorage.jsessionid
             },
             url :URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/manageTicket/apriTicket',
             method: 'POST',
