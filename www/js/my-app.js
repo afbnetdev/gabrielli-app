@@ -191,7 +191,7 @@ var new_tkt = myApp.onPageInit("new_tkt", function (page) {
         // console.log('filename: '+$$("#file-to-upload")[0].files[0].name);
         // console.log('filetype: '+$$("#file-to-upload")[0].files[0].type);
     });
-    $$("#btn-camera-upload").click(function () {
+    $$(".btn-camera-upload").click(function () {
         capturePhotoWithData();
     });
 
