@@ -93,13 +93,13 @@ var index = myApp.onPageInit('index', function () {
             getUserAnag();
             getUserInfo();
             
-            if(!window.sessionStorage.userProfile.includes("ammin")){
+            if(!window.sessionStorage.userProfile.includes("ammin") && !window.sessionStorage.userProfile.includes("super_doc")){
                 $$(".richiestaDocumenti").hide();
             }else{
                 $$(".richiestaDocumenti").show();
             }
             
-            if(!window.sessionStorage.userProfile.includes("sccdguests")){
+            if(!window.sessionStorage.userProfile.includes("ticket")){
                 $$(".gestioneTicket").hide();
             }else{
                 $$(".gestioneTicket").show();
