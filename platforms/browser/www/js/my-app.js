@@ -101,13 +101,13 @@ var index = myApp.onPageInit('index', function () {
             myApp.alert("User name o password errati","Login error");
         }
     });
-    if(authorizedUser && window.sessionStorage.jsessionid){
-        verifyUserProfile();
-    }
-    else{
-        getLogout();
-        return false;
-    }
+//    if(authorizedUser && window.sessionStorage.jsessionid){
+//        verifyUserProfile();
+//    }
+//    else{
+//        getLogout();
+//        return false;
+//    }
 
 }).trigger();
 
