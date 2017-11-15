@@ -28,6 +28,7 @@ var itemsPerLoad = 10;
 var lastIndexDoc = 0;
 var limitDoc = 10;
 var docTableData;
+var authorizedUser = ""
 
 var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
 var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
@@ -72,7 +73,8 @@ var index = myApp.onPageInit('index', function () {
 //        myApp.loginScreen(".login-screen", false);
 //    }
 
-
+    authorizedUser = "1";
+    
     $$("#btn-logout").click(function () {
         window.sessionStorage.clear();
         myApp.loginScreen(".login-screen", false);
@@ -92,23 +94,20 @@ var index = myApp.onPageInit('index', function () {
             getUserProfile();
             getUserAnag();
             getUserInfo();
-            
-            if(!window.sessionStorage.userProfile.includes("ammin") && !window.sessionStorage.userProfile.includes("super_doc")){
-                $$(".richiestaDocumenti").hide();
-            }else{
-                $$(".richiestaDocumenti").show();
-            }
-            
-            if(!window.sessionStorage.userProfile.includes("ticket")){
-                $$(".gestioneTicket").hide();
-            }else{
-                $$(".gestioneTicket").show();
-            }
+            verifyUserProfile();
+         
         }
         else{
             myApp.alert("User name o password errati","Login error");
         }
     });
+    if(authorizedUser && window.sessionStorage.jsessionid){
+        verifyUserProfile();
+    }
+    else{
+        getLogout();
+        return false;
+    }
 
 }).trigger();
 
