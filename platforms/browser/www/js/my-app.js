@@ -28,7 +28,7 @@ var itemsPerLoad = 10;
 var lastIndexDoc = 0;
 var limitDoc = 10;
 var docTableData;
-var authorizedUser = ""
+
 
 var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
 var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
@@ -73,7 +73,7 @@ var index = myApp.onPageInit('index', function () {
 //        myApp.loginScreen(".login-screen", false);
 //    }
 
-    authorizedUser = "1";
+
     
     $$("#btn-logout").click(function () {
         window.sessionStorage.clear();
@@ -101,13 +101,7 @@ var index = myApp.onPageInit('index', function () {
             myApp.alert("User name o password errati","Login error");
         }
     });
-//    if(authorizedUser && window.sessionStorage.jsessionid){
-//        verifyUserProfile();
-//    }
-//    else{
-//        getLogout();
-//        return false;
-//    }
+
 
 }).trigger();
 

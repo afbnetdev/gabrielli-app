@@ -3,8 +3,8 @@
 Initial setup
  ---------------------------------------*/
 
-var URL_ENDPOINT = 'http://portal.gabriellispa.it';
-//var URL_ENDPOINT = 'http://192.168.2.83:10039';
+//var URL_ENDPOINT = 'http://portal.gabriellispa.it';
+var URL_ENDPOINT = 'http://192.168.2.90:10039';
 
 //FILTER STRING
 var pageSizeFilterTickets=10;
@@ -181,10 +181,16 @@ function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
         if(!assignment){
             assignment = 'Operatore non disponibile';
         }
+        // remove __ to description
+        var desc = myList[i].description;
+        if(desc && desc.includes("__")){
+            var tmp = desc.split("__");
+            desc = tmp[0];
+        }
         url = "ticket/ticketPage.html?id=" + myList[i].ticketid;
         row$.append($$('<td data-collapsible-title="' + headers[0] + '"/>').html('<a href="'+ url +'" class="button button-fill button-raised yellow">' + myList[i].ticketid + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].externalsystem + '</a>'));
-        row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].description + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + desc + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[3] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].status + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[4] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].reportedby + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[5] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + assignment + '</a>'));
@@ -267,22 +273,25 @@ function populateTicketPageDetails(ticket){
       if(!assignment){
           assignment = 'Operatore non disponibile';
       }
-      
+        var desc = ticket.description ? ticket.description.replace(/<(?:.|\n)*?>/gm, '') : "Non disponibile";
+        if(desc && desc.includes("__")){
+            var tmp = desc.split("__");
+            desc = tmp[0];
+        }
+    
     $$(".hrefTicketId").val(ticket.href);
-    $$(".textAreaRichiestaTkt").val(ticket.description ? ticket.description.replace(/<(?:.|\n)*?>/gm, '') : "Non disponibile");
+    $$(".textAreaRichiestaTkt").val(desc);
     $$(".textAreaDettagliTkt").val(ticket.description_longdescription ? ticket.description_longdescription.replace(/<(?:.|\n)*?>/gm, '') : "Dettaglio ticket non disponibile");
     $$(".statusTkt input").val(ticket.status ? ticket.status : "Status non disponibile");
     $$(".operatoreTkt input").val(assignment);
     $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription.replace(/<(?:.|\n)*?>/gm, '')  : "Dettaglio risoluzione non disponibile");
     
+    if((ticket.val1 || ticket.val2 || ticket.cordialita) && ticket.status == 'RESOLVED'){
+        $$(".valutazioneTkt").hide();
+        myApp.alert("Ticket già valutato");
 
-    /*  
-     * ---------IMPORTANTE--------
-     * 
-     *  togliere il "&& false" dall'if usato in fase di TEST
-     * 
-     * ---------IMPORTANTE--------
-     */
+    }
+
     if(ticket.status !== 'RESOLVED' && ticket.status !== 'CLOSED'){
         $$(".soluzioneTicket").hide();
     }
@@ -312,12 +321,12 @@ function prepareEval(){
 function blockAfterEval(){
 
         $$(".valutazioneTkt input").attr({
-            "disabled" : true,
-            "readonly" : true
+            'disabled': true,
+            'readonly': true
         });
         $$(".notaValutazione textarea").attr({
-          "disabled" : true,
-          "readonly" : true
+          'disabled': true,
+          'readonly': true
         });
         $$("#btn-valuta-ticket").hide();
 }
