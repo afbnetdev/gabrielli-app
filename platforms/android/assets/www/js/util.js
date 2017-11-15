@@ -182,12 +182,12 @@ function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
             assignment = 'Operatore non disponibile';
         }
         // remove __ to description
-        var desc = myList[i].description;
+        var descTmpTable = myList[i].description;
 
         url = "ticket/ticketPage.html?id=" + myList[i].ticketid;
         row$.append($$('<td data-collapsible-title="' + headers[0] + '"/>').html('<a href="'+ url +'" class="button button-fill button-raised yellow">' + myList[i].ticketid + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].externalsystem + '</a>'));
-        row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + desc + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + descTmpTable + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[3] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].status + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[4] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].reportedby + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[5] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + assignment + '</a>'));
@@ -270,11 +270,11 @@ function populateTicketPageDetails(ticket){
       if(!assignment){
           assignment = 'Operatore non disponibile';
       }
-        var desc = ticket.description ? ticket.description.replace(/<(?:.|\n)*?>/gm, '') : "Non disponibile";
+        var descTmp = ticket.description ? ticket.description.replace(/<(?:.|\n)*?>/gm, '') : "Non disponibile";
 
     
     $$(".hrefTicketId").val(ticket.href);
-    $$(".textAreaRichiestaTkt").val(desc);
+    $$(".textAreaRichiestaTkt").val(descTmp);
     $$(".textAreaDettagliTkt").val(ticket.description_longdescription ? ticket.description_longdescription.replace(/<(?:.|\n)*?>/gm, '') : "Dettaglio ticket non disponibile");
     $$(".statusTkt input").val(ticket.status ? ticket.status : "Status non disponibile");
     $$(".operatoreTkt input").val(assignment);
