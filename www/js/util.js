@@ -183,10 +183,7 @@ function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
         }
         // remove __ to description
         var desc = myList[i].description;
-        if(desc && desc.includes("__")){
-            var tmp = desc.split("__");
-            desc = tmp[0];
-        }
+
         url = "ticket/ticketPage.html?id=" + myList[i].ticketid;
         row$.append($$('<td data-collapsible-title="' + headers[0] + '"/>').html('<a href="'+ url +'" class="button button-fill button-raised yellow">' + myList[i].ticketid + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].externalsystem + '</a>'));
@@ -274,10 +271,7 @@ function populateTicketPageDetails(ticket){
           assignment = 'Operatore non disponibile';
       }
         var desc = ticket.description ? ticket.description.replace(/<(?:.|\n)*?>/gm, '') : "Non disponibile";
-        if(desc && desc.includes("__")){
-            var tmp = desc.split("__");
-            desc = tmp[0];
-        }
+
     
     $$(".hrefTicketId").val(ticket.href);
     $$(".textAreaRichiestaTkt").val(desc);
