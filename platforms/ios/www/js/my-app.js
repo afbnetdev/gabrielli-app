@@ -30,6 +30,7 @@ var limitDoc = 10;
 var docTableData;
 
 
+
 var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
 var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 
@@ -64,14 +65,14 @@ myApp.onPageInit("*", function () {
 
 //INDEX
 var index = myApp.onPageInit('index', function () {
-//    //In caso di refresh  elimina fa auto-login
-//    if (typeof window.sessionStorage.authorized !== 'undefined' &&
-//            window.sessionStorage.authorized !== null &&
-//            window.sessionStorage.authorized !== "") {
-//        myApp.closeModal(".login-screen", false);
-//    } else {
-//        myApp.loginScreen(".login-screen", false);
-//    }
+    
+    if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
+            window.sessionStorage.jsessionid !== null &&
+            window.sessionStorage.jsessionid !== "") {
+       verifyUserProfile();
+    } else {
+        myApp.loginScreen(".login-screen", false);
+    }
 
 
     
@@ -95,7 +96,6 @@ var index = myApp.onPageInit('index', function () {
             getUserAnag();
             getUserInfo();
             verifyUserProfile();
-         
         }
         else{
             myApp.alert("User name o password errati","Login error");
