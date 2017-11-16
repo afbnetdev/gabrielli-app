@@ -189,7 +189,7 @@ function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
         }
         url = "ticket/ticketPage.html?id=" + myList[i].ticketid;
         row$.append($$('<td data-collapsible-title="' + headers[0] + '"/>').html('<a href="'+ url +'" class="button button-fill button-raised yellow">' + myList[i].ticketid + '</a>'));
-        row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].externalsystem + '</a>'));
+//        row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].externalsystem + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + desc + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[3] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].status + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[4] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].reportedby + '</a>'));
@@ -287,6 +287,7 @@ function populateTicketPageDetails(ticket){
     $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription.replace(/<(?:.|\n)*?>/gm, '')  : "Dettaglio risoluzione non disponibile");
     
     if((ticket.val1 || ticket.val2 || ticket.cordialita) && ticket.status == 'RESOLVED'){
+        $$("#btn-valuta-ticket").hide();
         $$(".valutazioneTkt").hide();
         myApp.alert("Ticket già valutato");
 
