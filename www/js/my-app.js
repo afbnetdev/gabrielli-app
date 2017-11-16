@@ -141,7 +141,7 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     if(!myList){
         return;
     }
-    maxItems = myList.member.length;
+    maxItems = myList.responseInfo.totalCount;
       if (lastIndexDoc < maxItems) {
             $$('.infinite-scroll-preloader').removeClass('nodisplay');
         } else {
