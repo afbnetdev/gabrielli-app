@@ -7,7 +7,7 @@ var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 //var URL_ENDPOINT = 'http://192.168.2.90:10039';
 
 //FILTER STRING
-var pageSizeFilterTickets=10;
+var pageSizeFilterTickets=20;
 var orderByFilterTickets="+changedate";
 /*---------------------------------------
  Table Construction
@@ -197,6 +197,7 @@ function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
         row$.append($$('<td data-collapsible-title="' + headers[6] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + formatDateFromTimeStampToItalian(myList[i].creationdate) + '</a>'));
         $$(".data-table > table > tbody").append(row$);
     }
+    filteredList = undefined;
 }
 
 function searchDocWithFilters(docAmountFrom, docAmountTo, dateFrom, dateTo, docContains, limit, lastIndexDoc) {

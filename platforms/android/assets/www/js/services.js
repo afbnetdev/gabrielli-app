@@ -388,10 +388,12 @@ function newTicket(){
        var tktdata = {};
 
        if(!tktnewtitle){
+           myApp.hidePreloader();
            myApp.alert('Il titolo è obbligatorio');
            return false;
        }
        if(!tktdetails){
+           myApp.hidePreloader();
            myApp.alert('La descrizione è obbligatoria');
            return false;
        }
