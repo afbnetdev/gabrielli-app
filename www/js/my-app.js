@@ -188,7 +188,7 @@ var new_tkt = myApp.onPageInit("new_tkt", function (page) {
         // alert($$(this).val());
         $$('#file-label').html( $$(this).val().replace(/C:\\fakepath\\/i, '') );
         // console.log('filename: '+$$("#file-to-upload")[0].files[0].name);
-        // console.log('filetype: '+$$("#file-to-upload")[0].files[0].type);
+        // console.log('filetype:  '+$$("#file-to-upload")[0].files[0].type);
     });
     $$(".btn-camera-upload").click(function () {
         capturePhotoWithData();
