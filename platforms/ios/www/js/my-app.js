@@ -88,10 +88,9 @@ var index = myApp.onPageInit('index', function () {
         chkLogin = validateUser(formLogin.username, formLogin.password);
 
         if(chkLogin){
-            mainView.router.reloadPage("index.html");
             window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
-            myApp.alert("Benvenuto " + window.sessionStorage.username, 'Login effettuato');
+            $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
             myApp.closeModal(".login-screen", false);
             getUserProfile();
             getUserAnag();
@@ -102,6 +101,7 @@ var index = myApp.onPageInit('index', function () {
             myApp.alert("User name o password errati","Login error");
         }
     });
+
 
 }).trigger();
 
