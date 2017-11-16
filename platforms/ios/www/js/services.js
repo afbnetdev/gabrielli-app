@@ -399,7 +399,7 @@ function newTicket(){
        tktdata.description = tkttitle;
        tktdata.description_longdescription = tktdetails;
        tktdata.reportedby = window.sessionStorage.username;
-       
+       tktdata.typestart = "APP";
        //call for new ticket service
        $$.ajax({
            headers:{

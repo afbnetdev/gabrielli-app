@@ -88,9 +88,10 @@ var index = myApp.onPageInit('index', function () {
         chkLogin = validateUser(formLogin.username, formLogin.password);
 
         if(chkLogin){
+            mainView.router.reloadPage("index.html");
             window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
-            $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
+            myApp.alert("Benvenuto " + window.sessionStorage.username, 'Login effettuato');
             myApp.closeModal(".login-screen", false);
             getUserProfile();
             getUserAnag();
@@ -101,7 +102,6 @@ var index = myApp.onPageInit('index', function () {
             myApp.alert("User name o password errati","Login error");
         }
     });
-
 
 }).trigger();
 
@@ -142,6 +142,12 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
         return;
     }
     maxItems = myList.member.length;
+      if (lastIndexDoc < maxItems) {
+            $$('.infinite-scroll-preloader').removeClass('nodisplay');
+        } else {
+            $$('.infinite-scroll-preloader').addClass('nodisplay');
+            return;
+        }
     var cols = ["ticketid", "externalsystem", "description", "status", "reportedby", "affectedperson", "creationdate"];
     var heads = ["ID Ticket", "Tipo segnalazione", "Descrizione", "Stato", "Aperto Da", "Assegnato A", "Data creazione"];
 
