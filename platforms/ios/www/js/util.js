@@ -225,7 +225,7 @@ function toFilterTickets(dateFrom, dateTo, status, desc){
        descIfExist  = 'and description="%'+desc+'%"';
     }
 
-    var stringFilters = 'oslc.pageSize='+pageSizeFilterTickets+'&oslc.orderBy='+orderByFilterTickets+'&oslc.select=*&oslc.where=reportedby="'+window.sessionStorage.username+'" and changedate>="'+dateFrom+'" and changedate<="'+dateTo+'" and status="'+status+'"'+descIfExist;
+    var stringFilters = 'oslc.pageSize='+pageSizeFilterTickets+'&oslc.orderBy='+orderByFilterTickets+'&oslc.select=*&oslc.where=reportedby="'+window.sessionStorage.username+'" and creationdate>="'+dateFrom+'" and creationdate<="'+dateTo+'" and status="'+status+'"'+descIfExist;
     
     return stringFilters;
 }
