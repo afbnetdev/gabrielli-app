@@ -2,6 +2,8 @@
 var myApp = new Framework7({
     template7Pages: true,
     material: true,
+    uniqueHistory : true,
+    
     preroute: function (view, options) {
         if (!window.sessionStorage.jsessionid) {
             getLogout();
