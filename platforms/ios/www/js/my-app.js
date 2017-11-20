@@ -149,7 +149,7 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
           $$('.infinite-scroll-preloader').addClass('nodisplay');
           return;
       }
-    if(maxItems < limitDoc){
+    if(maxItems <= limitDoc){
         $$('.infinite-scroll-preloader').addClass('nodisplay');
     }
     var cols = ["ticketid", "description", "status", "reportedby", "affectedperson", "creationdate"];
