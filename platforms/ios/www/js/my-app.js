@@ -3,7 +3,6 @@ var myApp = new Framework7({
     template7Pages: true,
     material: true,
     uniqueHistory : true,
-    
     preroute: function (view, options) {
         if (!window.sessionStorage.jsessionid) {
             getLogout();
@@ -64,26 +63,11 @@ myApp.onPageInit("*", function () {
 /*---------------------------------------
  On EACH page
  ---------------------------------------*/
-
-//INDEX
-var index = myApp.onPageInit('index', function () {
-    
-    if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
-            window.sessionStorage.jsessionid !== null &&
-            window.sessionStorage.jsessionid !== "") {
-       verifyUserProfile();
-    } else {
-        myApp.loginScreen(".login-screen", false);
-    }
-
-
-    
-    $$("#btn-logout").click(function () {
+ $$("#btn-logout").click(function () {
         window.sessionStorage.clear();
         myApp.loginScreen(".login-screen", false);
     });
     $$("#btn-login").click(function () {
-
         var formLogin = myApp.formGetData('frm-login');
         //Get Form Login
         var chkLogin;
@@ -98,11 +82,26 @@ var index = myApp.onPageInit('index', function () {
             getUserAnag();
             getUserInfo();
             verifyUserProfile();
+            mainView.router.loadPage({
+                force : true,
+                ignoreCache : true,
+                url :"index.html"
+            });
         }
         else{
             myApp.alert("User name o password errati","Login error");
         }
     });
+//INDEX
+var index = myApp.onPageInit('index', function () {
+    
+    if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
+            window.sessionStorage.jsessionid !== null &&
+            window.sessionStorage.jsessionid !== "") {
+       verifyUserProfile();
+    } else {
+        myApp.loginScreen(".login-screen", false);
+    }
 
 
 }).trigger();
@@ -150,8 +149,8 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
             $$('.infinite-scroll-preloader').addClass('nodisplay');
             return;
         }
-    var cols = ["ticketid", "externalsystem", "description", "status", "reportedby", "affectedperson", "creationdate"];
-    var heads = ["ID Ticket", "Tipo segnalazione", "Descrizione", "Stato", "Aperto Da", "Assegnato A", "Data creazione"];
+    var cols = ["ticketid", "description", "status", "reportedby", "affectedperson", "creationdate"];
+    var heads = ["ID Ticket", "Descrizione", "Stato", "Aperto Da", "Assegnato A", "Data creazione"];
 
     buildTicketTable(myList.member, cols, heads, limitDoc, lastIndexDoc);
     lastIndexDoc = lastIndexDoc + limitDoc;
