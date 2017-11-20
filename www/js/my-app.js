@@ -144,11 +144,14 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     }
     maxItems = myList.responseInfo.totalCount;
       if (lastIndexDoc < maxItems) {
-            $$('.infinite-scroll-preloader').removeClass('nodisplay');
-        } else {
-            $$('.infinite-scroll-preloader').addClass('nodisplay');
-            return;
-        }
+          $$('.infinite-scroll-preloader').removeClass('nodisplay');
+      } else {
+          $$('.infinite-scroll-preloader').addClass('nodisplay');
+          return;
+      }
+    if(maxItems < limitDoc){
+        $$('.infinite-scroll-preloader').addClass('nodisplay');
+    }
     var cols = ["ticketid", "description", "status", "reportedby", "affectedperson", "creationdate"];
     var heads = ["ID Ticket", "Descrizione", "Stato", "Aperto Da", "Assegnato A", "Data creazione"];
 
