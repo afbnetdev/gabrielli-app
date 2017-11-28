@@ -4,7 +4,7 @@ Initial setup
  ---------------------------------------*/
 
 var URL_ENDPOINT = 'http://portal.gabriellispa.it';
-//var URL_ENDPOINT = 'http://192.168.2.90:10039';
+//var URL_ENDPOINT = 'http://192.168.2.90:9080';
 
 //FILTER STRING
 var pageSizeFilterTickets=20;
@@ -119,23 +119,24 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
         var row$ = $$('<tr/>');
         //DA MODIFICARE L'EMAIL DELLA RISPOSTA CON I VALORI EFFETTIVAMENTE RESTITUITI DAL JSON 
         // PER REVERT SOSTITUIRE EX filterMyList[i].NumeroDocumento CON filterMyList[i].docNumber ECC...
-        var cellValue = {'docNumber': filterMyList[i].NumeroDocumento, 'docTitle': filterMyList[i].Title, 'docDate': filterMyList[i].DataDocumento, 'docLinkEmail': filterMyList[i].doclink, 'docPdf_Key_Doc_RISFA': filterMyList[i].KEY_DOC,'docPdf_LinkUrl_SHARE_POINT': filterMyList[i].LinkUrl}
+        var cellValue = {'docNumber': filterMyList[i].NumeroDocumento, 'docTitle': filterMyList[i].Title, 'docDate': filterMyList[i].DataDocumento, 'docImporto': filterMyList[i].Importo, 'docLinkEmail': filterMyList[i].doclink, 'docPdf_Key_Doc_RISFA': filterMyList[i].KEY_DOC,'docPdf_LinkUrl_SHARE_POINT': filterMyList[i].LinkUrl}
         row$.append($$('<td data-collapsible-title="' + columns[0] + '"/>').html('<a href="#" class="doc-info_number">' + cellValue.docNumber + '</a>'));
         row$.append($$('<td data-collapsible-title="' + columns[1] + '"/>').html('<a href="#" class="doc-info_title">' + cellValue.docTitle + '</a>'));
         row$.append($$('<td data-collapsible-title="' + columns[2] + '"/>').html('<a href="#" class="doc-info_date">' + formatDateFromTimeStampToItalian(cellValue.docDate) + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + columns[3] + '"/>').html('<a href="#" class="doc-info_importo"> &#8364; ' + formatAmountToFloat(cellValue.docImporto) + '</a>'));
         //valorizzo il link del pdf in modo da distinguere risfa e sharepoint
         var urlToOpenPdf="";
 
         if(cellValue.docPdf_Key_Doc_RISFA){
             urlToOpenPdf = URL_ENDPOINT+"/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&KeyDoc_RF="+cellValue.docPdf_Key_Doc_RISFA;         
-            row$.append($$('<td data-collapsible-title="' + columns[3] + '"/>').html('<a href="#" class="doc-info_email" data-KeyDoc_RF="' +cellValue.docPdf_Key_Doc_RISFA+ '" data-doc_title="' + cellValue.docTitle + '" data-LinkUrlDocumento_SP=""><i class="f7-icons">email</i></a>'));
+            row$.append($$('<td data-collapsible-title="' + columns[4] + '"/>').html('<a href="#" class="doc-info_email" data-KeyDoc_RF="' +cellValue.docPdf_Key_Doc_RISFA+ '" data-doc_title="' + cellValue.docTitle + '" data-LinkUrlDocumento_SP=""><i class="f7-icons">email</i></a>'));
         }else if(cellValue.docPdf_LinkUrl_SHARE_POINT){
             urlToOpenPdf = URL_ENDPOINT+"/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&LinkUrlDocumento_SP="+cellValue.docPdf_LinkUrl_SHARE_POINT;            
-            row$.append($$('<td data-collapsible-title="' + columns[3] + '"/>').html('<a href="#" class="doc-info_email" data-KeyDoc_RF="" data-doc_title="' + cellValue.docTitle + '" data-LinkUrlDocumento_SP="'+cellValue.docPdf_LinkUrl_SHARE_POINT+'"><i class="f7-icons">email</i></a>'));
+            row$.append($$('<td data-collapsible-title="' + columns[4] + '"/>').html('<a href="#" class="doc-info_email" data-KeyDoc_RF="" data-doc_title="' + cellValue.docTitle + '" data-LinkUrlDocumento_SP="'+cellValue.docPdf_LinkUrl_SHARE_POINT+'"><i class="f7-icons">email</i></a>'));
         }
         
      
-        row$.append($$('<td data-collapsible-title="' + columns[4] + '"/>').html('<a href="#" class="doc-info_pdf" data-linkpdf="' + urlToOpenPdf + '"><i class="f7-icons">document_text_fill</i></a>'));
+        row$.append($$('<td data-collapsible-title="' + columns[5] + '"/>').html('<a href="#" class="doc-info_pdf" data-linkpdf="' + urlToOpenPdf + '"><i class="f7-icons">document_text_fill</i></a>'));
         $$(".data-table > table > tbody").append(row$);
     }
         $$('.doc-info_pdf').on('click', function (e) {
@@ -200,15 +201,20 @@ function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
     filteredList = undefined;
 }
 
-function searchDocWithFilters(docAmountFrom, docAmountTo, dateFrom, dateTo, docContains, limit, lastIndexDoc) {
+function searchDocWithFilters(docAmountFrom, docAmountTo, dateFrom, dateTo, docContains, docType, limit, lastIndexDoc) {
 
-    docTableData = getDocumentList(docAmountFrom,docAmountTo, dateFrom, dateTo, docContains);
+    docTableData = getDocumentList(docAmountFrom,docAmountTo, dateFrom, dateTo, docContains, docType);
+    // DOC in ordine desc
+    docTableData.sort(function(a,b) {
+        return new Date(b.DataDocumento).getTime() - new Date(a.DataDocumento).getTime() ; 
+    });
     if(docTableData){
         var documentCount = docTableData.length;
-        buildDocumentTable(docTableData, ['Numero', 'Nome', 'Data', 'E-mail', 'PDF'], limit, lastIndexDoc);
+        buildDocumentTable(docTableData, ['Numero', 'Tipo Documento', 'Data','Importo', 'E-mail', 'PDF'], limit, lastIndexDoc);
         if(documentCount || documentCount === 0){
             $$('.docCount').text(documentCount);
             $$('.documentSearchCount').show();
+            $('.page-content').animate({scrollTop: 330}, 500);
         }
     }else{
        return;
@@ -356,4 +362,13 @@ function verifyUserProfile(){
         }else{
             $$(".gestioneTicket").show();
         }
+}
+
+function formatAmountToFloat(amount){
+    var amountFixed2 = "Non Disponibile";
+    var tmp = parseFloat(amount);
+    if(tmp){
+        amountFixed2 = tmp.toFixed(2);
+    }
+    return amountFixed2;
 }

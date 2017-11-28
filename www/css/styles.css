@@ -66,7 +66,7 @@
     font-size: 18px;
     text-align: center;
 }
-.datePickerFrom, .datePickerTo, .searchForNumberFrom, .searchForNumberTo, .docContains, .docAmountFrom, .docAmountTo{
+.datePickerFrom, .datePickerTo, .searchForNumberFrom, .searchForNumberTo, .docContains, .docAmountFrom, .docAmountTo, .docAmountFromDecimal, .docAmountToDecimal, .docType{
     height: 20px;
     margin-bottom: 20px;
     border: none;
@@ -104,7 +104,7 @@
     visibility: hidden;
 }
 .backToTop{
-       background: #ffc107!important;
+       background: #f44336 !important;
 }
 .buttonsFilter{
     margin-top: 50px;
@@ -178,6 +178,27 @@ a.button.button-fill.button-raised.yellow{
     background-color: #ffc107!important;
     color: #fff;
     font-size: 17px;
+}
+.amountSeparator{
+    font-size: 25px;
+    top: 8px;
+    position: relative;
+}
+
+.docAmountFrom, .docAmountTo{
+    width: 125px;
+    margin-bottom: 10px;
+}
+.docAmountFromDecimal, .docAmountToDecimal{
+    width: 18px;
+    margin-bottom: 10px;
+}
+.containerAmount{
+    position: relative;
+    top: -10px;
+}
+.searchForTextContainer{
+    margin-bottom: 30px;
 }
 
 @media (max-width: 480px) and (orientation: portrait) {
