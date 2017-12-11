@@ -200,7 +200,16 @@ a.button.button-fill.button-raised.yellow{
 .searchForTextContainer{
     margin-bottom: 30px;
 }
+.info.row, .puntiVenditaIspezione.row, .presentiIspezione.row, .commentiIspezione, .tipoIspezione{
+    margin-bottom: 20PX;
+}
+.nuovaIspezioneh3{
+    text-align: center;
+}
 
+.bold{
+    font-weight: bold;
+}
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{
         padding-top: 5px;

@@ -555,3 +555,105 @@ function getLogout(){
         myApp.loginScreen(".login-screen", false);
     });
 }
+function sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita){
+     var obj = new Object();
+     obj.commenti = commenti;
+     obj.controllore = controllore;
+     obj.dataIspezione= dataIspezione;
+     obj.presenti=presenti;
+     //sempre in status bozza al salvataggio dell'header
+     obj.status="B";
+     obj.tipoEvento= {idTipoEvento: tipoEvento};
+     obj.puntoVendita = { idPdv: puntoVendita};
+     var evaluation= JSON.stringify(obj);
+    $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/create',
+        method: 'POST',
+        data: evaluation,
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            var ispezioneCreata = JSON.parse(data);
+            populateInfoIspezione(ispezioneCreata);
+            getControlliFromIdEvento(ispezioneCreata.tipoEvento.idTipoEvento);
+        },
+        error: function (data, status, xhr) {
+            myApp.hidePreloader();
+            myApp.alert("Errore nel salvataggio dell'ispezione");
+        }
+    });
+}
+function getTipiEvento(){
+    $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/tipiEvento',
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            window.sessionStorage.setObj("tipiEvento",data);
+            myApp.hidePreloader();
+        },
+        error: function (data, status, xhr) {
+            myApp.hidePreloader();
+            myApp.alert('Reperimento eventi fallito');
+        }
+    });
+}
+function getPuntiVendita(){
+    $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/puntiVendita',
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            window.sessionStorage.setObj("puntiVendita",data);
+            myApp.hidePreloader();
+        },
+        error: function (data, status, xhr) {
+            myApp.hidePreloader();
+            myApp.alert('Reperimento punti vendita fallito');
+        }
+    });
+}
+
+
+function getControlliFromIdEvento(idTipoEvento){
+        $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/tipiEventoControlli?idTipoEvento='+idTipoEvento,
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            populateControlli(JSON.parse(data));
+            myApp.hidePreloader();
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Reperimento controlli fallito');
+            myApp.hidePreloader();
+        }
+    });
+}

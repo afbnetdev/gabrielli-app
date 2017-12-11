@@ -3,9 +3,18 @@
 Initial setup
  ---------------------------------------*/
 
-var URL_ENDPOINT = 'https://portal.gabriellispa.it';
+var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 //var URL_ENDPOINT = 'http://192.168.2.90:9080';
 var TEST_URL = 'http://192.168.81.215:9080';
+
+//Funzione per settare un obj nel sessionStorage
+
+Storage.prototype.setObj = function(key, obj) {
+    return this.setItem(key, JSON.stringify(obj))
+}
+Storage.prototype.getObj = function(key) {
+    return JSON.parse(this.getItem(key))
+}
 
 //FILTER STRING
 var pageSizeFilterTickets=20;
@@ -256,6 +265,14 @@ function formatDateFromTimeStampToItalian(timeStamp) {
     }
     return finalDate;
 }
+function formatDateFromTimeStampToUSA(timeStamp) {
+    var finalDate = 'Data non disponibile';
+    if (timeStamp && timeStamp !== 'null') {
+        var d= new Date(timeStamp);
+        finalDate = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+    }
+    return finalDate;
+}
 
 function dataURItoBlob(dataURI) {
     // convert base64 to raw binary data held in a string
@@ -372,4 +389,50 @@ function formatAmountToFloat(amount){
         amountFixed2 = tmp.toFixed(2);
     }
     return amountFixed2;
+}
+
+function populatePuntiVendita(){
+    var jsonPuntiVendita = JSON.parse(window.sessionStorage.getObj("puntiVendita"));
+    $.each(jsonPuntiVendita, function (i, pv) {
+    $('.puntiVenditaIspezioneSelect').append($('<option>', { 
+        value: pv.idPdv,
+        text : pv.codicePdv+" - "+pv.descrizione
+    }));
+});
+    
+}
+function populateTipiEvento(){
+    var jsonTipiEvento = JSON.parse(window.sessionStorage.getObj("tipiEvento"));
+    $.each(jsonTipiEvento, function (i, te) {
+    $('.tipoIspezioneSelect').append($('<option>', { 
+        value: te.idTipoEvento,
+        text : te.descrizione
+    }));
+});
+}
+
+function prepareSubmitIspezioneHeader(){
+    
+    var commenti = $$(".commentiIspezioneText").val() ? $$(".commentiIspezioneText").val() : 'Nessun Commento';
+    var controllore = window.sessionStorage.username;
+    var dataIspezione = formatDateFromTimeStampToUSA(new Date().getTime());
+    var presenti = $$(".presentiIspezioneText").val() ? $$(".presentiIspezioneText").val() : 'Non specificato';
+    var tipoEvento = parseInt($$(".tipoIspezioneSelect").val());
+    var puntoVendita = parseInt($$(".puntiVenditaIspezioneSelect").val());
+    
+    sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita);
+}
+
+function populateInfoIspezione(info){
+    $$(".submitIspezioneHeader").addClass("displaynone");
+    $$(".info.row").removeClass("displaynone");
+    $$(".idIspezione").text(info.idIspezione);
+    $$(".userIspezione").text(info.controllore);
+    $$(".dataIspezione").text(formatDateFromTimeStampToItalian(info.dataIspezione));
+}
+function populateControlli(controlliObj){
+    // ordino per sequenza 
+    var controlliObjSort = controlliObj.sort(function(a,b) {
+        return a.seq - b.seq ; 
+    });
 }

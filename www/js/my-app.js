@@ -2,6 +2,7 @@
 var myApp = new Framework7({
     template7Pages: true,
     material: true,
+    smartSelectSearchbar:true,
     uniqueHistory : true,
     preroute: function (view, options) {
         if (!window.sessionStorage.jsessionid) {
@@ -356,6 +357,31 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
 
 
 });
+//NEW TICKET
+var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
+    
+   $$(".submitIspezioneHeader").removeClass("displaynone");
+   $$(".info.row").addClass("displaynone");
+   
+    if(!window.sessionStorage.getObj("puntiVendita")){
+       getPuntiVendita();
+   }
+   if(!window.sessionStorage.getObj("tipiEvento")){
+       getTipiEvento();
+   }
+   
+   populatePuntiVendita();
+   populateTipiEvento();
 
+   $$('.submitIspezioneHeader').on('click', function () {
+        if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val()){
+            myApp.alert("Selezionare il tipo evento e il punto vendita");
+            return;
+        }
+        myApp.showPreloader();
+        setTimeout(function () { prepareSubmitIspezioneHeader();}, 1000);     
+   });
+
+});
 
 
