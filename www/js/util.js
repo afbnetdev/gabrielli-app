@@ -431,8 +431,35 @@ function populateInfoIspezione(info){
     $$(".dataIspezione").text(formatDateFromTimeStampToItalian(info.dataIspezione));
 }
 function populateControlli(controlliObj){
+    $$(".ispezioneDomini").removeClass("displaynone");
     // ordino per sequenza 
     var controlliObjSort = controlliObj.sort(function(a,b) {
         return a.seq - b.seq ; 
     });
+    
+    
+
+    var myListControlli = myApp.virtualList('.list-block.virtual-list.ispezioneList', {
+    // Array with items data
+    items: controlliObjSort ,
+    height:98,
+    // Template 7 template to render each item
+    template: '<li>' +
+                  '<div class="item-content">' +
+                  '<div class="item-inner-row">' +
+                      '<div class="item-title-row">' +
+                        '<div class="item-subtitle">{{controllo.ambito.descrizione}}</div>' +
+                      '</div>' +
+                      '<div class="item-title">{{controllo.descrizione}}</div>' +
+                      '<input type="text" name="commenti" placeholder="Inserisci commento">' +
+                  '</div>' +
+                  '<div class="item-input-row">' +
+                  '<select name=""><option value="">Esito</option><option value="C">Conforme</option><option value="N">Non conforme</option></select>' +    
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+               '</li>'
+});            
+    
+           
 }
