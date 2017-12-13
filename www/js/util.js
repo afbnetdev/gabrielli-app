@@ -419,7 +419,7 @@ function prepareSubmitIspezioneHeader(){
     var presenti = $$(".presentiIspezioneText").val() ? $$(".presentiIspezioneText").val() : 'Non specificato';
     var tipoEvento = parseInt($$(".tipoIspezioneSelect").val());
     var puntoVendita = parseInt($$(".puntiVenditaIspezioneSelect").val());
-    
+   
     sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita);
 }
 
@@ -429,9 +429,21 @@ function populateInfoIspezione(info){
     $$(".idIspezione").text(info.idIspezione);
     $$(".userIspezione").text(info.controllore);
     $$(".dataIspezione").text(formatDateFromTimeStampToItalian(info.dataIspezione));
+    
+    // RENDO DISABLED LA SELECT PUNTO VENDITA E IL TIPO EVENTO
+    $$(".puntiVenditaIspezione select").attr({
+            'disabled': true,
+            'readonly': true
+    });
+      $$(".tipoIspezione select").attr({
+            'disabled': true,
+            'readonly': true
+    });
+    
 }
 function populateControlli(controlliObj){
-    $$(".ispezioneDomini").removeClass("displaynone");
+
+    $$(".submitIspezioneDettaglio").removeClass("displaynone");
     // ordino per sequenza 
     var controlliObjSort = controlliObj.sort(function(a,b) {
         return a.seq - b.seq ; 
@@ -444,8 +456,7 @@ function populateControlli(controlliObj){
     items: controlliObjSort ,
     height:98,
     // Template 7 template to render each item
-    template: '<li>' +
-                  '<div class="item-content">' +
+    template: '<li class="item-content">' +
                   '<div class="item-inner-row">' +
                       '<div class="item-title-row">' +
                         '<div class="item-subtitle">{{controllo.ambito.descrizione}}</div>' +
@@ -454,12 +465,34 @@ function populateControlli(controlliObj){
                       '<input type="text" name="commenti" placeholder="Inserisci commento">' +
                   '</div>' +
                   '<div class="item-input-row">' +
-                  '<select name=""><option value="">Esito</option><option value="C">Conforme</option><option value="N">Non conforme</option></select>' +    
+                  '<select data-idControllo="{{controllo.idControllo}}" class="controlloIsp"><option value="">Esito</option><option value="C">Conforme</option><option value="N">Non conforme</option></select>' +    
                       '</div>' +
                     '</div>' +
-                  '</div>' +
                '</li>'
-});            
-    
-           
+    });                       
+}
+
+function prepareSubmitIspezioneDettaglio(){
+    var idIspezione = $$(".idIspezione").text();
+    var arrayJson = [];
+    if($$(".controlloIsp").val()){
+          $$(".controlloIsp").each(function (index){
+            var obj = new Object();
+            obj.ispezione = {idIspezione: idIspezione};
+            obj.controllo = {idControllo: $$(this).data("idControllo")};
+            obj.esito = $$(this).val();
+            obj.commento = "COOMMENTI";
+            arrayJson.push(obj);
+        });
+    }else{
+        myApp.alert("Valuta tutti i controlli");
+    }
+      var commenti = $$(".commentiIspezioneText").val() ? $$(".commentiIspezioneText").val() : 'Nessun Commento';
+    var controllore = window.sessionStorage.username;
+    var dataIspezione = formatDateFromTimeStampToUSA(new Date().getTime());
+    var presenti = $$(".presentiIspezioneText").val() ? $$(".presentiIspezioneText").val() : 'Non specificato';
+    var tipoEvento = parseInt($$(".tipoIspezioneSelect").val());
+    var puntoVendita = parseInt($$(".puntiVenditaIspezioneSelect").val());
+    submitIspezioneDettaglio(arrayJson, commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita);
+
 }

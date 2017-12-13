@@ -13,16 +13,25 @@
                 <div class="puntiVenditaIspezione row">
                     <div class="col-40">
                          <span>Punto vendita</span>
+                         <i class="f7-icons iconCalendar">home</i>
                     </div>
                     <div class="col-60">
-                            <select class="puntiVenditaIspezioneSelect">
-                                <option value="">Seleziona punto vendita</option>
+                         <a href = "#" data-searchbar = "true" data-searchbar-placeholder = "Ricerca Punti Vendita" class = "item-link smart-select">
+                            <select name="books" class="puntiVenditaIspezioneSelect">
+                                
                             </select>
+                             <div class = "item-content">
+                                    <div class = "item-inner">
+                                       <div class = "item-title">Seleziona punto vendita</div>
+                                    </div>
+                                 </div>
+                         </a>
                     </div>
                  </div>
                 <div class="presentiIspezione row">
                      <div class="col-40">
                          <span>Presenti</span>
+                         <i class="f7-icons iconCalendar">persons</i>
                     </div>
                     <div class="col-60">
                         <textarea class="presentiIspezioneText"></textarea>
@@ -31,6 +40,7 @@
                 <div class="commentiIspezione row">
                      <div class="col-40">
                          <span>Commenti</span>
+                         <i class="f7-icons iconCalendar">keyboard</i>
                     </div>
                     <div class="col-60">
                         <textarea class="commentiIspezioneText"></textarea>
@@ -39,52 +49,28 @@
                   <div class="tipoIspezione row">
                     <div class="col-40">
                          <span>Tipo evento</span>
+                         <i class="f7-icons iconCalendar">ticket</i>
                     </div>
                     <div class="col-60">
+                        <a href = "#" data-searchbar = "true" data-searchbar-placeholder = "Ricerca Punti Vendita" class = "item-link smart-select">
                             <select class="tipoIspezioneSelect">
-                                <option value="">Seleziona il tipo evento</option>
+                                
                             </select>
+                            <div class = "item-content">
+                                    <div class = "item-inner">
+                                       <div class = "item-title">Seleziona il tipo evento</div>
+                                    </div>
+                                 </div>
+                        </a>
                     </div>
                  </div>
                
                 <p><a class="button button-fill button-big button-raised color-amber btn-spacer submitIspezioneHeader" href="#" >Prosegui</a></p>
-             <div class="list-block">
-  <!-- First group-->
-  <div class="list-group">
-    <ul>
-      <li class="list-group-title">First group</li>
-      <li class="item-content">
-        <div class="item-inner">
-          <div class="item-title">Item title</div>
-          <div class="item-after">Label</div>
-        </div>
-      </li>
-      <li class="item-content">
-        <div class="item-inner">
-          <div class="item-title">Item with badge</div>
-          <div class="item-after"><span class="badge">5</span></div>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div class="list-group">
-    <ul>
-      <li class="list-group-title">Second Group</li>
-      <li class="item-content">
-        <div class="item-inner">
-          <div class="item-title">Item title</div>
-          <div class="item-after">Label</div>
-        </div>
-      </li>
-      <li class="item-content">
-        <div class="item-inner">
-          <div class="item-title">Item with badge</div>
-          <div class="item-after"><span class="badge">5</span></div>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>                
+                
+                <div class="list-block virtual-list ispezioneList media-list">
+                    <!-- keep it empty -->
+                </div>   
+                <p><a class="button button-fill button-big button-raised color-amber btn-spacer submitIspezioneDettaglio displaynone" href="#" >Salva</a></p>
             </div>
         </div>
     </div>

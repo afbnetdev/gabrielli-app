@@ -589,6 +589,42 @@ function sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEve
         }
     });
 }
+function submitIspezioneDettaglio(jsonObj, commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita){
+    var obj = new Object();
+    obj.idIspezione= $$(".idIspezione").text();
+    obj.commenti = commenti;
+    obj.controllore = controllore;
+    obj.dataIspezione= dataIspezione;
+    obj.presenti=presenti;
+     //sempre in status bozza al salvataggio dell'header
+    obj.status="B";
+    obj.dettaglioIspezione=jsonObj;
+    obj.tipoEvento= {idTipoEvento: tipoEvento};
+    obj.puntoVendita = { idPdv: puntoVendita};
+    var evaluation= JSON.stringify(obj);
+        $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/merge',
+        method: 'POST',
+        data: evaluation,
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+           myApp.hidePreloader();
+           myApp.alert("Ispezione salvata");
+
+        },
+        error: function (data, status, xhr) {
+            myApp.hidePreloader();
+            myApp.alert("Errore nel salvataggio dell'ispezione");
+        }
+    });
+}
 function getTipiEvento(){
     $$.ajax({
         headers: {
@@ -657,3 +693,27 @@ function getControlliFromIdEvento(idTipoEvento){
         }
     });
 }
+
+function getIspezioni(dateFrom,dateTo,descTipoEvento,idPuntoVendita,status){
+      $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/listIspezioni',
+        method: 'POST',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            populateListaIspezioni(JSON.parse(data));
+            myApp.hidePreloader();
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Reperimento controlli fallito');
+            myApp.hidePreloader();
+        }
+    });
+}
+

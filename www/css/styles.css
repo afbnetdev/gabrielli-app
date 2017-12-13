@@ -210,6 +210,36 @@ a.button.button-fill.button-raised.yellow{
 .bold{
     font-weight: bold;
 }
+.list-block.virtual-list.ispezioneList .item-subtitle{
+    background-color: #5a483e;
+    padding: 0px 5px;
+    color:#fff;
+    font-size:12px;
+    margin: 10px 0px;
+}
+.ispezioneList.list-block .item-title{
+    white-space: normal;
+}
+.ispezioneList select {
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+    -ms-appearance: menulist;
+    appearance: menulist;
+}
+.smart-select{
+    -webkit-appearance: menulist !Important;
+    -moz-appearance: menulist !Important;
+    -ms-appearance: menulist !Important;
+    appearance: menulist !Important;
+    display: inline-block;
+    width: 165px;
+    border-bottom: 1px solid;
+    padding: 2px;
+    color: #000 !Important;
+}
+.storicoIspezioni .datePickerContainer, .storicoIspezioni .searchForNumberContainer, .storicoIspezioni .filterStatus, .storicoIspezioni .filterDesc{
+    padding: 0px;
+}
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{
         padding-top: 5px;

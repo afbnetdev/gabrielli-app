@@ -4,6 +4,7 @@ var myApp = new Framework7({
     material: true,
     smartSelectSearchbar:true,
     uniqueHistory : true,
+    smartSelectBackOnSelect:true,
     preroute: function (view, options) {
         if (!window.sessionStorage.jsessionid) {
             getLogout();
@@ -357,12 +358,13 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
 
 
 });
-//NEW TICKET
+// ISPEZIONE
 var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
     
    $$(".submitIspezioneHeader").removeClass("displaynone");
    $$(".info.row").addClass("displaynone");
-   
+   $$(".ispezioneDomini").addClass("displaynone");
+   $$(".submitIspezioneDettaglio").addClass("displaynone");
     if(!window.sessionStorage.getObj("puntiVendita")){
        getPuntiVendita();
    }
@@ -381,7 +383,42 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
         myApp.showPreloader();
         setTimeout(function () { prepareSubmitIspezioneHeader();}, 1000);     
    });
+   $$(".submitIspezioneDettaglio").on('click', function () {
+        if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val()){
+            myApp.alert("Selezionare il tipo evento e il punto vendita");
+            return;
+        }
+        myApp.showPreloader();
+        setTimeout(function () { prepareSubmitIspezioneDettaglio();}, 1000);     
+   });
 
 });
 
+//STORICO ISPEZIONI
+var storicoIspezioni = myApp.onPageInit("storicoIspezioni", function (page) {
+    
+    var myCalendarIspezioni = myApp.calendar({
+        input: '.datePickerFrom',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+    var myCalendar2Ispezioni = myApp.calendar({
+        input: '.datePickerTo',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+   if(!window.sessionStorage.getObj("puntiVendita")){
+       getPuntiVendita();
+   }
+   if(!window.sessionStorage.getObj("tipiEvento")){
+       getTipiEvento();
+   }
+   
+   populatePuntiVendita();
+   populateTipiEvento();
+});
 
