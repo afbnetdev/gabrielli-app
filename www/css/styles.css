@@ -92,10 +92,10 @@
     margin: 1em auto;
     text-transform: uppercase;
 }
-.docContainer .data-table{
+.docContainer .data-table, .ispezioniContainer .data-table{
     width: 100%;
 }
-.tbodyDocumentList td{
+.tbodyDocumentList td, .tbodyIspezioniList td{
     padding-top: 15px;
     padding-bottom: 15px;
 }
@@ -201,10 +201,11 @@ a.button.button-fill.button-raised.yellow{
     margin-bottom: 30px;
 }
 .info.row, .puntiVenditaIspezione.row, .presentiIspezione.row, .commentiIspezione, .tipoIspezione{
-    margin-bottom: 20PX;
+    margin-bottom: 40PX;
 }
 .nuovaIspezioneh3{
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .bold{
@@ -239,6 +240,16 @@ a.button.button-fill.button-raised.yellow{
 }
 .storicoIspezioni .datePickerContainer, .storicoIspezioni .searchForNumberContainer, .storicoIspezioni .filterStatus, .storicoIspezioni .filterDesc{
     padding: 0px;
+}
+a.button.button-fill.button-big.button-raised.color-amber.btn-spacer.submitRicercaIspezioni, a.button.button-fill.button-big.button-raised.color-amber.btn-spacer.submitIspezioneHeader {
+    margin-top: 50px;
+}
+a.button.button-fill.button-big.button-raised.color-amber.btn-spacer.submitRicercaIspezioni {
+    margin-bottom: 50px;
+}
+
+.displayblock{
+    display: block;
 }
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{

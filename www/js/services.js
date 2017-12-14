@@ -694,20 +694,21 @@ function getControlliFromIdEvento(idTipoEvento){
     });
 }
 
-function getIspezioni(dateFrom,dateTo,descTipoEvento,idPuntoVendita,status){
+function getIspezioni(variableFilters){
       $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
            'Access-Control-Allow-Origin': '*'
         },
-        url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/listIspezioni',
-        method: 'POST',
+        url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/listIspezioni'+variableFilters,
+        method: 'GET',
         async: false,
         contentType: 'application/json',
         crossDomain: true,
         
         success: function (data) {
-            populateListaIspezioni(JSON.parse(data));
+            var objData = JSON.parse(data);
+            populateListaIspezioni(objData);
             myApp.hidePreloader();
         },
         error: function (data, status, xhr) {

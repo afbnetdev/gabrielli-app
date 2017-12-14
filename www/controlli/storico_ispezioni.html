@@ -9,7 +9,7 @@
                         <i class="f7-icons iconCalendar">calendar</i>
                     </div>
                     <div class="col-60">
-                        <input type="text" value="" placeholder="Dal" class="datePickerFrom" />
+                        <input type="text" value="" placeholder="Dal" class="datePickerFrom displayblock" />
                         <input type="text" value="" placeholder="Al" class="datePickerTo" />
                     </div>
                 </div>
@@ -21,11 +21,11 @@
                     <div class="col-60">
                             <a href = "#" data-searchbar = "true" data-searchbar-placeholder = "Ricerca Punti Vendita" class = "item-link smart-select">
                             <select name="books" class="puntiVenditaIspezioneSelect">
-                                
+                                <option value="">Tutti i punti vendita</option>
                             </select>
                              <div class = "item-content">
                                     <div class = "item-inner">
-                                       <div class = "item-title">Seleziona punto vendita</div>
+                                       <div class = "item-title"></div>
                                     </div>
                                  </div>
                          </a>
@@ -51,13 +51,13 @@
                     </div>
                     <div class="col-60">
                             <div class="col-60">
-                        <a href = "#" data-searchbar = "true" data-searchbar-placeholder = "Ricerca Punti Vendita" class = "item-link smart-select">
+                        <a href = "#" data-searchbar = "true" data-searchbar-placeholder = "Ricerca Eventi" class = "item-link smart-select">
                             <select class="tipoIspezioneSelect">
-                                
+                                <option value="">Tutti i tipi evento</option>
                             </select>
                             <div class = "item-content">
                                     <div class = "item-inner">
-                                       <div class = "item-title">Seleziona il tipo evento</div>
+                                       <div class = "item-title"></div>
                                     </div>
                                  </div>
                         </a>
@@ -66,7 +66,15 @@
                  </div>
                 
                      <p><a class="button button-fill button-big button-raised color-amber btn-spacer submitRicercaIspezioni" href="#" >Ricerca</a></p>
-                
+                 <div class="ispezioniContainer row">
+<!--                <p class="ispezioniSearchCount">Ispezioni trovate: <span class="ispezioniCountSpan"></span></p>-->
+                <div class="data-table data-table-collapsible data-table-init" >
+                    <table>
+                        <thead></thead>
+                        <tbody class="tbodyIspezioniList"></tbody>
+                    </table>
+                </div>
+            </div>
             </div>
         </div>
     </div>

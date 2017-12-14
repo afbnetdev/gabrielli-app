@@ -202,7 +202,11 @@ function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
         row$.append($$('<td data-collapsible-title="' + headers[0] + '"/>').html('<a href="'+ url +'" class="button button-fill button-raised yellow">' + myList[i].ticketid + '</a>'));
 //        row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].externalsystem + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + desc + '</a>'));
-        row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].status + '</a>'));
+         if(myList[i].status === "RESOLVED"){
+            row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title" style="font-weight: bold; color: #ffc107;">' + myList[i].status + '</a>'));
+        }else{
+            row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].status + '</a>'));
+        }
         row$.append($$('<td data-collapsible-title="' + headers[3] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].reportedby + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[4] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + assignment + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[5] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + formatDateFromTimeStampToItalian(myList[i].creationdate) + '</a>'));
@@ -241,7 +245,7 @@ function toFilterTickets(dateFrom, dateTo, status, desc){
        descIfExist  = 'and description="%'+desc+'%"';
     }
 
-    var stringFilters = 'oslc.pageSize='+pageSizeFilterTickets+'&oslc.orderBy='+orderByFilterTickets+'&oslc.select=*&oslc.where=reportedby="'+window.sessionStorage.personid+'" and creationdate>="'+dateFrom+'" and creationdate<="'+dateTo+'" and status="'+status+'"'+descIfExist;
+    var stringFilters = 'oslc.pageSize='+pageSizeFilterTickets+'&oslc.orderBy=-changedate&oslc.select=*&oslc.where=reportedby="'+window.sessionStorage.personid+'" and creationdate>="'+dateFrom+'" and creationdate<="'+dateTo+'" and status="'+status+'"'+descIfExist;
     
     return stringFilters;
 }
@@ -462,7 +466,7 @@ function populateControlli(controlliObj){
                         '<div class="item-subtitle">{{controllo.ambito.descrizione}}</div>' +
                       '</div>' +
                       '<div class="item-title">{{controllo.descrizione}}</div>' +
-                      '<input type="text" name="commenti" placeholder="Inserisci commento">' +
+                      '<input type="text"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento">' +
                   '</div>' +
                   '<div class="item-input-row">' +
                   '<select data-idControllo="{{controllo.idControllo}}" class="controlloIsp"><option value="">Esito</option><option value="C">Conforme</option><option value="N">Non conforme</option></select>' +    
@@ -481,7 +485,8 @@ function prepareSubmitIspezioneDettaglio(){
             obj.ispezione = {idIspezione: idIspezione};
             obj.controllo = {idControllo: $$(this).data("idControllo")};
             obj.esito = $$(this).val();
-            obj.commento = "COOMMENTI";
+            var commento = $$(".commentoIdControllo"+$$(this).data("idControllo")+"").val();
+            obj.commento = commento;
             arrayJson.push(obj);
         });
     }else{
@@ -495,4 +500,55 @@ function prepareSubmitIspezioneDettaglio(){
     var puntoVendita = parseInt($$(".puntiVenditaIspezioneSelect").val());
     submitIspezioneDettaglio(arrayJson, commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita);
 
+}
+
+function prepareRicercaIspezioni(){
+    
+    // compongo la stringa per l'URL
+    var variableFilters = "";
+    
+    var dateFromIspezioni = formatDateFromItalian($$('.datePickerFrom').val()) ;
+    var dateToIspezioni = formatDateFromItalian($$('.datePickerTo').val());
+    dateFromIspezioni = (dateFromIspezioni === "") ? '1990-01-01' : dateFromIspezioni;
+    dateToIspezioni = (dateToIspezioni === "") ? '2069-01-01' : dateToIspezioni;
+    
+    
+    var status = $$(".filterStatusSelect").val() ? "&status="+$$('.filterStatusSelect').val()+"" :"";
+    var tipoEvento = $$(".tipoIspezioneSelect").val() ? "&idTipoEvento="+$$('.tipoIspezioneSelect').val()+""  :"" ;
+    var puntoVendita = $$(".puntiVenditaIspezioneSelect").val() ? "&idPuntoVendita="+$$('.puntiVenditaIspezioneSelect').val()+""  :"" ;
+    
+    variableFilters= "?dateFrom="+dateFromIspezioni+"&dateTo="+dateToIspezioni+""+status+""+tipoEvento+""+puntoVendita+"";
+    getIspezioni(variableFilters);
+}
+
+function populateListaIspezioni(objIspezioni){
+    $$('.tbodyIspezioniList').empty();
+   var header =  ['Id', 'Data creazione', 'Tipo evento','Punto vendita', 'Status'];
+   if ($$('.headerTable').length === 0 && objIspezioni.length > 0) {
+        var headerTr$ = $$('<tr/>');
+        for (var i = 0; i < header.length; i++) {
+            headerTr$.append($$('<th class="headerTable"/>').html(header[i]));
+        }
+        $$(".data-table > table > thead").append(headerTr$);
+    }
+    if (objIspezioni.length === 0) {
+        $$(".data-table > table > thead").empty();
+    }
+    for (var i = 0; i < objIspezioni.length; i++) {
+        var row$ = $$('<tr/>');
+       var status = ""
+        if(objIspezioni[i].status === "B"){
+            status = "Salvata";
+        }else{
+            status = "Inviata";
+        }
+        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="#" class="idIspezioneList button button-fill button-raised yellow">' + objIspezioni[i].idIspezione + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="dataIspezioneList">' + formatDateFromTimeStampToItalian(objIspezioni[i].dataIspezione) + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[2] + '"/>').html('<a href="#" class="tipoIspezioneList">' + objIspezioni[i].tipoEvento.descrizione + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[3] + '"/>').html('<a href="#" class="puntoVenditaIspezioneList">' + objIspezioni[i].puntoVendita.descrizione + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[4] + '"/>').html('<a href="#" class="statusIspezioneList">' + status + '</a>'));
+        $$(".data-table > table > tbody").append(row$);
+        $('.page-content').animate({scrollTop: 330}, 500);
+    }
+    
 }
