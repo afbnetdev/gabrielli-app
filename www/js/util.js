@@ -18,7 +18,7 @@ Storage.prototype.getObj = function(key) {
 
 //FILTER STRING
 var pageSizeFilterTickets=20;
-var orderByFilterTickets="+changedate";
+
 /*---------------------------------------
  Table Construction
  ---------------------------------------*/
@@ -156,7 +156,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
             //var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
           var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
-             myApp.alert("Impossibile reperire il Pdf")
+             myApp.alert("Impossibile reperire il Pdf");
          }
 
     });
@@ -446,8 +446,11 @@ function populateInfoIspezione(info){
     
 }
 function populateControlli(controlliObj){
-
-    $$(".submitIspezioneDettaglio").removeClass("displaynone");
+    
+    if($$(".submitIspezioneDettaglio")){
+          $$(".submitIspezioneDettaglio").removeClass("displaynone");
+    }
+  
     // ordino per sequenza 
     var controlliObjSort = controlliObj.sort(function(a,b) {
         return a.seq - b.seq ; 
@@ -539,16 +542,38 @@ function populateListaIspezioni(objIspezioni){
        var status = ""
         if(objIspezioni[i].status === "B"){
             status = "Salvata";
-        }else{
+        }else if (objIspezioni[i].status === "I"){
             status = "Inviata";
         }
-        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="#" class="idIspezioneList button button-fill button-raised yellow">' + objIspezioni[i].idIspezione + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="controlli/edit_ispezione.html?id='+ objIspezioni[i].idIspezione +'" class="idIspezioneList button button-fill button-raised yellow">' + objIspezioni[i].idIspezione + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="dataIspezioneList">' + formatDateFromTimeStampToItalian(objIspezioni[i].dataIspezione) + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[2] + '"/>').html('<a href="#" class="tipoIspezioneList">' + objIspezioni[i].tipoEvento.descrizione + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[3] + '"/>').html('<a href="#" class="puntoVenditaIspezioneList">' + objIspezioni[i].puntoVendita.descrizione + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[4] + '"/>').html('<a href="#" class="statusIspezioneList">' + status + '</a>'));
         $$(".data-table > table > tbody").append(row$);
-        $('.page-content').animate({scrollTop: 330}, 500);
+        
     }
     
 }
+ function populateIspezioneDetails(objIspezione){
+    //POPOLO LE INFO
+    $$(".idIspezione").text(objIspezione.idIspezione);
+    $$(".userIspezione").text(objIspezione.controllore);
+    $$(".dataIspezione").text(formatDateFromTimeStampToItalian(objIspezione.dataIspezione));
+    
+    // POPOLO LA TESTATA
+    var status = "";
+        if(objIspezione.status === "B"){
+            status = "Salvata";
+        }else if (objIspezione.status === "I"){
+            status = "Inviata";
+        }
+     $$(".tipoEvento").text(objIspezione.tipoEvento.descrizione);
+     $$(".commentiIspezioneText").text(objIspezione.commenti);
+     $$(".presentiIspezioneText").text(objIspezione.presenti);
+     $$(".puntoVendita").text(objIspezione.puntoVendita.codicePdv+" - "+objIspezione.puntoVendita.descrizione);
+     $$(".statusIsp").text(status);
+    
+    
+ };
+ 

@@ -712,7 +712,32 @@ function getIspezioni(variableFilters){
             myApp.hidePreloader();
         },
         error: function (data, status, xhr) {
-            myApp.alert('Reperimento controlli fallito');
+            myApp.alert('Reperimento ispezioni fallito');
+            myApp.hidePreloader();
+        }
+    });
+}
+
+function getIspezioneDetails(idIspezione){
+      $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/getIspezione?idIspezione='+idIspezione,
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            var objData = JSON.parse(data);
+            getControlliFromIdEvento(objData.tipoEvento.idTipoEvento);
+            populateIspezioneDetails(objData);
+            myApp.hidePreloader();
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Reperimento ispezione N. '+idIspezione+' fallito');
             myApp.hidePreloader();
         }
     });

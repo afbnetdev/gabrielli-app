@@ -425,3 +425,20 @@ var storicoIspezioni = myApp.onPageInit("storicoIspezioni", function (page) {
    });
 });
 
+var editIspezione = myApp.onPageInit("editIspezione", function (page) {
+   var idIspezione = page.query.id;
+   if(!window.sessionStorage.getObj("puntiVendita")){
+       getPuntiVendita();
+   }
+   if(!window.sessionStorage.getObj("tipiEvento")){
+       getTipiEvento();
+   }
+   populatePuntiVendita();
+   populateTipiEvento();
+   // richiamo il dettaglio dell'ispezione
+   myApp.showPreloader();
+   getIspezioneDetails(idIspezione);
+   
+    
+});
+
