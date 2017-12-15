@@ -30,4 +30,7 @@
     <plugin name="cordova-plugin-console" spec="~1.0.1" />
     <plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
     <plugin name="cordova-plugin-camera" spec="2.4.1"/>
+    <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+        <activity android:configChanges="orientation|keyboardHidden" android:windowSoftInputMode="adjustPan" />
+    </edit-config>
 </widget>
