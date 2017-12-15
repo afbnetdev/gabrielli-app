@@ -450,6 +450,9 @@ function populateControlli(controlliObj){
     if($$(".submitIspezioneDettaglio")){
           $$(".submitIspezioneDettaglio").removeClass("displaynone");
     }
+     if($$(".submitIspezioneDettaglioInvia")){
+          $$(".submitIspezioneDettaglioInvia").removeClass("displaynone");
+    }
   
     // ordino per sequenza 
     var controlliObjSort = controlliObj.sort(function(a,b) {
@@ -479,10 +482,15 @@ function populateControlli(controlliObj){
     });                       
 }
 
-function prepareSubmitIspezioneDettaglio(){
+function prepareSubmitIspezioneDettaglio(status){
     var idIspezione = $$(".idIspezione").text();
     var arrayJson = [];
-    if($$(".controlloIsp").val()){
+     var okControlli = "ok";
+        $$(".controlloIsp").each(function(index){
+            if($$(this).val() === "")
+                okControlli = ""
+        });
+    if(okControlli || status === "B"){
           $$(".controlloIsp").each(function (index){
             var obj = new Object();
             obj.ispezione = {idIspezione: idIspezione};
@@ -493,15 +501,20 @@ function prepareSubmitIspezioneDettaglio(){
             arrayJson.push(obj);
         });
     }else{
-        myApp.alert("Valuta tutti i controlli");
+        if(status === "I"){
+            myApp.hidePreloader();
+            myApp.alert("Valuta tutti i controlli");
+            return;
+        }
+           
     }
-      var commenti = $$(".commentiIspezioneText").val() ? $$(".commentiIspezioneText").val() : 'Nessun Commento';
+    var commenti = $$(".commentiIspezioneText").val() ? $$(".commentiIspezioneText").val() : 'Nessun Commento';
     var controllore = window.sessionStorage.username;
     var dataIspezione = formatDateFromTimeStampToUSA(new Date().getTime());
     var presenti = $$(".presentiIspezioneText").val() ? $$(".presentiIspezioneText").val() : 'Non specificato';
     var tipoEvento = parseInt($$(".tipoIspezioneSelect").val());
     var puntoVendita = parseInt($$(".puntiVenditaIspezioneSelect").val());
-    submitIspezioneDettaglio(arrayJson, commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita);
+    submitIspezioneDettaglio(status,arrayJson, commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita);
 
 }
 
@@ -573,7 +586,37 @@ function populateListaIspezioni(objIspezioni){
      $$(".presentiIspezioneText").text(objIspezione.presenti);
      $$(".puntoVendita").text(objIspezione.puntoVendita.codicePdv+" - "+objIspezione.puntoVendita.descrizione);
      $$(".statusIsp").text(status);
+     
+     // setto in un input hidden i campi tipo evento e punto vendita
+    $(".tipoIspezioneSelect").val(objIspezione.tipoEvento.idTipoEvento);
+    $(".puntiVenditaIspezioneSelect").val(objIspezione.puntoVendita.idPdv);
+     
+
+    // itero i dettagli ispezioni
+    $.each(objIspezione.dettaglioIspezione, function (i, di) {
+       $("select[data-idControllo="+di.controllo.idControllo+"]").val(di.esito);
+       $(".commentoIdControllo"+di.controllo.idControllo+"").val(di.commento);
+    });
     
+    if(objIspezione.status === "I"){
+        disableInputEditIspezione();
+    }else if (objIspezione.status === "B"){
+        $$(".sendIspezione").removeClass("displaynone");
+    }
     
  };
  
+ function disableInputEditIspezione(){
+     $$(".editIspezione select").attr({
+            'disabled': true,
+            'readonly': true
+    });
+    $$(".editIspezione input").attr({
+            'disabled': true,
+            'readonly': true
+    });
+    $$(".editIspezione textarea").attr({
+            'disabled': true,
+            'readonly': true
+    });
+ };

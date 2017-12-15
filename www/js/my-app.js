@@ -365,6 +365,7 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
    $$(".info.row").addClass("displaynone");
    $$(".ispezioneDomini").addClass("displaynone");
    $$(".submitIspezioneDettaglio").addClass("displaynone");
+    $$(".submitIspezioneDettaglioInvia").addClass("displaynone");
     if(!window.sessionStorage.getObj("puntiVendita")){
        getPuntiVendita();
    }
@@ -389,7 +390,27 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
             return;
         }
         myApp.showPreloader();
-        setTimeout(function () { prepareSubmitIspezioneDettaglio();}, 1000);     
+        var status = "B";
+        setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
+   });
+    $$(".submitIspezioneDettaglioInvia").on('click', function () {
+        
+        var okControlli = "ok";
+        $$(".controlloIsp").each(function(index){
+            if($$(this).val() === "")
+                okControlli = ""
+        });
+        
+        
+        
+        if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val() || !okControlli){
+            myApp.hidePreloader()
+            myApp.alert("Per inviare l'ispezione tutti i campi devono essere compilati");
+            return;
+        }
+        var status = "I";
+        myApp.showPreloader();
+        setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
    });
 
 });
@@ -427,18 +448,19 @@ var storicoIspezioni = myApp.onPageInit("storicoIspezioni", function (page) {
 
 var editIspezione = myApp.onPageInit("editIspezione", function (page) {
    var idIspezione = page.query.id;
-   if(!window.sessionStorage.getObj("puntiVendita")){
-       getPuntiVendita();
-   }
-   if(!window.sessionStorage.getObj("tipiEvento")){
-       getTipiEvento();
-   }
-   populatePuntiVendita();
-   populateTipiEvento();
+
    // richiamo il dettaglio dell'ispezione
    myApp.showPreloader();
    getIspezioneDetails(idIspezione);
-   
+     $$(".sendIspezione").on('click', function () {
+        if(!$$(".editIspezione select").val()){
+            myApp.alert("Per inviare l'ispezione tutti i campi devono essere compilati");
+            return;
+        }
+        var status = "I";
+        myApp.showPreloader();
+        setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
+   });
     
 });
 

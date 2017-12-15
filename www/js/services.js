@@ -589,7 +589,7 @@ function sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEve
         }
     });
 }
-function submitIspezioneDettaglio(jsonObj, commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita){
+function submitIspezioneDettaglio(status,jsonObj, commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita){
     var obj = new Object();
     obj.idIspezione= $$(".idIspezione").text();
     obj.commenti = commenti;
@@ -597,7 +597,7 @@ function submitIspezioneDettaglio(jsonObj, commenti,controllore,dataIspezione,pr
     obj.dataIspezione= dataIspezione;
     obj.presenti=presenti;
      //sempre in status bozza al salvataggio dell'header
-    obj.status="B";
+    obj.status = status;
     obj.dettaglioIspezione=jsonObj;
     obj.tipoEvento= {idTipoEvento: tipoEvento};
     obj.puntoVendita = { idPdv: puntoVendita};
