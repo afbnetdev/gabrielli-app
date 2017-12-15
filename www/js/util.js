@@ -473,8 +473,10 @@ function populateControlli(controlliObj){
                         '<div class="item-subtitle">{{controllo.ambito.descrizione}}</div>' +
                       '</div>' +
                       '<div class="item-title">{{controllo.descrizione}}</div>' +
+                      '<div class="item-input-row">' +
                       '<input type="text"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento">' +
                   '</div>' +
+                   '</div>' +
                   '<div class="item-input-row">' +
                   '<select data-idControllo="{{controllo.idControllo}}" class="controlloIsp"><option value="">Esito</option><option value="C">Conforme</option><option value="N">Non conforme</option></select>' +    
                       '</div>' +
