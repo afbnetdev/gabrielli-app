@@ -1,7 +1,7 @@
 
 <div class="pages">
     <div data-page="editIspezione" class="page">
-        <div class="page-content nuovaIspezione">
+        <div class="page-content editIspezione">
             <div class="content-block">
                 <h3 CLASS="nuovaIspezioneh3">DETTAGLIO ISPEZIONE</h3>
                   <div class="info row ">
@@ -17,6 +17,8 @@
                     </div>
                     <div class="col-60">
                         <span class="bold puntoVendita"></span>
+<!--                        ha lo stesso nome della select per poter riutilizzare il codice-->
+                        <input type="hidden" class="puntiVenditaIspezioneSelect" value="" />
                     </div>
                  </div>
                  <div class="filterStatus row">
@@ -53,6 +55,8 @@
                     </div>
                     <div class="col-60">
                         <span class="bold tipoEvento"></span>
+                        <!--ha lo stesso nome della select per poter riutilizzare il codice-->
+                        <input type="hidden" class="tipoIspezioneSelect" value="" />
                     </div>
                  </div>
              
