@@ -262,6 +262,18 @@ a.button.button-fill.button-big.button-raised.color-amber.btn-spacer.submitRicer
     margin-top: 50px;
     
 }
+.item-link.smart-select{
+        padding: 10px;
+}
+select{
+    padding: 10px;
+}
+textArea{
+    padding: 10px;
+}
+input{
+    padding: 10px;
+}
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{
         padding-top: 5px;
