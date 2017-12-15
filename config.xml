@@ -19,6 +19,7 @@
     <platform name="android">
         <preference name="android-minSdkVersion" value="14" />
         <allow-intent href="market:*" />
+        <preference name="android-windowSoftInputMode" value="stateVisible" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
