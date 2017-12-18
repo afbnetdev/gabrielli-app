@@ -448,7 +448,7 @@ var storicoIspezioni = myApp.onPageInit("storicoIspezioni", function (page) {
 
 var editIspezione = myApp.onPageInit("editIspezione", function (page) {
    var idIspezione = page.query.id;
-
+   var status = page.query.status;
    // richiamo il dettaglio dell'ispezione
    myApp.showPreloader();
    getIspezioneDetails(idIspezione);
@@ -461,6 +461,32 @@ var editIspezione = myApp.onPageInit("editIspezione", function (page) {
         myApp.showPreloader();
         setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
    });
+   
+    $$('.prompt-ok').on('click', function (e) {
+        if(status === "I"){
+            return;
+        }
+        var elem = e.currentTarget.firstChild;
+        var titoloControlloDescrizione = e.currentTarget.dataset.descrizionecontrollo;
+        var valueDefault = elem.value ? elem.value : "";
+       myApp.modal({
+            title: titoloControlloDescrizione,
+            text: "",
+            afterText: '<input type="text" class="modal-text-input" placeholder="Inserisci commento" value="'+valueDefault+'" />',
+            buttons: [{
+              text: 'Conferma',
+              onClick: function(e) {
+                elem.value = $$(".modal-text-input").val();
+              }
+            }, {
+              text: 'Cancella',
+              onClick: function() {
+               elem.value ="";
+              }
+            }, ]
+          }); 
+
+          });
     
 });
 

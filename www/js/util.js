@@ -474,7 +474,7 @@ function populateControlli(controlliObj){
                       '</div>' +
                       '<div class="item-title">{{controllo.descrizione}}</div>' +
                       '<div class="item-input-row">' +
-                      '<input type="text"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento">' +
+                      '<a href="#" data-descrizioneControllo="{{controllo.descrizione}}" class="prompt-ok "><input type="text"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento"></a>' +
                   '</div>' +
                    '</div>' +
                   '<div class="item-input-row">' +
@@ -482,7 +482,9 @@ function populateControlli(controlliObj){
                       '</div>' +
                     '</div>' +
                '</li>'
-    });                       
+    });     
+    
+
 }
 
 function prepareSubmitIspezioneDettaglio(status){
@@ -561,7 +563,7 @@ function populateListaIspezioni(objIspezioni){
         }else if (objIspezioni[i].status === "I"){
             status = "Inviata";
         }
-        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="controlli/edit_ispezione.html?id='+ objIspezioni[i].idIspezione +'" class="idIspezioneList button button-fill button-raised yellow">' + objIspezioni[i].idIspezione + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="controlli/edit_ispezione.html?id='+ objIspezioni[i].idIspezione +'&status='+objIspezioni[i].status+'" class="idIspezioneList button button-fill button-raised yellow">' + objIspezioni[i].idIspezione + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="dataIspezioneList">' + formatDateFromTimeStampToItalian(objIspezioni[i].dataIspezione) + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[2] + '"/>').html('<a href="#" class="tipoIspezioneList">' + objIspezioni[i].tipoEvento.descrizione + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[3] + '"/>').html('<a href="#" class="puntoVenditaIspezioneList">' + objIspezioni[i].puntoVendita.descrizione + '</a>'));
@@ -603,6 +605,7 @@ function populateListaIspezioni(objIspezioni){
     
     if(objIspezione.status === "I"){
         disableInputEditIspezione();
+        $$(".submitIspezioneDettaglio").addClass("displaynone");
     }else if (objIspezione.status === "B"){
         $$(".sendIspezione").removeClass("displaynone");
     }
