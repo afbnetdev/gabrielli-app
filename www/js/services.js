@@ -581,7 +581,7 @@ function sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEve
         success: function (data) {
             var ispezioneCreata = JSON.parse(data);
             populateInfoIspezione(ispezioneCreata);
-            getControlliFromIdEvento(ispezioneCreata.tipoEvento.idTipoEvento);
+            getControlliFromIdEvento(ispezioneCreata.tipoEvento.idTipoEvento, "B");
         },
         error: function (data, status, xhr) {
             myApp.hidePreloader();
@@ -671,7 +671,7 @@ function getPuntiVendita(){
 }
 
 
-function getControlliFromIdEvento(idTipoEvento){
+function getControlliFromIdEvento(idTipoEvento, status){
         $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
@@ -684,7 +684,7 @@ function getControlliFromIdEvento(idTipoEvento){
         crossDomain: true,
         
         success: function (data) {
-            populateControlli(JSON.parse(data));
+            populateControlli(JSON.parse(data), status);
             myApp.hidePreloader();
         },
         error: function (data, status, xhr) {
@@ -732,7 +732,7 @@ function getIspezioneDetails(idIspezione){
         
         success: function (data) {
             var objData = JSON.parse(data);
-            getControlliFromIdEvento(objData.tipoEvento.idTipoEvento);
+            getControlliFromIdEvento(objData.tipoEvento.idTipoEvento, objData.status);
             populateIspezioneDetails(objData);
             myApp.hidePreloader();
         },

@@ -446,7 +446,7 @@ function populateInfoIspezione(info){
     });
     
 }
-function populateControlli(controlliObj){
+function populateControlli(controlliObj, status){
     
     if($$(".submitIspezioneDettaglio")){
           $$(".submitIspezioneDettaglio").removeClass("displaynone");
@@ -483,7 +483,32 @@ function populateControlli(controlliObj){
                     '</div>' +
                '</li>'
     });     
-    
+     $$('.prompt-ok').on('click', function (e) {
+        if(status === "I"){
+            return;
+        }
+        var elem = e.currentTarget.firstChild;
+        var titoloControlloDescrizione = e.currentTarget.dataset.descrizionecontrollo;
+        var valueDefault = elem.value ? elem.value : "";
+       myApp.modal({
+            title: titoloControlloDescrizione,
+            text: "",
+            afterText: '<input type="text" class="modal-text-input" placeholder="Inserisci commento" value="'+valueDefault+'" />',
+            buttons: [{
+              text: 'Conferma',
+              onClick: function(e) {
+                elem.value = $$(".modal-text-input").val();
+              }
+            }, {
+              text: 'Cancella',
+              onClick: function() {
+               elem.value ="";
+              }
+            }, ]
+          }); 
+
+          });
+
 
 }
 
@@ -626,3 +651,4 @@ function populateListaIspezioni(objIspezioni){
             'readonly': true
     });
  };
+
