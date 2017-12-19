@@ -474,7 +474,7 @@ function populateControlli(controlliObj){
                       '</div>' +
                       '<div class="item-title">{{controllo.descrizione}}</div>' +
                       '<div class="item-input-row">' +
-                      '<a href="#" data-descrizioneControllo="{{controllo.descrizione}}" class="prompt-ok "><input type="text"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento"></a>' +
+                      '<a href="#" data-descrizioneControllo="{{controllo.descrizione}}" class="prompt-ok "><input readonly="true" type="text"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento"></a>' +
                   '</div>' +
                    '</div>' +
                   '<div class="item-input-row">' +
