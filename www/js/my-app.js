@@ -107,6 +107,7 @@ $$("#btn-login").click(function () {
         //Get Form Login
 
         if(true){
+            window.sessionStorage.setItem("jsessionid","ok");
             window.sessionStorage.setItem("username", "userName_Controllore");  //Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
             $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
