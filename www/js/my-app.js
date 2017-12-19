@@ -129,12 +129,29 @@ $$("#btn-login").click(function () {
     });
 
 //INDEX
+//var index = myApp.onPageInit('index', function () {
+//    
+//    if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
+//            window.sessionStorage.jsessionid !== null &&
+//            window.sessionStorage.jsessionid !== "") {
+//       verifyUserProfile();
+//    } else {
+//        myApp.loginScreen(".login-screen", false);
+//    }
+//
+//
+//}).trigger();
+//    //  ************* *********************************** ************
+//    
+//  *************  DECOMMENTARE IL CODICE SOPRA E ELIMINARE IL CODICE CHE BYPASSA IL LOGIN ************
+//  
+//  *************  ******************************************** ************
 var index = myApp.onPageInit('index', function () {
     
     if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
             window.sessionStorage.jsessionid !== null &&
             window.sessionStorage.jsessionid !== "") {
-       verifyUserProfile();
+       
     } else {
         myApp.loginScreen(".login-screen", false);
     }
