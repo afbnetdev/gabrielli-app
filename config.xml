@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.gabriellispa.appv1" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>Gabrielli v1 beta</name>
+<widget id="com.gabriellispa.appv1" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
+    <name>Gabrielli v1</name>
     <description>
         Gabrielli App v.1
     </description>
-    <author email="l.lombardi@afbnet.it" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="l.lombardi@afbnet.it" href="http://www.afbnet.it">
+        AfbNET dev team
     </author>
     <icon src="img/logo-gabrielli-gruppo.jpg" />
     <content src="index.html" />
