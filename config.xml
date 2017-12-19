@@ -16,12 +16,6 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <edit-config file="AndroidManifest.xml" target="/manifest/uses-sdk" mode="merge">
-        <uses-sdk android:minSdkVersion="15" android:maxSdkVersion="23" />
-    </edit-config>
-    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="overwrite">
-        <activity android:name="MainActivity" android:label="NewLabel" android:configChanges="orientation|keyboardHidden" />
-    </edit-config>
     <platform name="android">
         <preference name="android-minSdkVersion" value="14" />
         <allow-intent href="market:*" />
