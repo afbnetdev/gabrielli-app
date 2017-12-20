@@ -41,7 +41,7 @@ var mainView = myApp.addView('.view-main', {dynamicNavbar: true, });
 $$(document).on('deviceready', function () {
     pictureSource = navigator.camera.PictureSourceType;
     destinationType = navigator.camera.DestinationType;
-    cordova.plugins.certificates.trustUnsecureCerts(true)
+    cordova.plugins.certificates.trustUnsecureCerts(true);
     //Necessarie per navigare il file system
 //    myPath = cordova.file.externalRootDirectory;
 //    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
