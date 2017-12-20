@@ -69,56 +69,26 @@ myApp.onPageInit("*", function () {
         window.sessionStorage.clear();
         myApp.loginScreen(".login-screen", false);
     });
-//    $$("#btn-login").click(function () {
-//        var formLogin = myApp.formGetData('frm-login');
-//        //Get Form Login
-//        var chkLogin ;
-//        chkLogin = validateUser(formLogin.username, formLogin.password);
-//
-//        if(chkLogin){
-//            window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
-//            window.sessionStorage.setItem("authorized", 1);                 //Set token auth
-//            $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
-//            myApp.closeModal(".login-screen", false);
-//            getUserProfile();
-//            getUserAnag();
-//            getUserInfo();
-//            verifyUserProfile();
-//            mainView.router.loadPage({
-//                force : true,
-//                ignoreCache : true,
-//                url :"index.html"
-//            });
-//        }
-//        else{
-//            if(!userAndPwdCheck){
-//                return;
-//            }
-//            myApp.alert("User name o password errati","Login error");
-//        }
-//    });
-//    //  ************* *********************************** ************
-//    
-//  *************  DECOMMENTARE IL CODICE SOPRA E ELIMINARE IL CODICE CHE BYPASSA IL LOGIN ************
-//  
-//  *************  ******************************************** ************
-$$("#btn-login").click(function () {
+    $$("#btn-login").click(function () {
         var formLogin = myApp.formGetData('frm-login');
         //Get Form Login
+        var chkLogin ;
+        chkLogin = validateUser(formLogin.username, formLogin.password);
 
-        if(true){
-            window.sessionStorage.setItem("jsessionid","ok");
-            window.sessionStorage.setItem("username", "userName_Controllore");  //Set user in session
+        if(chkLogin){
+            window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
             $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
             myApp.closeModal(".login-screen", false);
-             mainView.router.loadPage({
+            getUserProfile();
+            getUserAnag();
+            getUserInfo();
+            verifyUserProfile();
+            mainView.router.loadPage({
                 force : true,
                 ignoreCache : true,
                 url :"index.html"
             });
-            return;
-
         }
         else{
             if(!userAndPwdCheck){
@@ -129,35 +99,19 @@ $$("#btn-login").click(function () {
     });
 
 //INDEX
-//var index = myApp.onPageInit('index', function () {
-//    
-//    if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
-//            window.sessionStorage.jsessionid !== null &&
-//            window.sessionStorage.jsessionid !== "") {
-//       verifyUserProfile();
-//    } else {
-//        myApp.loginScreen(".login-screen", false);
-//    }
-//
-//
-//}).trigger();
-//    //  ************* *********************************** ************
-//    
-//  *************  DECOMMENTARE IL CODICE SOPRA E ELIMINARE IL CODICE CHE BYPASSA IL LOGIN ************
-//  
-//  *************  ******************************************** ************
 var index = myApp.onPageInit('index', function () {
     
     if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
             window.sessionStorage.jsessionid !== null &&
             window.sessionStorage.jsessionid !== "") {
-       
+       verifyUserProfile();
     } else {
         myApp.loginScreen(".login-screen", false);
     }
 
 
 }).trigger();
+
 
 //MANAGE TICKET
 var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
@@ -460,7 +414,18 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
         myApp.showPreloader();
         setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
    });
-   
+      $$('#file-to-upload').on('change', function(){
+        // alert($$(this).val());
+        $$('#file-label').html( $$(this).val().replace(/C:\\fakepath\\/i, '') );
+        // console.log('filename: '+$$("#file-to-upload")[0].files[0].name);
+        // console.log('filetype:  '+$$("#file-to-upload")[0].files[0].type);
+    });
+    $$(".btn-camera-upload").click(function () {
+        capturePhotoWithData();
+    });
+    $$(".allegatiIspezione").click(function () {
+        saveAttach();;
+    });
      
 });
 

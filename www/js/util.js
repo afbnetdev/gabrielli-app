@@ -5,8 +5,8 @@ Initial setup
 
 var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 //var URL_ENDPOINT = 'http://192.168.2.90:9080';
-//var TEST_URL = 'http://192.168.81.215:9080';
-var TEST_URL = 'http://portal.gabriellispa.it';
+var TEST_URL = 'http://192.168.81.215:9080';
+//var TEST_URL = 'http://portal.gabriellispa.it';
 
 //Funzione per settare un obj nel sessionStorage
 
@@ -651,4 +651,24 @@ function populateListaIspezioni(objIspezioni){
             'readonly': true
     });
  };
+ 
+ function prepareSaveAttach(){
+     var idIspezione =  $$(".idIspezione").text();
+      if($$("#file-to-upload")[0].files.length>0){
+            var suffix = '___' + Math.round(new Date().getTime()/1000);
+            var formData1 = new FormData();
+            formData.append("file",$$("#file-to-upload")[0].files[0], $$("#file-to-upload")[0].files[0].name+suffix);
+            saveAttach(formData1, idIspezione);
+            
+        }
+         if( $$('#small-image').attr('src')!='' ){
+             var suffix = '___' + Math.round(new Date().getTime()/1000);
+            var img = $$('#small-image').attr('src');
+            var imgdatafile = dataURItoBlob(img);
+            var formData2 = new FormData();
+            var imageName = "photoIspezione-"+idIspezione+suffix;
+            formData.append("file", imgdatafile, imageName);
+            saveAttach(formData2, idIspezione);
+        }
+ }
 

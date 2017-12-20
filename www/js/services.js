@@ -675,7 +675,8 @@ function getControlliFromIdEvento(idTipoEvento, status){
         $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/tipiEventoControlli?idTipoEvento='+idTipoEvento,
         method: 'GET',
@@ -738,6 +739,35 @@ function getIspezioneDetails(idIspezione){
         },
         error: function (data, status, xhr) {
             myApp.alert('Reperimento ispezione N. '+idIspezione+' fallito');
+            myApp.hidePreloader();
+        }
+    });
+}
+
+function saveAttach(formData, idIspezione){
+      
+      $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*',
+           'idIspezione': parseInt(idIspezione)
+          
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/allegatoIspezione/create',
+        method: 'POST',
+        data: formData,
+        async: false,
+        contentType: false,
+        crossDomain: true,
+        cache: false,
+        processData: false,
+        
+        success: function (data) {
+            var objData = JSON.parse(data);
+
+        },
+        error: function (data, status, xhr) {
+
             myApp.hidePreloader();
         }
     });
