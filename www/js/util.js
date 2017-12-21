@@ -653,21 +653,22 @@ function populateListaIspezioni(objIspezioni){
  };
  
  function prepareSaveAttach(){
-     var idIspezione =  $$(".idIspezione").text();
+     //var idIspezione =  $$(".idIspezione").text();
+     var idIspezione =  "121";
       if($$("#file-to-upload")[0].files.length>0){
-            var suffix = '___' + Math.round(new Date().getTime()/1000);
+            var prefix = Math.round(new Date().getTime()/1000) + '___' ;
             var formData1 = new FormData();
-            formData.append("file",$$("#file-to-upload")[0].files[0], $$("#file-to-upload")[0].files[0].name+suffix);
+            formData1.append("file",$$("#file-to-upload")[0].files[0], prefix+$$("#file-to-upload")[0].files[0].name);
             saveAttach(formData1, idIspezione);
             
         }
          if( $$('#small-image').attr('src')!='' ){
-             var suffix = '___' + Math.round(new Date().getTime()/1000);
+             var prefix = Math.round(new Date().getTime()/1000) + '___' ;
             var img = $$('#small-image').attr('src');
             var imgdatafile = dataURItoBlob(img);
             var formData2 = new FormData();
-            var imageName = "photoIspezione-"+idIspezione+suffix;
-            formData.append("file", imgdatafile, imageName);
+            var imageName = prefix+"photoIspezione.jpg";
+            formData2.append("file", imgdatafile, imageName);
             saveAttach(formData2, idIspezione);
         }
  }

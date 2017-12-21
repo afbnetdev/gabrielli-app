@@ -70,21 +70,50 @@ myApp.onPageInit("*", function () {
         window.sessionStorage.clear();
         myApp.loginScreen(".login-screen", false);
     });
-    $$("#btn-login").click(function () {
+//    $$("#btn-login").click(function () {
+//        var formLogin = myApp.formGetData('frm-login');
+//        //Get Form Login
+//        var chkLogin ;
+//        chkLogin = validateUser(formLogin.username, formLogin.password);
+//
+//        if(chkLogin){
+//            window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
+//            window.sessionStorage.setItem("authorized", 1);                 //Set token auth
+//            $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
+//            myApp.closeModal(".login-screen", false);
+//            getUserProfile();
+//            getUserAnag();
+//            getUserInfo();
+//            verifyUserProfile();
+//            mainView.router.loadPage({
+//                force : true,
+//                ignoreCache : true,
+//                url :"index.html"
+//            });
+//        }
+//        else{
+//            if(!userAndPwdCheck){
+//                return;
+//            }
+//            myApp.alert("User name o password errati","Login error");
+//        }
+//    });
+     $$("#btn-login").click(function () {
         var formLogin = myApp.formGetData('frm-login');
         //Get Form Login
-        var chkLogin ;
-        chkLogin = validateUser(formLogin.username, formLogin.password);
+//        var chkLogin ;
+//        chkLogin = validateUser(formLogin.username, formLogin.password);
 
-        if(chkLogin){
-            window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
+        if(true){
+            window.sessionStorage.setItem("username", formLogin.username); 
+            window.sessionStorage.setItem("jsessionid", "formLogin.username");//Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
             $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
             myApp.closeModal(".login-screen", false);
-            getUserProfile();
-            getUserAnag();
-            getUserInfo();
-            verifyUserProfile();
+//            getUserProfile();
+//            getUserAnag();
+//            getUserInfo();
+//            verifyUserProfile();
             mainView.router.loadPage({
                 force : true,
                 ignoreCache : true,
@@ -100,12 +129,24 @@ myApp.onPageInit("*", function () {
     });
 
 //INDEX
+//var index = myApp.onPageInit('index', function () {
+//    
+//    if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
+//            window.sessionStorage.jsessionid !== null &&
+//            window.sessionStorage.jsessionid !== "") {
+//       verifyUserProfile();
+//    } else {
+//        myApp.loginScreen(".login-screen", false);
+//    }
+//
+//
+//}).trigger();
 var index = myApp.onPageInit('index', function () {
     
     if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
             window.sessionStorage.jsessionid !== null &&
             window.sessionStorage.jsessionid !== "") {
-       verifyUserProfile();
+       //verifyUserProfile();
     } else {
         myApp.loginScreen(".login-screen", false);
     }
@@ -425,7 +466,7 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
         capturePhotoWithData();
     });
     $$(".allegatiIspezione").click(function () {
-        saveAttach();;
+        prepareSaveAttach();;
     });
      
 });

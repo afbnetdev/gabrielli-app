@@ -763,12 +763,12 @@ function saveAttach(formData, idIspezione){
         processData: false,
         
         success: function (data) {
-            var objData = JSON.parse(data);
-
+            
+            myApp.hidePreloader();
         },
         error: function (data, status, xhr) {
-
             myApp.hidePreloader();
+            myApp.alert("Errore nel caricamento degli allegati");
         }
     });
 }
