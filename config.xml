@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.gabriellispa.v1APP" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
-    <name>Gabrielli app</name>
+<widget id="com.gabriellispa.appv1" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
+    <name>Gabrielli v1</name>
     <description>
         Gabrielli App v.1
     </description>
