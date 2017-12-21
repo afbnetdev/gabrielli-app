@@ -256,6 +256,22 @@ module.exports = [
         "merges": [
             "cordova.plugins.disusered"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-certificates/www/certificate.js",
+        "id": "cordova-plugin-certificates.Certificates",
+        "pluginId": "cordova-plugin-certificates",
+        "clobbers": [
+            "cordova.plugins.certificates"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-certificates/www/certificate.js",
+        "id": "cordova-plugin-certificates.Certificates",
+        "pluginId": "cordova-plugin-certificates",
+        "clobbers": [
+            "cordova.plugins.certificates"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -269,7 +285,8 @@ module.exports.metadata =
     "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-file": "4.3.3",
     "cordova-plugin-file-opener2": "2.0.15",
-    "cordova-open": "1.0.12"
+    "cordova-open": "1.0.12",
+    "cordova-plugin-certificates": "0.6.4"
 }
 // BOTTOM OF METADATA
 });
