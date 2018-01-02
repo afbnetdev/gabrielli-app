@@ -143,7 +143,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
          var linkPDF = e.currentTarget.getAttribute("data-linkpdf");
          //myApp.alert('url: '+linkPDF);
          if(linkPDF){
-          var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
+          var ref = cordova.InAppBrowser.open(linkPDF, '_self', 'location=yes');
           //var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
              myApp.alert("Impossibile reperire il Pdf")
