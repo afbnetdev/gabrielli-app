@@ -146,7 +146,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
             var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
           //var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
-             myApp.alert("Impossibile reperire il Pdf")
+             myApp.alert("Impossibile reperire il Pdf");
          }
 
     });
