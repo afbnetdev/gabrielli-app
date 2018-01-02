@@ -57,4 +57,5 @@
     <plugin name="cordova-plugin-console" spec="~1.0.1" />
     <plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
    <plugin name="cordova-plugin-certificates" spec="0.6.4" />
+   <plugin name="cordova-plugin-inappbrowser" />
 </widget>
