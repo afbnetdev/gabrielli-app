@@ -153,11 +153,51 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
         $$('.doc-info_pdf').on('click', function (e) {
          var linkPDF = e.currentTarget.getAttribute("data-linkpdf");
          //myApp.alert('url: '+linkPDF);
-         if(linkPDF){
-            //var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
-          var ref = window.open(linkPDF, '_system', 'location=yes'); 
+        if(linkPDF){
+            
+            if(device.platform !== "Android" ){
+                var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
+                
+                }else{
+                   myApp.showPreloader();
+                    var fileURL = testPathCustom+"local.pdf";
+                   
+                    var myBase64 = "";
+                    convertFileToDataURLviaFileReader(encodeURI(linkPDF),function(base64Img) {
+                myBase64 = base64Img.split(',')[1];    
+               
+                // To define the type of the Blob
+                var contentType = "application/pdf";
+                // if cordova.file is not available use instead :
+                // var folderpath = "file:///storage/emulated/0/";
+                var folderpath = testPathCustom;
+                
+                var filename = "local.pdf";
+
+                savebase64AsPDF(folderpath,filename,myBase64,contentType);
+                
+                setTimeout(function () {
+                    cordova.plugins.fileOpener2.open(
+                    fileURL, 
+                    "application/pdf",
+                    { error : function(e) { 
+                        myApp.hidePreloader();
+                        myApp.alert("Errore","Impossibile aprire il pdf");
+                        },
+                     success : function(e) { 
+                        myApp.hidePreloader();
+                        
+                        }
+                    });
+                }, 4000);
+               
+                    });   
+		
+             
+                }
+          //var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
-             myApp.alert("Impossibile reperire il Pdf");
+             myApp.alert("Impossibile reperire il Pdf", "Errore");
          }
 
     });
@@ -671,5 +711,50 @@ function populateListaIspezioni(objIspezioni){
             formData2.append("file", imgdatafile, imageName);
             saveAttach(formData2, idIspezione);
         }
+        function b64toBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+      var blob = new Blob(byteArrays, {type: contentType});
+      return blob;
+}
+function savebase64AsPDF(folderpath,filename,content,contentType){
+    // Convert the base64 string in a Blob
+    var DataBlob = b64toBlob(content,contentType);
+    
+    console.log("Starting to write the file :3");
+    
+    window.resolveLocalFileSystemURL(folderpath, function(dir) {
+        
+        console.log("Access to the directory granted succesfully");
+		dir.getFile(filename, {create:true}, function(file) {
+            console.log("File created succesfully.");
+           
+            file.createWriter(function(fileWriter) {
+                console.log("Writing content to file");
+                
+                fileWriter.write(DataBlob);
+            }, function(){
+                alert('Unable to save file in path '+ folderpath);
+            });
+		});
+    });
+}
  }
 
