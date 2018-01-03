@@ -64,7 +64,7 @@
    <plugin name="cordova-plugin-certificates" spec="0.6.4" />
    <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
    <plugin name="cordova-plugin-device" spec="^1.1.6" />
-   <plugin name="cordova-plugin-file"  />
+   <plugin name="cordova-plugin-file"  spec="6.0.1" />
    <plugin name="cordova-plugin-file-opener2" spec="2.0.19" />
    
 </widget>

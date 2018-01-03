@@ -147,16 +147,19 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                 var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
                 
                 }else{
-                    myApp.showPreloader();
+                    
                     var fileURL = cordova.file.externalApplicationStorageDirectory+"local.pdf";
+                    myApp.alert(fileURL);
                     var myBase64 = "";
                     convertFileToDataURLviaFileReader(encodeURI(linkPDF),function(base64Img) {
-                myBase64 = base64Img.split(',')[1];        
+                myBase64 = base64Img.split(',')[1];    
+                myApp.alert(myBase64);
                 // To define the type of the Blob
                 var contentType = "application/pdf";
                 // if cordova.file is not available use instead :
                 // var folderpath = "file:///storage/emulated/0/";
                 var folderpath = cordova.file.externalApplicationStorageDirectory;
+                myApp.alert(folderpath);
                 var filename = "local.pdf";
 
                 savebase64AsPDF(folderpath,filename,myBase64,contentType);
@@ -170,7 +173,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                         },
                      success : function(e) { 
                         myApp.hidePreloader();
-                        
+                        myApp.alert("ok");
                         }
                     });
                     });   
@@ -435,15 +438,18 @@ function b64toBlob(b64Data, contentType, sliceSize) {
 function savebase64AsPDF(folderpath,filename,content,contentType){
     // Convert the base64 string in a Blob
     var DataBlob = b64toBlob(content,contentType);
-    
+    myApp.alert("Starting to write the file :3");
     console.log("Starting to write the file :3");
     
     window.resolveLocalFileSystemURL(folderpath, function(dir) {
+        myApp.alert("grant success");
         console.log("Access to the directory granted succesfully");
 		dir.getFile(filename, {create:true}, function(file) {
             console.log("File created succesfully.");
+            myApp.alert("File created succesfully.");
             file.createWriter(function(fileWriter) {
                 console.log("Writing content to file");
+                myApp.alert("Writing content to file");
                 fileWriter.write(DataBlob);
             }, function(){
                 alert('Unable to save file in path '+ folderpath);
