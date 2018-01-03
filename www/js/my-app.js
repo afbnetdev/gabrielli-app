@@ -42,7 +42,7 @@ $$(document).on('deviceready', function () {
     pictureSource = navigator.camera.PictureSourceType;
     destinationType = navigator.camera.DestinationType;
     cordova.plugins.certificates.trustUnsecureCerts(true);
-     testPathCustom = cordova.file.dataDirectory;
+     testPathCustom = cordova.file.externalApplicationStorageDirectory;
 
 
 });
