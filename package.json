@@ -21,7 +21,8 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-console": {},
-      "cordova-plugin-statusbar": {}
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-file": {}
     }
   }
 }
