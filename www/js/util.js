@@ -148,7 +148,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                 var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
                 
                 }else{
-                    myApp.alert(device.platform);
+                    myApp.alert(cordova.file.externalApplicationStorageDirectory);
                     var fileURL = cordova.file.externalApplicationStorageDirectory+"local.pdf";
                     myApp.alert(fileURL);
                     var myBase64 = "";
