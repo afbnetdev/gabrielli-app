@@ -28,13 +28,6 @@
        <icon density="xxxhdpi" src="resources/android/icon/xxxhdpi.png" />
         <preference name="android-minSdkVersion" value="14" />
        
-        <config-file parent="/manifest" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
-            
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-        </config-file>
-        
-<!--        <allow-intent href="market:*" />-->
     </platform>
     <platform name="ios">
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
