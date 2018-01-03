@@ -43,7 +43,7 @@ $$(document).on('deviceready', function () {
     destinationType = navigator.camera.DestinationType;
     cordova.plugins.certificates.trustUnsecureCerts(true);
      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0);
-     testPathCustom = cordova.file.externalApplicationStorageDirectory;
+     testPathCustom = cordova.file.externalRootDirectory;;
     //Necessarie per navigare il file system
 //    myPath = cordova.file.externalRootDirectory;
 
