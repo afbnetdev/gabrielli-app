@@ -27,10 +27,9 @@
        <icon density="xxhdpi" src="resources/android/icon/xxhdpi.png" />
        <icon density="xxxhdpi" src="resources/android/icon/xxxhdpi.png" />
         <preference name="android-minSdkVersion" value="14" />
-        <preference name="AndroidPersistentFileLocation" value="Compatibility" />
-        <preference name="AndroidExtraFilesystems" value="sdcard,cache" />
+       
         <config-file parent="/manifest" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
-            <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+            
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
             <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         </config-file>
