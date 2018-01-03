@@ -165,7 +165,8 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
 
                 savebase64AsPDF(folderpath,filename,myBase64,contentType);
                 
-                cordova.plugins.fileOpener2.open(
+                setTimeout(function () {
+                    cordova.plugins.fileOpener2.open(
                     fileURL, 
                     "application/pdf",
                     { error : function(e) { 
@@ -177,6 +178,8 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                         
                         }
                     });
+                }, 4000);
+               
                     });   
 		
              
