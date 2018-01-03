@@ -148,9 +148,9 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                 var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
                 
                 }else{
-                   
+                   myApp.showPreloader();
                     var fileURL = testPathCustom+"local.pdf";
-                    myApp.alert(fileURL);
+                   
                     var myBase64 = "";
                     convertFileToDataURLviaFileReader(encodeURI(linkPDF),function(base64Img) {
                 myBase64 = base64Img.split(',')[1];    
@@ -160,7 +160,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                 // if cordova.file is not available use instead :
                 // var folderpath = "file:///storage/emulated/0/";
                 var folderpath = testPathCustom;
-                myApp.alert(folderpath);
+                
                 var filename = "local.pdf";
 
                 savebase64AsPDF(folderpath,filename,myBase64,contentType);
@@ -174,7 +174,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                         },
                      success : function(e) { 
                         myApp.hidePreloader();
-                        myApp.alert("ok");
+                        
                         }
                     });
                     });   
