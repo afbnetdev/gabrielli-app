@@ -148,8 +148,8 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                 var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
                 
                 }else{
-                    myApp.alert(cordova.file.cacheDirectory);
-                    var fileURL = cordova.file.cacheDirectory+"local.pdf";
+                    myApp.alert(cordova.file.externalApplicationStorageDirectory);
+                    var fileURL = cordova.file.externalApplicationStorageDirectory+"local.pdf";
                     myApp.alert(fileURL);
                     var myBase64 = "";
                     convertFileToDataURLviaFileReader(encodeURI(linkPDF),function(base64Img) {
@@ -159,7 +159,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
                 var contentType = "application/pdf";
                 // if cordova.file is not available use instead :
                 // var folderpath = "file:///storage/emulated/0/";
-                var folderpath = cordova.file.cacheDirectory;
+                var folderpath = cordova.file.externalApplicationStorageDirectory;
                 myApp.alert(folderpath);
                 var filename = "local.pdf";
 
