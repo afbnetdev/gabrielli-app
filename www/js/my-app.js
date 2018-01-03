@@ -30,7 +30,7 @@ var lastIndexDoc = 0;
 var limitDoc = 10;
 var docTableData;
 var userAndPwdCheck = true;
-
+var testPathCustom;
 
 var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
 var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
@@ -42,9 +42,11 @@ $$(document).on('deviceready', function () {
     pictureSource = navigator.camera.PictureSourceType;
     destinationType = navigator.camera.DestinationType;
     cordova.plugins.certificates.trustUnsecureCerts(true);
+     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
+     testPathCustom = cordova.file.externalApplicationStorageDirectory;
     //Necessarie per navigare il file system
 //    myPath = cordova.file.externalRootDirectory;
-//    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
+
 });
 
 /*---------------------------------------
