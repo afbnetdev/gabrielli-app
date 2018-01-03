@@ -22,7 +22,8 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-console": {},
       "cordova-plugin-statusbar": {},
-      "cordova-plugin-file": {}
+      "cordova-plugin-file": {},
+      "cordova-plugin-file-opener2": {}
     }
   }
 }
