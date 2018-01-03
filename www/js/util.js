@@ -143,11 +143,12 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
          var linkPDF = e.currentTarget.getAttribute("data-linkpdf");
          //myApp.alert('url: '+linkPDF);
          if(linkPDF){
+             myApp.alert("INIZIO");
             if(device.platform !== "Android" ){
                 var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
                 
                 }else{
-                    
+                    myApp.alert(device.platform);
                     var fileURL = cordova.file.externalApplicationStorageDirectory+"local.pdf";
                     myApp.alert(fileURL);
                     var myBase64 = "";
