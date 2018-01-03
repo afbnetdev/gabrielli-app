@@ -711,6 +711,7 @@ function populateListaIspezioni(objIspezioni){
             formData2.append("file", imgdatafile, imageName);
             saveAttach(formData2, idIspezione);
         }
+    }
         function b64toBlob(b64Data, contentType, sliceSize) {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
@@ -756,5 +757,5 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 		});
     });
 }
- }
+ 
 
