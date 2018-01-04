@@ -75,9 +75,10 @@
                                     <div class="item-title label">Allegato</div>
                                     <i class="icon f7-icons color-red" id="btn-attachment-upload">folder</i>
                                     <label class="fileContainer">
-                                        <span id="file-label">Seleziona un file</span>
-                                        <input type="file" name="file-to-upload" id="file-to-upload"/>
+                                        <span  class="file-label">Seleziona un file</span>
+                                        <input type="file" name="file-to-upload" class="file-to-upload" data-numero="1"  onchange="addFileInput(this)"/>
                                     </label>
+                                    <div class="listFiles"></div>
                                     <br /><br />
                                     <i class="icon f7-icons color-brown btn-camera-upload" id="btn-camera-upload">camera</i>
                                     <label for="btn-camera-upload" class="btn-camera-upload">Allega una foto</label>

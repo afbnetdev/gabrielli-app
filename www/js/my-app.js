@@ -418,12 +418,12 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
         myApp.showPreloader();
         setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
    });
-      $$('#file-to-upload').on('change', function(){
-        // alert($$(this).val());
-        $$('#file-label').html( $$(this).val().replace(/C:\\fakepath\\/i, '') );
-        // console.log('filename: '+$$("#file-to-upload")[0].files[0].name);
-        // console.log('filetype:  '+$$("#file-to-upload")[0].files[0].type);
-    });
+//      $$('#file-to-upload').on('change', function(){
+//        // alert($$(this).val());
+//        $$('#file-label').html( $$(this).val().replace(/C:\\fakepath\\/i, '') );
+//        // console.log('filename: '+$$("#file-to-upload")[0].files[0].name);
+//        // console.log('filetype:  '+$$("#file-to-upload")[0].files[0].type);
+//    });
     $$(".btn-camera-upload").click(function () {
         capturePhotoWithData();
     });

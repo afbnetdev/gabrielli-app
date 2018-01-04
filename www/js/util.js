@@ -675,7 +675,7 @@ function populateListaIspezioni(objIspezioni){
         $$(".sendIspezione").removeClass("displaynone");
     }
     
- };
+ }
  
  function disableInputEditIspezione(){
      $$(".editIspezione select").attr({
@@ -690,7 +690,7 @@ function populateListaIspezioni(objIspezioni){
             'disabled': true,
             'readonly': true
     });
- };
+ }
  
  function prepareSaveAttach(){
      //var idIspezione =  $$(".idIspezione").text();
@@ -712,7 +712,9 @@ function populateListaIspezioni(objIspezioni){
             saveAttach(formData2, idIspezione);
         }
     }
-        function b64toBlob(b64Data, contentType, sliceSize) {
+       
+
+function b64toBlob(b64Data, contentType, sliceSize) {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
 
@@ -757,5 +759,33 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 		});
     });
 }
- 
 
+function addFileInput(element){
+    var numero = parseInt($(element).attr("data-numero")) + 1;
+    var valueInput =  $(element).val().replace(/C:\\fakepath\\/i, '');
+    $(element).addClass("sposta");
+    var label = '<div class="rowFile"><span data-numero="'+(numero-1)+'"  class="file-label">'+valueInput+'<i class="f7-icons" onclick="deleteFile('+(numero-1)+')">close</i></span></div>';
+    var el = '<input type="file" name="file-to-upload" class="file-to-upload" data-numero="'+numero+'"  onchange="addFileInput(this)"/>';
+    $(".listFiles").append($(label));
+    $(".fileContainer").append($(el));
+}
+ 
+function deleteFile(numero){
+    if(numero === 1){
+        $('span[data-numero="'+numero+'"]').parent().remove();
+        $('input[data-numero="'+numero+'"]').val("");
+        
+        if($$('input.file-to-upload').length === 2){
+            $('.file-to-upload:not(input[data-numero="'+numero+'"])').remove();
+            $$('input[data-numero="'+numero+'"]').removeClass("sposta");
+        }
+            
+    }else{
+        $('span[data-numero="'+numero+'"]').parent().remove();
+        $('input[data-numero="'+numero+'"]').remove();
+        if($('input.file-to-upload').length === 2){
+            $('.file-to-upload:not(input[data-numero="1"])').remove();
+            $('input[data-numero="1"]').removeClass("sposta");
+        }
+    }
+}
