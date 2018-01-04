@@ -3,7 +3,7 @@
 Initial setup
  ---------------------------------------*/
 
-var URL_ENDPOINT = 'http://portal.gabriellispa.it';
+var URL_ENDPOINT = 'https://portal.gabriellispa.it';
 //var URL_ENDPOINT = 'http://192.168.2.90:9080';
 var TEST_URL = 'http://192.168.81.215:9080';
 //var TEST_URL = 'http://portal.gabriellispa.it';
@@ -693,16 +693,23 @@ function populateListaIspezioni(objIspezioni){
  }
  
  function prepareSaveAttach(){
-     //var idIspezione =  $$(".idIspezione").text();
-     var idIspezione =  "121";
-      if($$("#file-to-upload")[0].files.length>0){
-            var prefix = Math.round(new Date().getTime()/1000) + '___' ;
-            var formData1 = new FormData();
-            formData1.append("file",$$("#file-to-upload")[0].files[0], prefix+$$("#file-to-upload")[0].files[0].name);
-            saveAttach(formData1, idIspezione);
-            
+     var idIspezione =  121;
+      
+      if($$(".file-to-upload").length>0){
+        var formData1 = new FormData();
+        var formDatalIsPopulated = false;
+        for(var i = 0; i < $$(".file-to-upload").length; i++){
+             if($$(".file-to-upload")[i].files.length>0){
+                var prefix = Math.round(new Date().getTime()/1000) + '___' ;
+                formData1.append("file",$$(".file-to-upload")[i].files[0], prefix+$$(".file-to-upload")[i].files[0].name);
+                formDatalIsPopulated = true;
+            }
         }
-         if( $$('#small-image').attr('src')!='' ){
+           if(formDatalIsPopulated){
+                saveAttach(formData1, idIspezione);
+           }
+        }
+      if( $$('#small-image').attr('src')!='' ){
              var prefix = Math.round(new Date().getTime()/1000) + '___' ;
             var img = $$('#small-image').attr('src');
             var imgdatafile = dataURItoBlob(img);
