@@ -425,7 +425,7 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
 //        // console.log('filetype:  '+$$("#file-to-upload")[0].files[0].type);
 //    });
     $$(".btn-camera-upload").click(function () {
-        capturePhotoWithData();
+        capturePhotoWithDataMULTI();
     });
     $$(".allegatiIspezione").click(function () {
         prepareSaveAttach();;

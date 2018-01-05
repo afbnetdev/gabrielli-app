@@ -98,6 +98,55 @@ function capturePhotoWithFile() {
     };
     navigator.camera.getPicture(onPhotoDataSuccess, onFail, options);
 }
+
+
+/*
+ * LOGICA SIMILE PER LE ISPEZIONI, CAMBIA LA POSSIBILITA' DI INSERIRE PIU' FOTO
+ */
+
+
+
+
+function onPhotoDataSuccessMULTI(imageData) {
+    var numeroImg = $$('.imgContent').length;
+    var smallImage = $$('<div class="row imgContent" data-numeroImg="'+numeroImg+'"><img src ="data:image/jpeg;base64,' +imageData+'" class="camera-upload-thumb small-imageMulti"><i class="f7-icons customDeleteImg" onclick="deleteImg('+numeroImg+')">close</i></div>');
+    $$('.imgWrapper').append($$(smallImage));
+
+}
+// Called when a photo is successfully retrieved
+function onPhotoFileSuccessMULTI(imageData) {
+   var numeroImg = $$('.imgContent').length;
+    var smallImage = $$('<div class="row imgContent" data-numeroImg="'+numeroImg+'"><img src ="data:image/jpeg;base64,' +imageData+'" class="camera-upload-thumb small-imageMulti"><i class="f7-icons customDeleteImg" onclick="deleteImg('+numeroImg+')">close</i></div>');
+    $$('.imgWrapper').append($$(smallImage));
+}
+// Called when a photo is successfully retrieved
+function onPhotoURISuccessMULTI(imageURI) {
+    var largeImage = document.getElementById('large-image');
+    largeImage.style.display = 'block';
+    largeImage.src = imageURI;
+}
+// A button will call this function
+function capturePhotoWithDataMULTI() {
+    var options = {
+        quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL, //Return Base64
+        sourceType: Camera.PictureSourceType.CAMERA,
+        mediaType: Camera.MediaType.PICTURE,
+        encodingType: Camera.EncodingType.JPEG,
+        correctOrientation : true
+    };
+    navigator.camera.getPicture(onPhotoDataSuccessMULTI, onFail, options);
+}
+function capturePhotoWithFileMULTI() {
+    var options = {
+        quality: 50,
+        destinationType: Camera.DestinationType.FILE_URI, //Return Base64
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+        mediaType: Camera.MediaType.ALLMEDIA,
+        correctOrientation : true
+    };
+    navigator.camera.getPicture(onPhotoDataSuccessMULTI, onFail, options);
+}
 // A button will call this function
 function getPhoto(source) {
     navigator.camera.getPicture(onPhotoURISuccess, onFail, {quality: 50,
@@ -694,31 +743,39 @@ function populateListaIspezioni(objIspezioni){
  
  function prepareSaveAttach(){
      var idIspezione =  121;
-      
+     var formData1 = new FormData();
+     var formDatalIsPopulated = false;
+     
       if($$(".file-to-upload").length>0){
-        var formData1 = new FormData();
-        var formDatalIsPopulated = false;
+        
         for(var i = 0; i < $$(".file-to-upload").length; i++){
              if($$(".file-to-upload")[i].files.length>0){
                 var prefix = Math.round(new Date().getTime()/1000) + '___' ;
                 formData1.append("file",$$(".file-to-upload")[i].files[0], prefix+$$(".file-to-upload")[i].files[0].name);
                 formDatalIsPopulated = true;
             }
-        }
-           if(formDatalIsPopulated){
-                saveAttach(formData1, idIspezione);
-           }
-        }
-      if( $$('#small-image').attr('src')!='' ){
-             var prefix = Math.round(new Date().getTime()/1000) + '___' ;
-            var img = $$('#small-image').attr('src');
-            var imgdatafile = dataURItoBlob(img);
-            var formData2 = new FormData();
-            var imageName = prefix+"photoIspezione.jpg";
-            formData2.append("file", imgdatafile, imageName);
-            saveAttach(formData2, idIspezione);
-        }
+        }        
+     }
+        
+      if($$('.small-imageMulti').length > 0){
+          for(var i = 0; i < $$('.small-imageMulti').length; i++){
+              if( $$('.small-imageMulti')[i].attr('src')!=='' ){
+                  var prefix = Math.round(new Date().getTime()/1000) + '___' ;
+                  var img = $$('.small-imageMulti')[i].attr('src');
+                  var imgdatafile = dataURItoBlob(img);
+                  var imageName = prefix+"photoIspezione"+[i]+".jpg";
+                  formData1.append("file", imgdatafile, imageName);
+                  formDatalIsPopulated = true;
+              }
+          }
+      }
+      
+    // se ho almeno un file tra img e file caricatri allora invio  
+    if(formDatalIsPopulated){
+            saveAttach(formData1, idIspezione);
     }
+
+}
        
 
 function b64toBlob(b64Data, contentType, sliceSize) {
@@ -771,7 +828,7 @@ function addFileInput(element){
     var numero = parseInt($(element).attr("data-numero")) + 1;
     var valueInput =  $(element).val().replace(/C:\\fakepath\\/i, '');
     $(element).addClass("sposta");
-    var label = '<div class="rowFile"><span data-numero="'+(numero-1)+'"  class="file-label">'+valueInput+'<i class="f7-icons" onclick="deleteFile('+(numero-1)+')">close</i></span></div>';
+    var label = '<div class="rowFile"><span data-numero="'+(numero-1)+'"  class="file-label">'+valueInput+'<i class="f7-icons customDelete" onclick="deleteFile('+(numero-1)+')">close</i></span></div>';
     var el = '<input type="file" name="file-to-upload" class="file-to-upload" data-numero="'+numero+'"  onchange="addFileInput(this)"/>';
     $(".listFiles").append($(label));
     $(".fileContainer").append($(el));
@@ -795,4 +852,8 @@ function deleteFile(numero){
             $('input[data-numero="1"]').removeClass("sposta");
         }
     }
+}
+
+function deleteImg(numeroImg){
+    $("div.imgContent[data-numeroimg='"+numeroImg+"']").remove();
 }

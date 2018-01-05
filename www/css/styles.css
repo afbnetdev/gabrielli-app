@@ -280,6 +280,23 @@ input.modal-text-input{
     position: absolute !Important;
     right: 3000px !Important;
 }
+.small-imageMulti{
+    display: block;
+    margin: 10px 0px;
+    width: 60px;
+}
+.row.imgContent{
+    width: 100px;
+}
+.customDelete {
+    position: relative;
+    top: 4px;
+    left: 20px;
+}
+.customDeleteImg {
+    position: relative;
+    top: 14px;
+}
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{
         padding-top: 5px;
