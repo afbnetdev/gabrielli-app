@@ -23,6 +23,12 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
+        <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
+            <string>Take Photo</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
+            <string>Take Photo Library</string>
+        </edit-config>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="40" src="resources/ios/icon/icon-small-40.png" width="40" />
@@ -54,6 +60,9 @@
     <plugin name="cordova-plugin-file" spec="~4.3.3" />
     <plugin name="cordova-plugin-file-opener2" spec="~2.0.15" />
     <plugin name="cordova-plugin-whitelist" spec="~1.2.0" />
-    <plugin name="cordova-plugin-camera" spec="^2.4.1" />
+    <plugin name="cordova-plugin-camera" spec="^2.4.1">
+        <param name="CAMERA_USAGE_DESCRIPTION" value="Take Photo" />
+        <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Take Photo Library" />
+    </plugin>
     <engine name="android" spec="^6.2.3" />
 </widget>

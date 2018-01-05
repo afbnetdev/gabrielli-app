@@ -759,9 +759,9 @@ function populateListaIspezioni(objIspezioni){
         
       if($$('.small-imageMulti').length > 0){
           for(var i = 0; i < $$('.small-imageMulti').length; i++){
-              if( $$('.small-imageMulti')[i].attr('src')!=='' ){
+              if( $$('.small-imageMulti').eq(i).attr('src')!=='' ){
                   var prefix = Math.round(new Date().getTime()/1000) + '___' ;
-                  var img = $$('.small-imageMulti')[i].attr('src');
+                  var img = $$('.small-imageMulti').eq(i).attr('src');
                   var imgdatafile = dataURItoBlob(img);
                   var imageName = prefix+"photoIspezione"+[i]+".jpg";
                   formData1.append("file", imgdatafile, imageName);
