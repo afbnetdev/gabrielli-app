@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.gabriellispa.appv1" version="2.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
+<widget id="com.gabriellispa.appv1" version="2.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
     <name>Gabrielli v1</name>
     <description>
         Gabrielli App v.1
@@ -21,6 +21,12 @@
         <preference name="android-minSdkVersion" value="14" />
     </platform>
     <platform name="ios">
+        <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
+            <string>Take Photo</string>
+        </edit-config>
+        <edit-config target="NSPhotoLibraryUsageDescription" file="*-Info.plist" mode="merge">
+            <string>Take Photo Library</string>
+        </edit-config>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="40" src="resources/ios/icon/icon-small-40.png" width="40" />
@@ -44,7 +50,10 @@
         <preference name="BackupWebStorage" value="none" />
     </platform>
     <preference name="DisallowOverscroll" value="true" />
-    <plugin name="cordova-plugin-camera" spec="2.4.1" />
+    <plugin name="cordova-plugin-camera" spec="2.4.1">
+        <param name="CAMERA_USAGE_DESCRIPTION" value="Take Photo" />
+        <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Take Photo Library" />
+    </plugin>
     <plugin name="cordova-plugin-certificates" spec="0.6.4" />
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-device" spec="1.1.7" />
