@@ -585,7 +585,7 @@ function sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEve
         },
         error: function (data, status, xhr) {
             myApp.hidePreloader();
-            myApp.alert("Errore nel salvataggio dell'ispezione");
+            myApp.alert("Errore nel salvataggio dell'ispezione", "Errore");
         }
     });
 }
@@ -615,13 +615,26 @@ function submitIspezioneDettaglio(status,jsonObj, commenti,controllore,dataIspez
         crossDomain: true,
         
         success: function (data) {
-           myApp.hidePreloader();
-           myApp.alert("Ispezione salvata");
+         
+           if(status === "I"){
+                 createPdfFromSavedIsp(parseInt($$(".idIspezione").text()));
+                 myApp.alert("Ispezione inviata", "Ispezione");
+                 
+           }else{
+                myApp.hidePreloader();
+                myApp.alert("Ispezione salvata", "Ispezione");
+           }
 
         },
         error: function (data, status, xhr) {
-            myApp.hidePreloader();
-            myApp.alert("Errore nel salvataggio dell'ispezione");
+            if(status === "I"){
+                myApp.hidePreloader();
+                myApp.alert("Errore nell'invio dell'ispezione", "Errore");
+            }else{
+                myApp.hidePreloader();
+                myApp.alert("Errore nel salvataggio dell'ispezione", "Errore");
+            }
+            
         }
     });
 }
@@ -643,7 +656,7 @@ function getTipiEvento(){
         },
         error: function (data, status, xhr) {
             myApp.hidePreloader();
-            myApp.alert('Reperimento eventi fallito');
+            myApp.alert('Reperimento eventi fallito', "Errore");
         }
     });
 }
@@ -665,7 +678,7 @@ function getPuntiVendita(){
         },
         error: function (data, status, xhr) {
             myApp.hidePreloader();
-            myApp.alert('Reperimento punti vendita fallito');
+            myApp.alert('Reperimento punti vendita fallito', "Errore");
         }
     });
 }
@@ -689,7 +702,7 @@ function getControlliFromIdEvento(idTipoEvento, status){
             myApp.hidePreloader();
         },
         error: function (data, status, xhr) {
-            myApp.alert('Reperimento controlli fallito');
+            myApp.alert('Reperimento controlli fallito', "Errore");
             myApp.hidePreloader();
         }
     });
@@ -713,7 +726,7 @@ function getIspezioni(variableFilters){
             myApp.hidePreloader();
         },
         error: function (data, status, xhr) {
-            myApp.alert('Reperimento ispezioni fallito');
+            myApp.alert('Reperimento ispezioni fallito', "Errore");
             myApp.hidePreloader();
         }
     });
@@ -738,7 +751,7 @@ function getIspezioneDetails(idIspezione){
             myApp.hidePreloader();
         },
         error: function (data, status, xhr) {
-            myApp.alert('Reperimento ispezione N. '+idIspezione+' fallito');
+            myApp.alert('Reperimento ispezione N. '+idIspezione+' fallito', "Errore");
             myApp.hidePreloader();
         }
     });
@@ -768,10 +781,12 @@ function saveAttach(formData, idIspezione){
         },
         error: function (data, status, xhr) {
             myApp.hidePreloader();
-            myApp.alert("Errore nel caricamento degli allegati");
+            myApp.alert("Errore nel caricamento degli allegati","Errore");
         }
     });
 }
+
+// Questa funzione serve per eseguire una get che ha come response uno stream di byte ( pdf) usa i metodi standard di js
 function convertFileToDataURLviaFileReader(url, callback) {
                         var xhr = new XMLHttpRequest();
                         xhr.onload = function() {
@@ -786,3 +801,25 @@ function convertFileToDataURLviaFileReader(url, callback) {
                         xhr.send();
 }
 
+function createPdfFromSavedIsp(idIspezione){
+         $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/pdf/create/'+idIspezione,
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            myApp.hidePreloader();
+            
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Creazione pdf non riuscita',"Errore");
+            myApp.hidePreloader();
+        }
+    });
+}

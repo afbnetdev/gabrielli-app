@@ -677,7 +677,13 @@ function populateListaIspezioni(objIspezioni){
         }else if (objIspezioni[i].status === "I"){
             status = "Inviata";
         }
-        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="controlli/edit_ispezione.html?id='+ objIspezioni[i].idIspezione +'&status='+objIspezioni[i].status+'" class="idIspezioneList button button-fill button-raised yellow">' + objIspezioni[i].idIspezione + '</a>'));
+        
+        // se lo status è inviata  allora faccio al click sull'id apro il PDF e non il dettaglio
+        if(objIspezioni[i].status === "I"){
+            row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a onclick="openPdfIspezione('+objIspezioni[i].idIspezione+')" class="idIspezioneList button button-fill button-raised yellow">' + objIspezioni[i].idIspezione + '</a>'));
+        }else{
+            row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="controlli/edit_ispezione.html?id='+ objIspezioni[i].idIspezione +'&status='+objIspezioni[i].status+'" class="idIspezioneList button button-fill button-raised yellow">' + objIspezioni[i].idIspezione + '</a>'));
+        }
         row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="dataIspezioneList">' + formatDateFromTimeStampToItalian(objIspezioni[i].dataIspezione) + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[2] + '"/>').html('<a href="#" class="tipoIspezioneList">' + objIspezioni[i].tipoEvento.descrizione + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[3] + '"/>').html('<a href="#" class="puntoVenditaIspezioneList">' + objIspezioni[i].puntoVendita.descrizione + '</a>'));
@@ -856,4 +862,41 @@ function deleteFile(numero){
 
 function deleteImg(numeroImg){
     $("div.imgContent[data-numeroimg='"+numeroImg+"']").remove();
+}
+
+function openPdfIspezione(idIspezione){
+    
+                var linkPdf = TEST_URL+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
+                myApp.showPreloader();
+                var fileURL = testPathCustom+idIspezione+".pdf";
+                var myBase64 = "";
+                convertFileToDataURLviaFileReader(encodeURI(linkPdf),function(base64Img) {
+                myBase64 = base64Img.split(',')[1];    
+               
+                // To define the type of the Blob
+                var contentType = "application/pdf";
+                // if cordova.file is not available use instead :
+                // var folderpath = "file:///storage/emulated/0/";
+                var folderpath = testPathCustom;
+                
+                var filename = idIspezione+".pdf";
+
+                savebase64AsPDF(folderpath,filename,myBase64,contentType);
+                
+                setTimeout(function () {
+                    cordova.plugins.fileOpener2.open(
+                    fileURL, 
+                    "application/pdf",
+                    { error : function(e) { 
+                        myApp.hidePreloader();
+                        myApp.alert("Errore","Impossibile aprire il pdf");
+                        },
+                     success : function(e) { 
+                        myApp.hidePreloader();
+                        
+                        }
+                    });
+                }, 4000);
+               
+                    });   
 }
