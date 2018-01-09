@@ -748,7 +748,8 @@ function populateListaIspezioni(objIspezioni){
  }
  
  function prepareSaveAttach(){
-     var idIspezione =  121;
+     myApp.showPreloader();
+     var idIspezione =  $$(".idIspezione").text();
      var formData1 = new FormData();
      var formDatalIsPopulated = false;
      
@@ -779,6 +780,8 @@ function populateListaIspezioni(objIspezioni){
     // se ho almeno un file tra img e file caricatri allora invio  
     if(formDatalIsPopulated){
             saveAttach(formData1, idIspezione);
+    }else{
+        myApp.hidePreloader();
     }
 
 }
