@@ -11,6 +11,9 @@
     <access origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="*" />
+    <feature name="StatusBar">
+            <param name="ios-package" value="CDVStatusBar" onload="true" />
+        </feature>
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/ldpi.png" />
         <icon density="mdpi" src="resources/android/icon/mdpi.png" />
@@ -50,13 +53,14 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <preference name="BackupWebStorage" value="none" />
+        <preference name="StatusBarBackgroundColor" value="#000000" />
+         
     </platform>
     <preference name="DisallowOverscroll" value="true" />
     <plugin name="cordova-plugin-certificates" spec="0.6.4" />
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-device" spec="1.1.7" />
     <plugin name="cordova-plugin-inappbrowser" spec="1.7.2" />
-    <plugin name="cordova-plugin-statusbar" spec="1.0.1" />
     <plugin name="cordova-plugin-file" spec="~4.3.3" />
     <plugin name="cordova-plugin-file-opener2" spec="~2.0.15" />
     <plugin name="cordova-plugin-whitelist" spec="~1.2.0" />
@@ -66,4 +70,5 @@
         <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Take Photo Library" />
     </plugin>
     <engine name="android" spec="^6.2.3" />
+    <plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
 </widget>
