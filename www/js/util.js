@@ -537,13 +537,16 @@ function populateInfoIspezione(info){
 }
 function populateControlli(controlliObj, status){
     
+    
     if($$(".submitIspezioneDettaglio")){
           $$(".submitIspezioneDettaglio").removeClass("displaynone");
     }
      if($$(".submitIspezioneDettaglioInvia")){
           $$(".submitIspezioneDettaglioInvia").removeClass("displaynone");
     }
-  
+    // rendo visibile la parte degli allegati
+     $$(".divDocContainer").removeClass("displaynone");
+      $$(".divImgContainer").removeClass("displaynone");
     // ordino per sequenza 
     var controlliObjSort = controlliObj.sort(function(a,b) {
         return a.seq - b.seq ; 
@@ -729,6 +732,9 @@ function populateListaIspezioni(objIspezioni){
     }else if (objIspezione.status === "B"){
         $$(".sendIspezione").removeClass("displaynone");
     }
+    // rendo visibile la parte degli allegati
+     $$(".divDocContainer").removeClass("displaynone");
+      $$(".divImgContainer").removeClass("displaynone");
     
  }
  
@@ -748,7 +754,7 @@ function populateListaIspezioni(objIspezioni){
  }
  
  function prepareSaveAttach(){
-     myApp.showPreloader();
+  
      var idIspezione =  $$(".idIspezione").text();
      var formData1 = new FormData();
      var formDatalIsPopulated = false;
