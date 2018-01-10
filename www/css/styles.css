@@ -213,7 +213,7 @@ a.button.button-fill.button-raised.yellow{
 }
 .list-block.virtual-list.ispezioneList .item-subtitle{
     background-color: #5a483e;
-    padding: 0px 5px;
+    padding: 5px 5px;
     color:#fff;
     font-size:12px;
     margin: 10px 0px;
@@ -300,6 +300,19 @@ input.modal-text-input{
 .filterStatusSelect{
     background: none !important;
 }
+
+div.ispezioneList .item-subtitle{
+    white-space:normal;
+}
+
+.ispezioneList select{
+    width: 130px;
+    margin-left: 20px;
+}
+div.ispezioneList ul{
+    height: 100% !important;
+}
+
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{
         padding-top: 5px;

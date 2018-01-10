@@ -60,6 +60,7 @@
     <plugin name="cordova-plugin-file" spec="~4.3.3" />
     <plugin name="cordova-plugin-file-opener2" spec="~2.0.15" />
     <plugin name="cordova-plugin-whitelist" spec="~1.2.0" />
+    <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1">
         <param name="CAMERA_USAGE_DESCRIPTION" value="Take Photo" />
         <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Take Photo Library" />

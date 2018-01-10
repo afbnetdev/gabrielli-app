@@ -474,6 +474,11 @@ function verifyUserProfile(){
         }else{
             $$(".gestioneTicket").show();
         }
+        if(!window.sessionStorage.userProfile.includes("controllori")){
+            $$(".gestioneControlli").hide();
+        }else{
+            $$(".gestioneControlli").show();
+        }
 }
 
 function formatAmountToFloat(amount){
@@ -566,7 +571,7 @@ function populateControlli(controlliObj, status){
                       '</div>' +
                       '<div class="item-title">{{controllo.descrizione}}</div>' +
                       '<div class="item-input-row">' +
-                      '<a href="#" data-descrizioneControllo="{{controllo.descrizione}}" class="prompt-ok "><input readonly="true" type="text"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento"></a>' +
+                      '<a href="#" data-descrizioneControllo="{{controllo.descrizione}}" class="prompt-ok "><input readonly="true" type="text" style="color: #f44336;"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento"></a>' +
                   '</div>' +
                    '</div>' +
                   '<div class="item-input-row">' +
@@ -909,3 +914,15 @@ function openPdfIspezione(idIspezione){
                
                     });   
 }
+
+// VA TESTATO BENE, funzione che chiude la tastiera al click del pulsante 'vai'
+
+$(document).on('keydown keyup keypress', function (event, characterCode) {
+   
+  var keyCode = (event.which ? event.which : event.keyCode);
+    if (keyCode === 13 && (typeof Keyboard !== 'undefined')) {
+        Keyboard.hide();
+        event.preventDefault();
+    }
+
+});
