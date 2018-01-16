@@ -423,12 +423,13 @@ function newTicket(){
             docDescr = fileName;
             callToMaximoFile(doclink, fileType, docMeta, docDescr, fileName, formData2)
         }
+        modifyTktTitle(tktnewtitle,hrefTkt);
         myApp.hidePreloader();
         myApp.alert('Ticket creato correttamente');
         mainView.router.reloadPage("manage_ticket.html");
 
         //reset ticket title
-        // modifyTktTitle(tktnewtitle,hrefTkt);
+        
     return false;
    }
 }
@@ -472,17 +473,16 @@ function modifyTktTitle(tktnewtitle,hrefTkt){
         headers:{
             'Authorization': 'Bearer 102-token',
             'Access-Control-Allow-Origin': '*',
-         //    'Content-type': 'application/x-www-form-urlencoded',
             'jSessionID': window.sessionStorage.jsessionid,
-            'hrefTicket': hrefTkt,
+            'hrefTicket': hrefTkt
          },
          url :URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/manageTicket/modificaTicket',
-         method: 'PUT',
+         method: 'POST',
          contentType: 'application/json',
          data: JSON.stringify(tktdata),
          async: false,
          success: function(data){
-             dataoutput = data;
+             console.log("OK TITOLO MODIFICATO");
          },
          error: function(data, status, xhr){
              error = true;

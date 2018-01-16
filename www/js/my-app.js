@@ -34,8 +34,6 @@ var docTableData;
 var userAndPwdCheck = true;
 var testPathCustom;
 
-var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
-var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 
 $$.ajaxSetup({headers: {'Access-Control-Allow-Origin': '*'}});
 var mainView = myApp.addView('.view-main', {dynamicNavbar: true, });
@@ -479,7 +477,15 @@ var editIspezione = myApp.onPageInit("editIspezione", function (page) {
         myApp.showPreloader();
         setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
    });
-   
+      $$(".submitIspezioneDettaglio").on('click', function () {
+        if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val()){
+            myApp.alert("Selezionare il tipo evento e il punto vendita");
+            return;
+        }
+        myApp.showPreloader();
+        var status = "B";
+        setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
+   });
    
     
 });

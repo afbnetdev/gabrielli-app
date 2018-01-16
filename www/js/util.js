@@ -5,8 +5,9 @@ Initial setup
 
 var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 //var URL_ENDPOINT = 'http://192.168.2.90:9080';
-//var TEST_URL = 'http://192.168.81.215:9080';
-var TEST_URL = 'http://portal.gabriellispa.it';
+var TEST_URL = 'http://192.168.81.215:9080';
+//var TEST_URL = 'http://portal.gabriellispa.it';
+
 
 //Funzione per settare un obj nel sessionStorage
 
@@ -20,6 +21,9 @@ Storage.prototype.getObj = function(key) {
 //FILTER STRING
 var pageSizeFilterTickets=20;
 
+
+var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 /*---------------------------------------
  Table Construction
  ---------------------------------------*/
@@ -355,7 +359,7 @@ function formatDateFromTimeStampToItalian(timeStamp) {
     var finalDate = 'Data non disponibile';
     if (timeStamp && timeStamp !== 'null') {
         var d= new Date(timeStamp);
-        finalDate = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear();
+        finalDate = ("0" + d.getDate()).slice(-2) + '/' + ("0" + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
     }
     return finalDate;
 }
@@ -392,7 +396,7 @@ function populateTicketPageDetails(ticket){
       if(!assignment){
           assignment = 'Operatore non disponibile';
       }
-        var desc = ticket.description ? ticket.description.replace(/<(?:.|\n)*?>/gm, '') : "Non disponibile";
+        var desc = ticket.description ? ticket.description.replace(/<[^>]+>/igm, '').trim() : "Non disponibile";
         if(desc && desc.includes("__")){
             var tmp = desc.split("__");
             desc = tmp[0];
@@ -400,10 +404,12 @@ function populateTicketPageDetails(ticket){
     
     $$(".hrefTicketId").val(ticket.href);
     $$(".textAreaRichiestaTkt").val(desc);
-    $$(".textAreaDettagliTkt").val(ticket.description_longdescription ? ticket.description_longdescription.replace(/<(?:.|\n)*?>/gm, '') : "Dettaglio ticket non disponibile");
+    $$(".textAreaDettagliTkt").val(ticket.description_longdescription ? ticket.description_longdescription.replace(/<[^>]+>/igm, '').trim() : "Dettaglio ticket non disponibile");
     $$(".statusTkt input").val(ticket.status ? ticket.status : "Status non disponibile");
     $$(".operatoreTkt input").val(assignment);
-    $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription.replace(/<(?:.|\n)*?>/gm, '')  : "Dettaglio risoluzione non disponibile");
+    $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription.replace(/<[^>]+>/igm, '').trim()  : "Dettaglio risoluzione non disponibile");
+    
+    $$(".sr-notaText").html(ticket.nota  ? ticket.nota.replace(/<[^>]+>/igm, '').trim()  : "Nota non disponibile");
     
     if((ticket.val1 || ticket.val2 || ticket.cordialita) && ticket.status == 'RESOLVED'){
         $$("#btn-valuta-ticket").hide();
@@ -411,6 +417,12 @@ function populateTicketPageDetails(ticket){
         myApp.alert("Ticket già valutato");
 
     }
+
+    //Only for canceled tickets
+    if(ticket.status == 'ANNULLATO'){
+        $$(".sr-notaTkt").css('display', 'block');
+    }
+    
 
     if(ticket.status !== 'RESOLVED' && ticket.status !== 'CLOSED'){
         $$(".soluzioneTicket").hide();
@@ -571,11 +583,11 @@ function populateControlli(controlliObj, status){
                       '</div>' +
                       '<div class="item-title">{{controllo.descrizione}}</div>' +
                       '<div class="item-input-row">' +
-                      '<a href="#" data-descrizioneControllo="{{controllo.descrizione}}" class="prompt-ok "><input readonly="true" type="text" style="color: #f44336;"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento"></a>' +
+                      '<a href="#" data-descrizioneControllo="{{controllo.descrizione}}" class="prompt-ok "><input readonly="true" type="text" style="color: #a5a1a1;"  class="commentoIdControllo{{controllo.idControllo}} " name="commenti" placeholder="Inserisci commento"></a>' +
                   '</div>' +
                    '</div>' +
                   '<div class="item-input-row">' +
-                  '<select data-idControllo="{{controllo.idControllo}}" class="controlloIsp"><option value="">Esito</option><option value="C">Conforme</option><option value="N">Non conforme</option></select>' +    
+                  '<select onchange="verifyResult(this)" data-idControllo="{{controllo.idControllo}}" class="controlloIsp"><option value="">Esito</option><option value="C">Conforme</option><option value="N">Non conforme</option></select>' +    
                       '</div>' +
                     '</div>' +
                '</li>'
@@ -615,7 +627,7 @@ function prepareSubmitIspezioneDettaglio(status){
      var okControlli = "ok";
         $$(".controlloIsp").each(function(index){
             if($$(this).val() === "")
-                okControlli = ""
+                okControlli = "";
         });
     if(okControlli || status === "B"){
           $$(".controlloIsp").each(function (index){
@@ -625,6 +637,9 @@ function prepareSubmitIspezioneDettaglio(status){
             obj.esito = $$(this).val();
             var commento = $$(".commentoIdControllo"+$$(this).data("idControllo")+"").val();
             obj.commento = commento;
+            if(obj.esito === "N"){ 
+                obj.dataLimite = formatDateFromItalian($$(".dataLimiteEvento-"+$$(this).data("idControllo")+"").val());
+            }
             arrayJson.push(obj);
         });
     }else{
@@ -727,8 +742,13 @@ function populateListaIspezioni(objIspezioni){
 
     // itero i dettagli ispezioni
     $.each(objIspezione.dettaglioIspezione, function (i, di) {
-       $("select[data-idControllo="+di.controllo.idControllo+"]").val(di.esito);
+        var selectElement = $("select[data-idControllo="+di.controllo.idControllo+"]");
+       $("select[data-idControllo="+di.controllo.idControllo+"]").val(di.esito.trim());
        $(".commentoIdControllo"+di.controllo.idControllo+"").val(di.commento);
+       if(di.esito === "N" && (di.dataLimite !== null && typeof di.dataLimite !== 'undefined')){
+           var siebling = selectElement.parent().siblings();
+           $(siebling).append('<div class="item-input-row"><input readonly="true" type="text" value="'+formatDateFromTimeStampToItalian(di.dataLimite)+'" style="color: red;" class="dataLimiteEvento-'+di.controllo.idControllo+'" ></div>');
+       }
     });
     
     if(objIspezione.status === "I"){
@@ -914,6 +934,45 @@ function openPdfIspezione(idIspezione){
                
                     });   
 }
+
+function verifyResult(selectElement){
+     var siebling = selectElement.parentNode.previousSibling;
+    if($(selectElement).val() === "N"){
+       
+     myApp.modal({
+            title: "Selezionare una data",
+            text: "Selezionare una data limite entro la quale l'evento dovrà essere reso conforme",
+            afterText: '<input type="text" class="modal-text-input calendar" placeholder="Inserisci data" value="" />',
+            buttons: [{
+              text: 'Conferma',
+              onClick: function() {
+                $(siebling).append('<div class="item-input-row"><input readonly="true" type="text" value="'+$(".calendar").val()+'" style="color: red;" class="dataLimiteEvento-'+selectElement.dataset.idcontrollo+'" ></div>');
+              }
+            }, {
+              text: 'Cancella',
+              onClick: function() {
+               $(selectElement).val("");
+              }
+            }, ]
+          }); 
+        
+      var myCalendarLimit = myApp.calendar({
+        input: '.calendar',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days,
+        minDate: new Date()
+       
+        });
+        
+    
+    }else{
+        $(".dataLimiteEvento-"+selectElement.dataset.idcontrollo).remove();
+    }
+}
+
+
 
 // VA TESTATO BENE, funzione che chiude la tastiera al click del pulsante 'vai'
 
