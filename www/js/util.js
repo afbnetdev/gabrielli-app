@@ -207,47 +207,51 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
          var linkPDF = e.currentTarget.getAttribute("data-linkpdf");
          //myApp.alert('url: '+linkPDF);
         if(linkPDF){
-            
-            if(device.platform !== "Android" ){
-                var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
+            if(typeof device !== 'undefined'){
                 
-                }else{
-                   myApp.showPreloader();
-                    var fileURL = testPathCustom+"local.pdf";
-                   
-                    var myBase64 = "";
-                    convertFileToDataURLviaFileReader(encodeURI(linkPDF),function(base64Img) {
-                myBase64 = base64Img.split(',')[1];    
-               
-                // To define the type of the Blob
-                var contentType = "application/pdf";
-                // if cordova.file is not available use instead :
-                // var folderpath = "file:///storage/emulated/0/";
-                var folderpath = testPathCustom;
-                
-                var filename = "local.pdf";
+                if(device.platform !== "Android" ){
+                    var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
 
-                savebase64AsPDF(folderpath,filename,myBase64,contentType);
-                
-                setTimeout(function () {
-                    cordova.plugins.fileOpener2.open(
-                    fileURL, 
-                    "application/pdf",
-                    { error : function(e) { 
-                        myApp.hidePreloader();
-                        myApp.alert("Errore","Impossibile aprire il pdf");
-                        },
-                     success : function(e) { 
-                        myApp.hidePreloader();
-                        
-                        }
-                    });
-                }, 4000);
-               
-                    });   
-		
-             
-                }
+                    }else{
+                       myApp.showPreloader();
+                        var fileURL = testPathCustom+"local.pdf";
+
+                        var myBase64 = "";
+                        convertFileToDataURLviaFileReader(encodeURI(linkPDF),function(base64Img) {
+                    myBase64 = base64Img.split(',')[1];    
+
+                    // To define the type of the Blob
+                    var contentType = "application/pdf";
+                    // if cordova.file is not available use instead :
+                    // var folderpath = "file:///storage/emulated/0/";
+                    var folderpath = testPathCustom;
+
+                    var filename = "local.pdf";
+
+                    savebase64AsPDF(folderpath,filename,myBase64,contentType);
+
+                    setTimeout(function () {
+                        cordova.plugins.fileOpener2.open(
+                        fileURL, 
+                        "application/pdf",
+                        { error : function(e) { 
+                            myApp.hidePreloader();
+                            myApp.alert("Errore","Impossibile aprire il pdf");
+                            },
+                         success : function(e) { 
+                            myApp.hidePreloader();
+
+                            }
+                        });
+                    }, 4000);
+
+                        });   
+
+
+                    }
+            }else{
+                window.open(linkPDF, '_system', 'location=yes');
+            }
           //var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
              myApp.alert("Impossibile reperire il Pdf", "Errore");
@@ -411,15 +415,15 @@ function populateTicketPageDetails(ticket){
     
     $$(".sr-notaText").html(ticket.nota  ? ticket.nota.replace(/<[^>]+>/igm, '').trim()  : "Nota non disponibile");
     
-    if((ticket.val1 || ticket.val2 || ticket.cordialita) && ticket.status == 'RESOLVED'){
+    if((ticket.val1 || ticket.val2 || ticket.cordialita) && ticket.status === 'RESOLVED'){
         $$("#btn-valuta-ticket").hide();
         $$(".valutazioneTkt").hide();
-        myApp.alert("Ticket già valutato");
+        myApp.alert("Ticket già valutato","Attenzione");
 
     }
 
     //Only for canceled tickets
-    if(ticket.status == 'ANNULLATO'){
+    if(ticket.status === 'ANNULLATO'){
         $$(".sr-notaTkt").css('display', 'block');
     }
     
@@ -645,7 +649,7 @@ function prepareSubmitIspezioneDettaglio(status){
     }else{
         if(status === "I"){
             myApp.hidePreloader();
-            myApp.alert("Valuta tutti i controlli");
+            myApp.alert("Valuta tutti i controlli", "Attenzione");
             return;
         }
            

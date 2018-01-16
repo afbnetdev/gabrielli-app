@@ -24,7 +24,7 @@ function getMaximoTktList(stringFilter){
         crossDomain: true,
             error: function (data, status, xhr) {
                 //alert(JSON.stringify(data));
-                myApp.alert('Errore caricamento ticket');
+                myApp.alert('Errore caricamento ticket', "Attenzione");
                 err = 'err_00'
             },
             success: function (data, status, xhr) {
@@ -36,7 +36,7 @@ function getMaximoTktList(stringFilter){
 
             },
             401: function (xhr) {
-                myApp.alert('App non autorizzata ad ottenere i dati');
+                myApp.alert('App non autorizzata ad ottenere i dati', "Attenzione");
             }
         }
     });
@@ -104,7 +104,7 @@ function getUserInfo(){
                     error: function (data, status, xhr) {
 
                         //alert(JSON.stringify(data));
-                        myApp.alert('Errore reperimento Email utente');
+                        myApp.alert('Errore reperimento Email utente', "Attenzione");
                         err = 'err_00';
                         myApp.hidePreloader();
                     },
@@ -251,7 +251,7 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains,d
                     error: function (data, status, xhr) {
                         myApp.hidePreloader();
                         //alert(JSON.stringify(data));
-                        myApp.alert('Errore reperimento dati');
+                        myApp.alert('Errore reperimento dati', "Attenzione");
                         err = 'err_00'
                     },
                     success: function (data, status, xhr) {
@@ -302,12 +302,12 @@ function sendDocument(keyDoc_RF, linkUrlDocumento_SP, title){
                           error: function (data, status, xhr) {
                               myApp.hidePreloader();
                               //alert(JSON.stringify(data));
-                              myApp.alert("Errore nell'invio della mail");
+                              myApp.alert("Errore nell'invio della mail", "Attenzione");
                               err = 'err_00'
                           },
                           success: function (data, status, xhr) {
                                   myApp.hidePreloader();
-                                  myApp.alert('Documento inviato con successo alla email: '+window.sessionStorage.userEmail);
+                                  myApp.alert('Documento inviato con successo alla email: '+window.sessionStorage.userEmail, "Documento");
                           },
 
                       statusCode: {
@@ -336,12 +336,12 @@ function newTicket(){
 
        if(!tktnewtitle){
            myApp.hidePreloader();
-           myApp.alert('Il titolo è obbligatorio');
+           myApp.alert('Il titolo è obbligatorio', "Attenzione");
            return false;
        }
        if(!tktdetails){
            myApp.hidePreloader();
-           myApp.alert('La descrizione è obbligatoria');
+           myApp.alert('La descrizione è obbligatoria', "Attenzione");
            return false;
        }
 
@@ -374,14 +374,14 @@ function newTicket(){
             statusCode:{
                 415: function(xhr) {
                     myApp.hidePreloader();
-                    myApp.alert('Servizio non disponibile. Error status: 415');
+                    myApp.alert('Servizio non disponibile. Error status: 415', "Attenzione");
                     return false;
                 }
             }
         });
         if(error){
             myApp.hidePreloader();
-            myApp.alert('Impossibile aprire un tkt');
+            myApp.alert('Impossibile aprire un tkt', "Attenzione");
             return false;
         }
         //get inserted ticket
@@ -425,7 +425,7 @@ function newTicket(){
         }
         modifyTktTitle(tktnewtitle,hrefTkt);
         myApp.hidePreloader();
-        myApp.alert('Ticket creato correttamente');
+        myApp.alert('Ticket creato correttamente', "Ticket");
         mainView.router.reloadPage("manage_ticket.html");
 
         //reset ticket title
@@ -457,7 +457,7 @@ function callToMaximoFile(doclink, fileType, docMeta, docDescr, fileName, formDa
         },
         error: function (data, status, xhr) {
             console.log('Upload file fallito!' + JSON.stringify(data) + ' status: ' + status);
-            myApp.alert('Upload file fallito! STATUS: ' + status);
+            myApp.alert('Upload file fallito! STATUS: ' + status, "Attenzione");
         },
         cache: false,
         contentType: false,
@@ -490,13 +490,13 @@ function modifyTktTitle(tktnewtitle,hrefTkt){
          },
          statusCode:{
              415: function(xhr) {
-                 myApp.alert('Servizio non disponibile. Error status: 415');
+                 myApp.alert('Servizio non disponibile. Error status: 415', "Attenzione");
                  return false;
              }
          }
      });
      if(error){
-         myApp.alert('Impossibile modificare tkt');
+         myApp.alert('Impossibile modificare tkt', "Attenzione");
          return false;
      }
      return false;
@@ -531,19 +531,19 @@ function sendEval(valutazioneTempistica, valutazioneSoluzione, valutazioneCortes
                           error: function (data, status, xhr) {
                               myApp.hidePreloader();
                               //alert(JSON.stringify(data));
-                              myApp.alert("Errore nell'invio della valutazione");
+                              myApp.alert("Errore nell'invio della valutazione", "Attenzione");
                               err = 'err_00'
                           },
                           success: function (data, status, xhr) {
                                   myApp.hidePreloader();
-                                  myApp.alert('Valutazione inviata con successo ');
+                                  myApp.alert('Valutazione inviata con successo', "Valutazione");
                                   blockAfterEval();
                           },
 
                       statusCode: {
                           401: function (xhr) {
                               myApp.hidePreloader();
-                              myApp.alert('App non autorizzata ad inviare i dati');
+                              myApp.alert('App non autorizzata ad inviare i dati', "Attenzione");
                           }
                       }
                   });
