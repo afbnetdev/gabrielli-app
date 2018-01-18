@@ -511,7 +511,7 @@ function populatePuntiVendita(){
     $.each(jsonPuntiVendita, function (i, pv) {
     $('.puntiVenditaIspezioneSelect').append($('<option>', { 
         value: pv.idPdv,
-        text : pv.codicePdv+" - "+pv.descrizione
+        text : pv.codicePdv+" - "+pv.localita
     }));
 });
     
@@ -713,7 +713,7 @@ function populateListaIspezioni(objIspezioni){
         }
         row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="dataIspezioneList">' + formatDateFromTimeStampToItalian(objIspezioni[i].dataIspezione) + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[2] + '"/>').html('<a href="#" class="tipoIspezioneList">' + objIspezioni[i].tipoEvento.descrizione + '</a>'));
-        row$.append($$('<td data-collapsible-title="' + header[3] + '"/>').html('<a href="#" class="puntoVenditaIspezioneList">' + objIspezioni[i].puntoVendita.descrizione + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[3] + '"/>').html('<a href="#" class="puntoVenditaIspezioneList">' + objIspezioni[i].puntoVendita.localita + '</a>'));
         row$.append($$('<td data-collapsible-title="' + header[4] + '"/>').html('<a href="#" class="statusIspezioneList">' + status + '</a>'));
         $$(".data-table > table > tbody").append(row$);
         
@@ -736,7 +736,7 @@ function populateListaIspezioni(objIspezioni){
      $$(".tipoEvento").text(objIspezione.tipoEvento.descrizione);
      $$(".commentiIspezioneText").text(objIspezione.commenti);
      $$(".presentiIspezioneText").text(objIspezione.presenti);
-     $$(".puntoVendita").text(objIspezione.puntoVendita.codicePdv+" - "+objIspezione.puntoVendita.descrizione);
+     $$(".puntoVendita").text(objIspezione.puntoVendita.codicePdv+" - "+objIspezione.puntoVendita.localita);
      $$(".statusIsp").text(status);
      
      // setto in un input hidden i campi tipo evento e punto vendita
