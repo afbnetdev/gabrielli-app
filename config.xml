@@ -69,5 +69,5 @@
         <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Take Photo Library" />
     </plugin>
     <plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
-    <engine name="android" spec="^6.2.3" />
+    
 </widget>
