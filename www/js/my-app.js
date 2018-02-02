@@ -426,7 +426,7 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
         capturePhotoWithDataMULTI();
     });
     $$(".allegatiIspezione").click(function () {
-        prepareSaveAttach();;
+        prepareSaveAttach();
     });
      
 });
@@ -486,7 +486,9 @@ var editIspezione = myApp.onPageInit("editIspezione", function (page) {
         var status = "B";
         setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
    });
-   
+   $$(".btn-camera-upload").click(function () {
+        capturePhotoWithDataMULTI();
+    });
     
 });
 
