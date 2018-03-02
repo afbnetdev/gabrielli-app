@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-
-<widget id="com.gabriellispa.appv1" version="2.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
-
+<widget id="com.gabriellispa.appv1" version="2.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
     <name>Gabrielli v1</name>
     <description>
         Gabrielli App v.1
@@ -28,12 +26,10 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
-
         <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
             <string>Take Photo</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
-
             <string>Take Photo Library</string>
         </edit-config>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -60,7 +56,6 @@
         <preference name="StatusBarBackgroundColor" value="#000000" />
     </platform>
     <preference name="DisallowOverscroll" value="true" />
-
     <plugin name="cordova-plugin-certificates" spec="0.6.4" />
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-device" spec="1.1.7" />
