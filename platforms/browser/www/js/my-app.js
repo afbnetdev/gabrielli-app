@@ -2,9 +2,6 @@
 var myApp = new Framework7({
     template7Pages: true,
     material: true,
-    smartSelectSearchbar:true,
-    uniqueHistory : true,
-    smartSelectBackOnSelect:true,
     preroute: function (view, options) {
         if (!window.sessionStorage.jsessionid) {
             getLogout();
@@ -31,7 +28,7 @@ var itemsPerLoad = 10;
 var lastIndexDoc = 0;
 var limitDoc = 10;
 var docTableData;
-var userAndPwdCheck = true;
+
 
 
 var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
@@ -43,7 +40,6 @@ var mainView = myApp.addView('.view-main', {dynamicNavbar: true, });
 $$(document).on('deviceready', function () {
     pictureSource = navigator.camera.PictureSourceType;
     destinationType = navigator.camera.DestinationType;
-    cordova.plugins.certificates.trustUnsecureCerts(true);
     //Necessarie per navigare il file system
 //    myPath = cordova.file.externalRootDirectory;
 //    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
@@ -66,94 +62,48 @@ myApp.onPageInit("*", function () {
 /*---------------------------------------
  On EACH page
  ---------------------------------------*/
- $$("#btn-logout").click(function () {
-        window.sessionStorage.clear();
-        myApp.loginScreen(".login-screen", false);
-    });
-//    $$("#btn-login").click(function () {
-//        var formLogin = myApp.formGetData('frm-login');
-//        //Get Form Login
-//        var chkLogin ;
-//        chkLogin = validateUser(formLogin.username, formLogin.password);
-//
-//        if(chkLogin){
-//            window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
-//            window.sessionStorage.setItem("authorized", 1);                 //Set token auth
-//            $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
-//            myApp.closeModal(".login-screen", false);
-//            getUserProfile();
-//            getUserAnag();
-//            getUserInfo();
-//            verifyUserProfile();
-//            mainView.router.loadPage({
-//                force : true,
-//                ignoreCache : true,
-//                url :"index.html"
-//            });
-//        }
-//        else{
-//            if(!userAndPwdCheck){
-//                return;
-//            }
-//            myApp.alert("User name o password errati","Login error");
-//        }
-//    });
-     $$("#btn-login").click(function () {
-        var formLogin = myApp.formGetData('frm-login');
-        //Get Form Login
-//        var chkLogin ;
-//        chkLogin = validateUser(formLogin.username, formLogin.password);
-
-        if(true){
-            window.sessionStorage.setItem("username", formLogin.username); 
-            window.sessionStorage.setItem("jsessionid", "formLogin.username");//Set user in session
-            window.sessionStorage.setItem("authorized", 1);                 //Set token auth
-            $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
-            myApp.closeModal(".login-screen", false);
-//            getUserProfile();
-//            getUserAnag();
-//            getUserInfo();
-//            verifyUserProfile();
-            mainView.router.loadPage({
-                force : true,
-                ignoreCache : true,
-                url :"index.html"
-            });
-        }
-        else{
-            if(!userAndPwdCheck){
-                return;
-            }
-            myApp.alert("User name o password errati","Login error");
-        }
-    });
 
 //INDEX
-//var index = myApp.onPageInit('index', function () {
-//    
-//    if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
-//            window.sessionStorage.jsessionid !== null &&
-//            window.sessionStorage.jsessionid !== "") {
-//       verifyUserProfile();
-//    } else {
-//        myApp.loginScreen(".login-screen", false);
-//    }
-//
-//
-//}).trigger();
 var index = myApp.onPageInit('index', function () {
     
     if (typeof window.sessionStorage.jsessionid !== 'undefined' &&
             window.sessionStorage.jsessionid !== null &&
             window.sessionStorage.jsessionid !== "") {
-       //verifyUserProfile();
+       verifyUserProfile();
     } else {
         myApp.loginScreen(".login-screen", false);
     }
 
 
-}).trigger();
+    
+    $$("#btn-logout").click(function () {
+        window.sessionStorage.clear();
+        myApp.loginScreen(".login-screen", false);
+    });
+    $$("#btn-login").click(function () {
 
+        var formLogin = myApp.formGetData('frm-login');
+        //Get Form Login
+        var chkLogin;
+        chkLogin = validateUser(formLogin.username, formLogin.password);
+
+        if(chkLogin){
+            window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
+            window.sessionStorage.setItem("authorized", 1);                 //Set token auth
+            $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
+            myApp.closeModal(".login-screen", false);
+            getUserProfile();
+            getUserAnag();
+            getUserInfo();
+            verifyUserProfile();
+        }
+        else{
+            myApp.alert("User name o password errati","Login error");
+        }
+    });
+
+
+}).trigger();
 
 //MANAGE TICKET
 var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
@@ -169,7 +119,7 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     //var myList = getTktDataByFilter('0','10',filter, sort);
     var myList; var lastIndexDoc; var limitDoc; var maxItems;
     if(!filteredList){
-        var stringFilterOnlyUsername = 'oslc.select=*&oslc.where=reportedby="'+window.sessionStorage.personid+'"&oslc.orderBy=-changedate';
+        var stringFilterOnlyUsername = 'oslc.select=*&oslc.where=reportedby="'+window.sessionStorage.username+'"';
         myList = getMaximoTktList(stringFilterOnlyUsername);
     // myList = getTktDataByFilter(lastIndex, itemsPerLoad, filter, sort);
 
@@ -191,18 +141,15 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     if(!myList){
         return;
     }
-    maxItems = myList.responseInfo.totalCount;
+    maxItems = myList.member.length;
       if (lastIndexDoc < maxItems) {
-          $$('.infinite-scroll-preloader').removeClass('nodisplay');
-      } else {
-          $$('.infinite-scroll-preloader').addClass('nodisplay');
-          return;
-      }
-    if(maxItems <= limitDoc){
-        $$('.infinite-scroll-preloader').addClass('nodisplay');
-    }
-    var cols = ["ticketid", "description", "status", "reportedby", "affectedperson", "creationdate"];
-    var heads = ["ID Ticket", "Descrizione", "Stato", "Aperto Da", "Assegnato A", "Data creazione"];
+            $$('.infinite-scroll-preloader').removeClass('nodisplay');
+        } else {
+            $$('.infinite-scroll-preloader').addClass('nodisplay');
+            return;
+        }
+    var cols = ["ticketid", "externalsystem", "description", "status", "reportedby", "affectedperson", "creationdate"];
+    var heads = ["ID Ticket", "Tipo segnalazione", "Descrizione", "Stato", "Aperto Da", "Assegnato A", "Data creazione"];
 
     buildTicketTable(myList.member, cols, heads, limitDoc, lastIndexDoc);
     lastIndexDoc = lastIndexDoc + limitDoc;
@@ -241,7 +188,7 @@ var new_tkt = myApp.onPageInit("new_tkt", function (page) {
         // alert($$(this).val());
         $$('#file-label').html( $$(this).val().replace(/C:\\fakepath\\/i, '') );
         // console.log('filename: '+$$("#file-to-upload")[0].files[0].name);
-        // console.log('filetype:  '+$$("#file-to-upload")[0].files[0].type);
+        // console.log('filetype: '+$$("#file-to-upload")[0].files[0].type);
     });
     $$(".btn-camera-upload").click(function () {
         capturePhotoWithData();
@@ -333,31 +280,27 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
 //   });
     $$('.infinite-scroll').on('infinite', function () {
         // Exit, if loading in progress
-        if (loading || !docTableData){
-           return;
-        }
-        
-        if(lastIndexDoc < docTableData.length){
-            // Set loading flag
-            loading = true;
-            // Emulate 1s loading
-                lastIndexDoc = limitDoc;
-                limitDoc = limitDoc + 10;
+        if (loading)
+            return;
+        // Set loading flag
+        loading = true;
+        // Emulate 1s loading
 
-            if (lastIndexDoc < docTableData.length) {
+        lastIndexDoc = limitDoc;
+        limitDoc = limitDoc + 10;
 
-                $$('.infinite-scroll-preloader').removeClass('nodisplay');
-            } else {
-                $$('.infinite-scroll-preloader').addClass('nodisplay');
-                return;
-            }
-            setTimeout(function () {
-                // Reset loading flag
-                loading = false;
-                buildDocumentTable(docTableData, ['Numero', 'Tipo Documento', 'Data','Importo', 'E-mail', 'PDF'], limitDoc, lastIndexDoc);
-                $$('.backToTop').removeClass('nodisplay');
-            }, 1000);
+        if (lastIndexDoc < docTableData.length) {
+            $$('.infinite-scroll-preloader').removeClass('nodisplay');
+        } else {
+            $$('.infinite-scroll-preloader').addClass('nodisplay');
+            return;
         }
+        setTimeout(function () {
+            // Reset loading flag
+            loading = false;
+            buildDocumentTable(docTableData, ['Numero', 'Nome', 'Data', 'E-mail', 'PDF'], limitDoc, lastIndexDoc);
+            $$('.backToTop').removeClass('nodisplay');
+        }, 1000);
     });
 
     $$('.backToTop').on('click', function () {
@@ -373,152 +316,64 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
         $$('.backToTop').addClass('nodisplay');
         $$('.tbodyDocumentList').empty();
         docTableData = [];
-        $$('.infinite-scroll-preloader').addClass('nodisplay');
 //        var docType = inputHiddenId;
-        var docAmountFrom = $$('.docAmountFrom').val() ? $$('.docAmountFrom').val() : '0';
-        var docAmountTo = $$('.docAmountTo').val() ? $$('.docAmountTo').val() : '99999999';
-        var docAmountFromDecimal = $$('.docAmountFromDecimal').val() ? $$('.docAmountFromDecimal').val() : '00';
-        var docAmountToDecimal = $$('.docAmountToDecimal').val() ? $$('.docAmountToDecimal').val() : '00';
+        var docAmountFrom = $$('.docAmountFrom').val();
+        var docAmountTo = $$('.docAmountTo').val();
         var dateFrom = formatDateFromItalian($$('.datePickerFrom').val());
         var dateTo = formatDateFromItalian($$('.datePickerTo').val());
         var docContains = $$('.docContains').val();
-        var docType = $$('.docType').val();
-        // add dot
-        docAmountFrom = docAmountFrom+"."+docAmountFromDecimal;
-        docAmountTo = docAmountTo+"."+docAmountToDecimal;
-        //modifico se vuoto        
+        //modifico se vuoto
+        docAmountFrom = (docAmountFrom === "") ? '0' : docAmountFrom;
+        docAmountTo = (docAmountTo === "") ? '99999999' : docAmountTo;
         docContains = (docContains === "") ? 'ALL' : docContains;
         dateFrom = (dateFrom === "") ? '1970-01-01' : dateFrom;
         dateTo = (dateTo === "") ? '2049-01-01' : dateTo;
-        docType = (docType === "") ? '' : docType;
 
         lastIndexDoc = 0;
         limitDoc = 10;
-        setTimeout(function () { searchDocWithFilters(docAmountFrom,docAmountTo, dateFrom, dateTo, docContains, docType, limitDoc, lastIndexDoc); }, 1000);
+        setTimeout(function () { searchDocWithFilters(docAmountFrom,docAmountTo, dateFrom, dateTo, docContains, limitDoc, lastIndexDoc); }, 1000);
         loading = false;
-
+        $('.page-content').animate({scrollTop: 330}, 500);
     });
 
 
 
 });
-// ISPEZIONE
-var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
-    
-   $$(".submitIspezioneHeader").removeClass("displaynone");
-   $$(".info.row").addClass("displaynone");
-   $$(".ispezioneDomini").addClass("displaynone");
-   $$(".submitIspezioneDettaglio").addClass("displaynone");
-    $$(".submitIspezioneDettaglioInvia").addClass("displaynone");
-    if(!window.sessionStorage.getObj("puntiVendita")){
-       getPuntiVendita();
-   }
-   if(!window.sessionStorage.getObj("tipiEvento")){
-       getTipiEvento();
-   }
-   
-   populatePuntiVendita();
-   populateTipiEvento();
 
-   $$('.submitIspezioneHeader').on('click', function () {
-        if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val()){
-            myApp.alert("Selezionare il tipo evento e il punto vendita");
-            return;
-        }
-        myApp.showPreloader();
-        setTimeout(function () { prepareSubmitIspezioneHeader();}, 1000);     
-   });
-   $$(".submitIspezioneDettaglio").on('click', function () {
-        if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val()){
-            myApp.alert("Selezionare il tipo evento e il punto vendita");
-            return;
-        }
-        myApp.showPreloader();
-        var status = "B";
-        setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
-   });
-    $$(".submitIspezioneDettaglioInvia").on('click', function () {
-        
-        var okControlli = "ok";
-        $$(".controlloIsp").each(function(index){
-            if($$(this).val() === "")
-                okControlli = ""
-        });
-        
-        
-        
-        if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val() || !okControlli){
-            myApp.hidePreloader()
-            myApp.alert("Per inviare l'ispezione tutti i campi devono essere compilati");
-            return;
-        }
-        var status = "I";
-        myApp.showPreloader();
-        setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
-   });
-      $$('#file-to-upload').on('change', function(){
-        // alert($$(this).val());
-        $$('#file-label').html( $$(this).val().replace(/C:\\fakepath\\/i, '') );
-        // console.log('filename: '+$$("#file-to-upload")[0].files[0].name);
-        // console.log('filetype:  '+$$("#file-to-upload")[0].files[0].type);
-    });
-    $$(".btn-camera-upload").click(function () {
-        capturePhotoWithData();
-    });
-    $$(".allegatiIspezione").click(function () {
-        saveAttach();;
-    });
-     
-});
 
-//STORICO ISPEZIONI
-var storicoIspezioni = myApp.onPageInit("storicoIspezioni", function (page) {
-    
-    var myCalendarIspezioni = myApp.calendar({
-        input: '.datePickerFrom',
-        dateFormat: 'dd/mm/yyyy',
-        closeOnSelect: true,
-        monthNames: months,
-        dayNamesShort: days
-    });
-    var myCalendar2Ispezioni = myApp.calendar({
-        input: '.datePickerTo',
-        dateFormat: 'dd/mm/yyyy',
-        closeOnSelect: true,
-        monthNames: months,
-        dayNamesShort: days
-    });
-   if(!window.sessionStorage.getObj("puntiVendita")){
-       getPuntiVendita();
-   }
-   if(!window.sessionStorage.getObj("tipiEvento")){
-       getTipiEvento();
-   }
-   populatePuntiVendita();
-   populateTipiEvento();
-   $$(".submitRicercaIspezioni").on('click', function () {
-        myApp.showPreloader();
-        setTimeout(function () { prepareRicercaIspezioni();}, 1000);     
-   });
-});
 
-var editIspezione = myApp.onPageInit("editIspezione", function (page) {
-   var idIspezione = page.query.id;
-   var status = page.query.status;
-   // richiamo il dettaglio dell'ispezione
-   myApp.showPreloader();
-   getIspezioneDetails(idIspezione);
-     $$(".sendIspezione").on('click', function () {
-        if(!$$(".editIspezione select").val()){
-            myApp.alert("Per inviare l'ispezione tutti i campi devono essere compilati");
-            return;
-        }
-        var status = "I";
-        myApp.showPreloader();
-        setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
-   });
-   
-   
-    
-});
+//Funzioni per il caricamento da file system
+//function listPath(myPath) {
+//    var backLink = '<div onclick="listPath(' + "'" + myPath + "'" + ');" >' + myPath + '</div>';
+//    $$(".popup-filebrowser .title").html(backLink);
+//    window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
+//        var directoryReader = dirEntry.createReader();
+//        directoryReader.readEntries(onSuccessCallback, onFailCallback);
+//    });
+//}
 
+//function onSuccessCallback(entries) {
+//    var html = '';
+//    for (i = 0; i < entries.length; i++) {
+//        var row = entries[i];
+//        if (row.isDirectory) {
+//            // We will draw the content of the clicked folder
+//            html += '<li onclick="listPath(' + "'" + row.nativeURL + "'" + ');" class="directory"><i class="icons f7-icons">folder</i>' + row.name + '</li>';
+//        } else {
+//            // alert the path of file
+//            html += '<li onclick="getFilepath(' + "'" + row.nativeURL + "'" + ');" class="file"><i class="icons f7-icons">tags</i>' + row.name + '</li>';
+//        }
+//    }
+//    if (html != "")
+//        $$(".popup-filebrowser #list-element").html(html);
+//    else
+//        $$(".popup-filebrowser #list-element").html("No elements!");
+//}
+//
+//function onFailCallback(e) {
+//    alert(error.e)
+//}
+//
+//function getFilepath(thefilepath) {
+//    alert(thefilepath);
+//}

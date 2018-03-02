@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.gabriellispa.appv1" version="2.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
+
+<widget id="com.gabriellispa.appv1" version="2.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://gabriellispa.it/ns/1.0">
+
     <name>Gabrielli v1</name>
     <description>
         Gabrielli App v.1
@@ -11,6 +13,9 @@
     <access origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="*" />
+    <feature name="StatusBar">
+        <param name="ios-package" onload="true" value="CDVStatusBar" />
+    </feature>
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/ldpi.png" />
         <icon density="mdpi" src="resources/android/icon/mdpi.png" />
@@ -19,12 +24,16 @@
         <icon density="xxhdpi" src="resources/android/icon/xxhdpi.png" />
         <icon density="xxxhdpi" src="resources/android/icon/xxxhdpi.png" />
         <preference name="android-minSdkVersion" value="14" />
+        <preference name="android-windowSoftInputMode" value="adjustPan" />
+        <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
-        <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
+
+        <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
             <string>Take Photo</string>
         </edit-config>
-        <edit-config target="NSPhotoLibraryUsageDescription" file="*-Info.plist" mode="merge">
+        <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
+
             <string>Take Photo Library</string>
         </edit-config>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -48,18 +57,22 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <preference name="BackupWebStorage" value="none" />
+        <preference name="StatusBarBackgroundColor" value="#000000" />
     </platform>
     <preference name="DisallowOverscroll" value="true" />
-    <plugin name="cordova-plugin-camera" spec="2.4.1">
-        <param name="CAMERA_USAGE_DESCRIPTION" value="Take Photo" />
-        <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Take Photo Library" />
-    </plugin>
+
     <plugin name="cordova-plugin-certificates" spec="0.6.4" />
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-device" spec="1.1.7" />
     <plugin name="cordova-plugin-inappbrowser" spec="1.7.2" />
-    <plugin name="cordova-plugin-statusbar" spec="1.0.1" />
-    <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-file" spec="~4.3.3" />
     <plugin name="cordova-plugin-file-opener2" spec="~2.0.15" />
+    <plugin name="cordova-plugin-whitelist" spec="~1.2.0" />
+    <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
+    <plugin name="cordova-plugin-camera" spec="^2.4.1">
+        <param name="CAMERA_USAGE_DESCRIPTION" value="Take Photo" />
+        <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Take Photo Library" />
+    </plugin>
+    <plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
+    
 </widget>

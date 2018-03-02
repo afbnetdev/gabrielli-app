@@ -26,7 +26,7 @@
   "cordova-plugin-camera": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-camera@3.0.0"
+      "id": "cordova-plugin-camera@2.4.1"
     },
     "is_top_level": true,
     "variables": {}
@@ -42,9 +42,9 @@
   "cordova-plugin-file": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-file"
+      "id": "cordova-plugin-file@~4.3.3"
     },
-    "is_top_level": false,
+    "is_top_level": true,
     "variables": {}
   },
   "cordova-plugin-compat": {
@@ -58,7 +58,7 @@
   "cordova-plugin-file-opener2": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-file-opener2"
+      "id": "cordova-plugin-file-opener2@~2.0.15"
     },
     "is_top_level": true,
     "variables": {}
@@ -67,6 +67,30 @@
     "source": {
       "type": "registry",
       "id": "cordova-open"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-certificates": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-certificates@^0.6.4"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-device": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-device@1.1.7"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-keyboard": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-keyboard@^1.2.0"
     },
     "is_top_level": true,
     "variables": {}

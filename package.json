@@ -11,8 +11,15 @@
   "author": "theloz",
   "contributors": [],
   "dependencies": {
-    "cordova-plugin-camera": "2.4.1",
+    "cordova-android": "^6.2.3",
+    "cordova-plugin-camera": "^2.4.1",
+    "cordova-plugin-certificates": "0.6.4",
     "cordova-plugin-console": "~1.0.1",
+    "cordova-plugin-device": "1.1.7",
+    "cordova-plugin-file": "~4.3.3",
+    "cordova-plugin-file-opener2": "~2.0.15",
+    "cordova-plugin-inappbrowser": "1.7.2",
+    "cordova-plugin-keyboard": "^1.2.0",
     "cordova-plugin-statusbar": "~1.0.1",
     "cordova-plugin-whitelist": "~1.2.0"
   },
@@ -23,7 +30,13 @@
       "cordova-plugin-console": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-file-opener2": {}
-    }
+      "cordova-plugin-file-opener2": {},
+      "cordova-plugin-certificates": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-inappbrowser": {}
+    },
+    "platforms": [
+      "android"
+    ]
   }
 }
