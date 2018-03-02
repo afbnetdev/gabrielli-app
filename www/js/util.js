@@ -18,6 +18,7 @@ Storage.prototype.getObj = function(key) {
     return JSON.parse(this.getItem(key))
 }
 
+
 //FILTER STRING
 var pageSizeFilterTickets=20;
 
