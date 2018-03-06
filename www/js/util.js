@@ -479,8 +479,8 @@ function setUserProfile(data){
     
    window.sessionStorage.setItem("userProfile", groupArray);
 }
-function isInArray(days, day) {
-    return days.indexOf(day.toLowerCase()) > -1;
+function isInArray(gruppi, gruppo) {
+    return gruppi.split(",").indexOf(gruppo.toLowerCase()) > -1;
 }
 function verifyUserProfile(){
        if(!isInArray(window.sessionStorage.userProfile,"ammin") && !isInArray(window.sessionStorage.userProfile,"super_doc")){
