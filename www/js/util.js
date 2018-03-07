@@ -8,7 +8,7 @@ var URL_ENDPOINT = 'https://portal.gabriellispa.it';
 //var TEST_URL = 'http://192.168.81.215:9080';
 var TEST_URL = 'https://portal.gabriellispa.it';
 
-
+var MACCHINA_VIRTUALE = 'http://192.168.81.220:9080';
 //Funzione per settare un obj nel sessionStorage
 
 Storage.prototype.setObj = function(key, obj) {
