@@ -3,10 +3,10 @@
 Initial setup
  ---------------------------------------*/
 
-var URL_ENDPOINT = 'https://portal.gabriellispa.it';
+var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 //var URL_ENDPOINT = 'http://192.168.2.90:9080';
 //var TEST_URL = 'http://192.168.81.215:9080';
-var TEST_URL = 'https://portal.gabriellispa.it';
+var TEST_URL = 'http://portal.gabriellispa.it';
 
 var MACCHINA_VIRTUALE = 'http://192.168.81.220:9080';
 //Funzione per settare un obj nel sessionStorage
@@ -512,13 +512,26 @@ function formatAmountToFloat(amount){
 
 function populatePuntiVendita(){
     var jsonPuntiVendita = JSON.parse(window.sessionStorage.getObj("puntiVendita"));
-    $.each(jsonPuntiVendita, function (i, pv) {
-    $('.puntiVenditaIspezioneSelect').append($('<option>', { 
-        value: pv.idPdv,
-        text : pv.codicePdv+" - "+pv.localita
-    }));
-});
     
+    // popolo la select delle ispezioni
+    if($('.puntiVenditaIspezioneSelect').length > 0){
+        $.each(jsonPuntiVendita, function (i, pv) {
+            $('.puntiVenditaIspezioneSelect').append($('<option>', { 
+                value: pv.idPdv,
+                text : pv.codicePdv+" - "+pv.localita
+            }));
+        });
+    }
+    // popolo la select della ricerca plichi
+    if($('.puntiVenditaPlicoChiaviSelect').length > 0){
+        $.each(jsonPuntiVendita, function (i, pv) {
+            $('.puntiVenditaPlicoChiaviSelect').append($('<option>', { 
+                value: pv.idPdv,
+                text : pv.codicePdv+" - "+pv.localita
+            }));
+        });
+    }
+        
 }
 function populateTipiEvento(){
     var jsonTipiEvento = JSON.parse(window.sessionStorage.getObj("tipiEvento"));
@@ -981,6 +994,25 @@ function verifyResult(selectElement){
     }else{
         $(".dataLimiteEvento-"+selectElement.dataset.idcontrollo).remove();
     }
+}
+
+function populateDipendentiFromPdv(data){
+        if($('.dipendentiPlicoSelect').length > 0){
+            //SVUOTO LE OPTION DELLA SELECT E FACCIO VISUALIZZARE LA LABEL DI DEFAULT TUTTI I DIPENDENTI
+            $('.dipendentiPlicoSelect option').remove();
+            $('.dipendentiPlicoSelect').val("");
+            $('.dipendentiPlicoSelect').append($('<option value="">Tutti i dipendenti</option>'));
+            $('.dipendentiPlicoSelect').siblings().find(".item-after").text("Tutti i dipendenti");
+            $.each(data, function (i, d) {
+                $('.dipendentiPlicoSelect').append($('<option>', { 
+                    value: d.idDipendente,
+                    text : d.nome+" "+d.cognome
+                }));
+            });
+            $('.linkRicercaDipendenti').removeClass("disabled");
+            $('.submitRicercaPlichi').removeClass("disabled");
+    }
+    
 }
 
 

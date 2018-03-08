@@ -824,3 +824,30 @@ function createPdfFromSavedIsp(idIspezione){
         }
     });
 }
+function getDipendentiFromPdv(idPdv){
+         $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/dipendenti',
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        data: {
+            idPdv:parseInt(idPdv),
+            sicurezzaPatrimoniale: true
+        },
+        success: function (data) {
+            populateDipendentiFromPdv(JSON.parse(data));
+            myApp.hidePreloader();
+            
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Errore reperimento dipendenti',"Errore");
+            myApp.hidePreloader();
+        }
+    });
+}
+

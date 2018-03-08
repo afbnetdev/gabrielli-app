@@ -492,3 +492,23 @@ var editIspezione = myApp.onPageInit("editIspezione", function (page) {
     
 });
 
+var listaPlichi = myApp.onPageInit("listaPlichi", function (page) {
+    
+
+   if(!window.sessionStorage.getObj("puntiVendita")){
+       getPuntiVendita();
+   }  
+   populatePuntiVendita();
+   
+   $$(".puntiVenditaPlicoChiaviSelect").on('change', function (e) {
+       var idPdv = e.currentTarget.value;
+       myApp.showPreloader();
+       setTimeout(function () { getDipendentiFromPdv(idPdv);}, 1000);
+   });
+   
+   $$(".submitRicercaPlichi").on('click', function () {
+        myApp.showPreloader();
+        setTimeout(function () { prepareRicercaPlichi();}, 1000);     
+   });
+   
+});
