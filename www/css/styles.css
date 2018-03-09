@@ -99,7 +99,10 @@
     padding-top: 15px;
     padding-bottom: 15px;
 }
-
+.tbodyListaPlichi td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 .nodisplay{
     visibility: hidden;
 }
@@ -323,6 +326,24 @@ div.ispezioneList ul{
 }
 div.list-block.virtual-list.ispezioneList.media-list li{
     position:static !Important;
+}
+
+.marginBottom40{
+    margin-bottom:40px;
+}
+
+.listaChiaviH4{
+    color: #ffc107;
+    text-align: center;
+}
+.color-yellowCustom{
+    background-color: #ffc107 !Important;
+}
+.chip{
+    height: auto !important;
+}
+.chip-label{
+    white-space: normal !important;
 }
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{

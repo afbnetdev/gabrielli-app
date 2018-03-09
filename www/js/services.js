@@ -850,4 +850,91 @@ function getDipendentiFromPdv(idPdv){
         }
     });
 }
+function getListaPlichi(filter){
+         $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/getList',
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        data: filter,
+        success: function (data) {
+            var objPlichi = JSON.parse(data).resultData;
+            populateListaPlichi(objPlichi);
+            myApp.hidePreloader();
+            
+            
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Errore reperimento dipendenti',"Errore");
+            myApp.hidePreloader();
+        }
+    });
+}
+
+function getPlicoDetails(idPlico,editOrDetails){
+      $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/getById/'+idPlico,
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            var objPlico = JSON.parse(data).resultData;
+            
+            if(editOrDetails === "details")
+                populateDetailsPlico(objPlico);
+            if(editOrDetails === "edit") 
+                populateEditPlico(objPlico);
+            
+            myApp.hidePreloader();
+            
+            
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Errore reperimento dettagli plico',"Errore");
+            myApp.hidePreloader();
+        }
+    });
+}
+
+function deletePlico(idPlico){
+          $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/delete/'+idPlico,
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+            myApp.hidePreloader();
+            myApp.alert("Plico cancellato correttamente","Cancellazione plico");
+              mainView.router.loadPage({
+                force : true,
+                ignoreCache : true,
+                url :"plicoChiavi/listaPlichi.html"
+            });
+            
+            
+            
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Errore nella cancellazione del plico',"Errore");
+            myApp.hidePreloader();
+        }
+    });
+}
 

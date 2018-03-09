@@ -502,6 +502,17 @@ var listaPlichi = myApp.onPageInit("listaPlichi", function (page) {
    
    $$(".puntiVenditaPlicoChiaviSelect").on('change', function (e) {
        var idPdv = e.currentTarget.value;
+       // se seleziono null non effettuo la chiamata e rendo disabled il bottone di ricerca
+       if(!idPdv){
+            $('.dipendentiPlicoSelect option').remove();
+            $('.dipendentiPlicoSelect').val("");
+            $('.dipendentiPlicoSelect').append($('<option value="">Tutti i dipendenti</option>'));
+            $('.dipendentiPlicoSelect').siblings().find(".item-after").text("Tutti i dipendenti");
+            $('.submitRicercaPlichi').addClass("disabled");
+            $$('.tbodyListaPlichi').empty();
+            return;
+       }
+       $$('.tbodyListaPlichi').empty();
        myApp.showPreloader();
        setTimeout(function () { getDipendentiFromPdv(idPdv);}, 1000);
    });
@@ -512,3 +523,46 @@ var listaPlichi = myApp.onPageInit("listaPlichi", function (page) {
    });
    
 });
+
+var detailPlico = myApp.onPageInit("detailPlico", function (page) {
+    var idPlico = page.query.idPlico;
+    myApp.showPreloader();
+    getPlicoDetails(idPlico,"details");
+    
+    $$(".deletePlico").on('click', function () {
+         myApp.confirm('Vuoi cancellare il plico?','Cancella', function () {
+            myApp.showPreloader();
+            setTimeout(function () { deletePlico(idPlico);}, 1000);
+        });     
+   });
+    
+});
+
+var editPlico = myApp.onPageInit("editPlico", function (page) {
+    var idPlico = page.query.idPlico;
+    myApp.showPreloader();
+     var myCalendarIspezioni = myApp.calendar({
+        input: '.datePickerFrom',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+    var myCalendar2Ispezioni = myApp.calendar({
+        input: '.datePickerTo',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+    
+    getPlicoDetails(idPlico,"edit");
+    
+    
+    $$(".addKeyBtn").on('click', function () {
+       addPlicoKey();  
+    });
+    
+    
+});
+

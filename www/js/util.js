@@ -1015,7 +1015,108 @@ function populateDipendentiFromPdv(data){
     
 }
 
+function prepareRicercaPlichi(){
+    var idPdv = $$('.puntiVenditaPlicoChiaviSelect').val() ? $$('.puntiVenditaPlicoChiaviSelect').val() : 0;
+    var idDipendente = $$('.dipendentiPlicoSelect').val() ? $$('.dipendentiPlicoSelect').val() : 0;
+    var reverse = false;
+    var pageSize = 500;
+    var key="validitaA";
+    
+    var objQueryParam = {
+        'firstResult': '0', 'pageSize': pageSize, 'sortKey': key, 'reverse' : reverse, 'selectedPuntoVendita' : idPdv, 'selectedDipendente' : idDipendente
+    };
+    
+    getListaPlichi(objQueryParam);
+}
 
+
+function populateListaPlichi(objPlichi){
+    $$('.tbodyListaPlichi').empty();
+   var header =  ['Id plico','Descrizione' ,'Inizio Validità', 'Fine Validità','Dipendente', 'Punto vendita'];
+   if ($$('.headerTable').length === 0 && objPlichi.length > 0) {
+        var headerTr$ = $$('<tr/>');
+        for (var i = 0; i < header.length; i++) {
+            headerTr$.append($$('<th class="headerTable"/>').html(header[i]));
+        }
+        $$(".data-table > table > thead").append(headerTr$);
+    }
+    if (objPlichi.length === 0) {
+        $$(".data-table > table > thead").empty();
+        myApp.alert("Nessun plico trovato","Ricerca plichi");
+    }
+    for (var i = 0; i < objPlichi.length; i++) {
+        var row$ = $$('<tr/>');
+        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="plicoChiavi/detailPlico.html?idPlico='+ objPlichi[i].idPlico +'" class="idPlicoList button button-fill button-raised yellow">' + objPlichi[i].idPlico + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="plicoDescrizione">' + objPlichi[i].descrizione + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[2] + '"/>').html('<a href="#" class="plicoValiditaDa">' + formatDateFromTimeStampToItalian(objPlichi[i].validitaDa) + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[3] + '"/>').html('<a href="#" class="plicoValiditaA">' + formatDateFromTimeStampToItalian(objPlichi[i].validitaA) + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[4] + '"/>').html('<a href="#" class="plicoDipendente">' + objPlichi[i].dipendente.cognome + ' '+objPlichi[i].dipendente.nome+'</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[5] + '"/>').html('<a href="#" class="plicoPdv">' + objPlichi[i].puntoVendita.denominazione + '</a>'));
+        
+        
+        $$(".data-table > table > tbody").append(row$);
+        
+    }
+    
+    
+}
+
+function populateDetailsPlico(objPlico){
+    
+    $$(".idPlicoClass").text(objPlico.idPlico);
+    $$(".puntoVenditaPlico").text(objPlico.puntoVendita.denominazione);
+    $$(".dipendentiPlicoSpan").text(objPlico.dipendente.cognome + " " + objPlico.dipendente.nome);
+    $$(".datePlicoDa").text(formatDateFromTimeStampToItalian(objPlico.validitaDa));
+    $$(".datePlicoA").text(formatDateFromTimeStampToItalian(objPlico.validitaA));
+    
+    
+    
+    //populate tabella chiavi
+    var header =  ['Id chiave','Descrizione'];
+    if ($$('.headerTable').length === 0 && objPlico.chiavi.length > 0) {
+        var headerTr$ = $$('<tr/>');
+        for (var i = 0; i < header.length; i++) {
+            headerTr$.append($$('<th class="headerTable"/>').html(header[i]));
+        }
+        $$(".data-table > table > thead").append(headerTr$);
+    }
+    if (objPlico.chiavi.length === 0) {
+        $$(".data-table > table > thead").empty();
+        $$(".listaChiaviH4").addClass("nodisplay");
+    }else{
+        $$(".listaChiaviH4").removeClass("nodisplay");
+    }
+    for (var i = 0; i < objPlico.chiavi.length; i++) {
+        var row$ = $$('<tr/>');
+        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="#" class="plicoId">' + objPlico.chiavi[i].idChiave + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="plicoDescrizione">' + objPlico.chiavi[i].descrizione + '</a>'));
+        $$(".data-table > table > tbody").append(row$);
+    }
+}
+
+function addPlicoKey(){
+     myApp.prompt('Inserisci la descrizione della chiave',' Nuova chiave', function (value) {
+            if(value){
+                    var nuovaChiaveChips =   '<div class="chip">'
+                                                +'<div class="chip-label">'+value+'</div><a href="#" class="chip-delete deleteCustom"></a>'
+                                             +'</div>';
+                    $('.containerListaChiavi').append($(nuovaChiaveChips));    
+                    $$(".listaChiaviH4").removeClass("nodisplay");
+            }
+            $$(".deleteCustom").on('click', function (e) {
+                e.preventDefault();
+                $$(this).parent().remove();
+                if($$(".chip").length === 0){
+                    $$(".listaChiaviH4").addClass("nodisplay");
+                }
+            });
+
+        }); 
+}
+
+function populateEditPlico(objPlico){
+    
+}
 
 // VA TESTATO BENE, funzione che chiude la tastiera al click del pulsante 'vai'
 
