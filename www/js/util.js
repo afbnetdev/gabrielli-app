@@ -1015,6 +1015,7 @@ function populateDipendentiFromPdv(data){
     
 }
 
+
 function prepareRicercaPlichi(){
     var idPdv = $$('.puntiVenditaPlicoChiaviSelect').val() ? $$('.puntiVenditaPlicoChiaviSelect').val() : 0;
     var idDipendente = $$('.dipendentiPlicoSelect').val() ? $$('.dipendentiPlicoSelect').val() : 0;
@@ -1082,9 +1083,7 @@ function populateDetailsPlico(objPlico){
     }
     if (objPlico.chiavi.length === 0) {
         $$(".data-table > table > thead").empty();
-        $$(".listaChiaviH4").addClass("nodisplay");
-    }else{
-        $$(".listaChiaviH4").removeClass("nodisplay");
+        
     }
     for (var i = 0; i < objPlico.chiavi.length; i++) {
         var row$ = $$('<tr/>');
@@ -1097,27 +1096,85 @@ function populateDetailsPlico(objPlico){
 function addPlicoKey(){
      myApp.prompt('Inserisci la descrizione della chiave',' Nuova chiave', function (value) {
             if(value){
-                    var nuovaChiaveChips =   '<div class="chip">'
-                                                +'<div class="chip-label">'+value+'</div><a href="#" class="chip-delete deleteCustom"></a>'
-                                             +'</div>';
-                    $('.containerListaChiavi').append($(nuovaChiaveChips));    
-                    $$(".listaChiaviH4").removeClass("nodisplay");
-            }
-            $$(".deleteCustom").on('click', function (e) {
-                e.preventDefault();
-                $$(this).parent().remove();
-                if($$(".chip").length === 0){
-                    $$(".listaChiaviH4").addClass("nodisplay");
-                }
-            });
-
+                var nuovaChiaveChips =   '<div class="chip">'
+                                            +'<div class="chip-label chipKeyValue">'+value+'</div><a href="#" onclick="deleteKey(this);" class="chip-delete deleteCustom"></a>'
+                                         +'</div>';
+                $('.containerListaChiavi').append($(nuovaChiaveChips));    
+            }       
         }); 
 }
 
+function deleteKey(chip){
+        var keyChip =$$(chip);
+        myApp.confirm("Vuoi cancellare la chiave: <b>" + keyChip.parent().text() + "</b> ?", 'Cancellazione chiave', function() {
+            keyChip.parent().remove();
+        });
+}
 function populateEditPlico(objPlico){
+    $$(".idPlicoClass").text(objPlico.idPlico);
+    $$(".puntoVenditaPlicoEdit").text(objPlico.puntoVendita.denominazione);
+    $(".puntoVenditaPlicoEdit").data("idPuntoVendita",objPlico.puntoVendita.idPdv);
+    $$(".descrizionePlicoEdit").text(objPlico.descrizione);
+    $$(".datePlicoDa").val(formatDateFromTimeStampToItalian(objPlico.validitaDa));
+    $$(".datePlicoA").val(formatDateFromTimeStampToItalian(objPlico.validitaA));
+    
+    getDipendentiFromPdv(objPlico.puntoVendita.idPdv, "editPlico");
+    $.each($('.dipendentiPlicoSelectEdit option'), function (i, d){
+            if(objPlico.dipendente.idDipendente === parseInt(d.value)){
+                $(d).attr("selected",true);
+            }
+    });
+    $(".dipendentiPlicoSelectEdit").parent().find('.item-after').text($(".dipendentiPlicoSelectEdit").find("option:selected").text());
+    
+     $.each(objPlico.chiavi, function (i, d){
+          var nuovaChiaveChips =   '<div class="chip">'
+                                            +'<div class="chip-label chipKeyValue">'+d.descrizione+'</div><a href="#" onclick="deleteKey(this);" class="chip-delete deleteCustom"></a>'
+                                         +'</div>';
+        $$(".containerListaChiavi").append(nuovaChiaveChips);
+    });
     
 }
 
+function populateDipendentiFromPdvEdit(dipendenti){
+    $.each(dipendenti, function (i, d){
+              $('.dipendentiPlicoSelectEdit').append($('<option>' , { 
+                  value: d.idDipendente,
+                  text : d.nome+" "+d.cognome
+              }));
+    });
+}
+
+
+function preparePlicoSaveModify(){
+    if($$(".dipendentiPlicoSelectEdit").val() === "" && (".chip").length === 0){
+        myApp.alert("Controllare di aver selezionato un dipendete e di aver inserito almeno una chiave nel plico","Errore");
+        return;
+    }
+    if(!$$(".datePlicoDa") && !$$(".datePlicoA")){
+        myApp.alert("Controllare di aver selezionato una data valida","Errore");
+        return;
+    }
+    
+    var chiaviPlicoList = [];
+    
+    $.each($$(".chipKeyValue"), function (i, d){ 
+        chiaviPlicoList.push({ 
+	        "descrizione" : d.textContent
+	});
+    });
+    
+    var data = {
+                idPlico: parseInt($$(".idPlicoClass").text()),
+                puntoVendita: { idPdv: $(".puntoVenditaPlicoEdit").data().idPuntoVendita },
+                descrizione:  $$(".descrizionePlicoEdit").text(),
+                chiavi: chiaviPlicoList,
+                validitaDa: new Date(formatDateFromItalian($$(".datePickerFrom").val())),
+                validitaA: new Date(formatDateFromItalian($$(".datePickerTo").val())),
+                dipendente: { idDipendente: parseInt($$(".dipendentiPlicoSelectEdit").val()) }
+		};
+    updatePlico(data);
+                
+}
 // VA TESTATO BENE, funzione che chiude la tastiera al click del pulsante 'vai'
 
 $(document).on('keydown keyup keypress', function (event, characterCode) {

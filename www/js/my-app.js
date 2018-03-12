@@ -514,7 +514,7 @@ var listaPlichi = myApp.onPageInit("listaPlichi", function (page) {
        }
        $$('.tbodyListaPlichi').empty();
        myApp.showPreloader();
-       setTimeout(function () { getDipendentiFromPdv(idPdv);}, 1000);
+       setTimeout(function () { getDipendentiFromPdv(idPdv,"formRicerca");}, 1000);
    });
    
    $$(".submitRicercaPlichi").on('click', function () {
@@ -527,7 +527,7 @@ var listaPlichi = myApp.onPageInit("listaPlichi", function (page) {
 var detailPlico = myApp.onPageInit("detailPlico", function (page) {
     var idPlico = page.query.idPlico;
     myApp.showPreloader();
-    getPlicoDetails(idPlico,"details");
+    getPlicoDetails(idPlico,"detail");
     
     $$(".deletePlico").on('click', function () {
          myApp.confirm('Vuoi cancellare il plico?','Cancella', function () {
@@ -535,6 +535,13 @@ var detailPlico = myApp.onPageInit("detailPlico", function (page) {
             setTimeout(function () { deletePlico(idPlico);}, 1000);
         });     
    });
+   $$(".editPlico").on('click', function () {
+        mainView.router.loadPage({
+                force : true,
+                ignoreCache : true,
+                url :"plicoChiavi/editPlico.html?idPlico="+idPlico
+        });
+    });
     
 });
 
@@ -553,7 +560,8 @@ var editPlico = myApp.onPageInit("editPlico", function (page) {
         dateFormat: 'dd/mm/yyyy',
         closeOnSelect: true,
         monthNames: months,
-        dayNamesShort: days
+        dayNamesShort: days,
+        minDate: new Date()
     });
     
     getPlicoDetails(idPlico,"edit");
@@ -562,6 +570,14 @@ var editPlico = myApp.onPageInit("editPlico", function (page) {
     $$(".addKeyBtn").on('click', function () {
        addPlicoKey();  
     });
+    
+    
+    $$(".savePlicoModify").on('click', function () {
+       preparePlicoSaveModify();  
+    });
+    
+    
+    
     
     
 });

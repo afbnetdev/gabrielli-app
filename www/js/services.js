@@ -824,7 +824,8 @@ function createPdfFromSavedIsp(idIspezione){
         }
     });
 }
-function getDipendentiFromPdv(idPdv){
+function getDipendentiFromPdv(idPdv,action){
+    
          $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
@@ -840,7 +841,10 @@ function getDipendentiFromPdv(idPdv){
             sicurezzaPatrimoniale: true
         },
         success: function (data) {
-            populateDipendentiFromPdv(JSON.parse(data));
+            if(action === "formRicerca")
+                populateDipendentiFromPdv(JSON.parse(data));
+            if(action === "editPlico")
+                populateDipendentiFromPdvEdit(JSON.parse(data));
             myApp.hidePreloader();
             
         },
@@ -891,7 +895,7 @@ function getPlicoDetails(idPlico,editOrDetails){
         success: function (data) {
             var objPlico = JSON.parse(data).resultData;
             
-            if(editOrDetails === "details")
+            if(editOrDetails === "detail")
                 populateDetailsPlico(objPlico);
             if(editOrDetails === "edit") 
                 populateEditPlico(objPlico);
@@ -938,3 +942,63 @@ function deletePlico(idPlico){
     });
 }
 
+function updatePlico(plico){
+          $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/update',
+        method: 'POST',
+        async: false,      
+        contentType: 'application/json',
+        crossDomain: true,       
+        data:JSON.stringify(plico),
+        success: function (data) {
+            myApp.hidePreloader();
+            myApp.alert("Plico aggiornato correttamente","Modifica plico");
+              mainView.router.loadPage({
+                force : true,
+                ignoreCache : true,
+                url :"plicoChiavi/listaPlichi.html"
+            });
+            
+            
+            
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Errore nella modifica del plico',"Errore");
+            myApp.hidePreloader();
+        }
+    });
+}
+function createPlico(plico){
+          $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*'
+        },
+        url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/create',
+        method: 'POST',
+        async: false,      
+        contentType: 'application/json',
+        crossDomain: true,       
+        data:JSON.stringify(plico),
+        success: function (data) {
+            myApp.hidePreloader();
+            myApp.alert("Plico creato correttamente","Creazione plico");
+              mainView.router.loadPage({
+                force : true,
+                ignoreCache : true,
+                url :"plicoChiavi/gestionePlichi.html"
+            });
+            
+            
+            
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Errore nella crezione del plico',"Errore");
+            myApp.hidePreloader();
+        }
+    });
+}
