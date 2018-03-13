@@ -531,6 +531,14 @@ function populatePuntiVendita(){
             }));
         });
     }
+    if($('.puntiVenditaPlicoChiaviSelectCreate').length > 0){
+        $.each(jsonPuntiVendita, function (i, pv) {
+            $('.puntiVenditaPlicoChiaviSelectCreate').append($('<option>', { 
+                value: pv.idPdv,
+                text : pv.codicePdv+" - "+pv.localita
+            }));
+        });
+    }
         
 }
 function populateTipiEvento(){
@@ -1014,6 +1022,24 @@ function populateDipendentiFromPdv(data){
     }
     
 }
+function populateDipendentiFromPdvCreatePlico(data){
+        if($('.dipendentiPlicoSelectCreate').length > 0){
+            //SVUOTO LE OPTION DELLA SELECT E FACCIO VISUALIZZARE LA LABEL DI DEFAULT TUTTI I DIPENDENTI
+            $('.dipendentiPlicoSelectCreate option').remove();
+            $('.dipendentiPlicoSelectCreate').val("");
+            $('.dipendentiPlicoSelectCreate').append($('<option value="">Selez.re un dipendente</option>'));
+            $('.dipendentiPlicoSelectCreate').siblings().find(".item-after").text("Selez.re un dipendente");
+            $.each(data, function (i, d) {
+                $('.dipendentiPlicoSelectCreate').append($('<option>', { 
+                    value: d.idDipendente,
+                    text : d.nome+" "+d.cognome
+                }));
+            });
+            $('.linkRicercaDipendentiCreate').removeClass("disabled");
+   
+    }
+    
+}
 
 
 function prepareRicercaPlichi(){
@@ -1150,7 +1176,7 @@ function preparePlicoSaveModify(){
         myApp.alert("Controllare di aver selezionato un dipendete e di aver inserito almeno una chiave nel plico","Errore");
         return;
     }
-    if(!$$(".datePlicoDa") && !$$(".datePlicoA")){
+    if(!$$(".datePickerFrom").val() && !$$(".datePickerTo").val()){
         myApp.alert("Controllare di aver selezionato una data valida","Errore");
         return;
     }
@@ -1175,6 +1201,41 @@ function preparePlicoSaveModify(){
     updatePlico(data);
                 
 }
+
+function prepareCreatePlico(){
+     if($$(".dipendentiPlicoSelectEdit").val() === "" && (".chip").length === 0){
+        myApp.alert("Controllare di aver selezionato un dipendete e di aver inserito almeno una chiave nel plico","Errore");
+        return;
+    }
+    if(!$$(".datePickerFrom").val() && !$$(".datePickerTo").val()){
+        myApp.alert("Controllare di aver selezionato una data valida","Errore");
+        return;
+    }
+    if(!$$(".descrizionePlicoEditCreate").val()){
+        myApp.alert("Controllare di aver inserito una descrizione","Errore");
+        return;
+    }
+        var chiaviPlicoList = [];
+    
+    $.each($$(".chipKeyValue"), function (i, d){ 
+        chiaviPlicoList.push({ 
+	        "descrizione" : d.textContent
+	});
+    });
+    
+    var data = {
+                
+                puntoVendita: { idPdv: $$(".puntiVenditaPlicoChiaviSelectCreate").val() },
+                descrizione:  $$(".descrizionePlicoEditCreate").val(),
+                chiavi: chiaviPlicoList,
+                validitaDa: new Date(formatDateFromItalian($$(".datePickerFrom").val())),
+                validitaA: new Date(formatDateFromItalian($$(".datePickerTo").val())),
+                dipendente: { idDipendente: parseInt($$(".dipendentiPlicoSelectCreate").val()) }
+		};
+    
+    createPlico(data);
+}
+
 // VA TESTATO BENE, funzione che chiude la tastiera al click del pulsante 'vai'
 
 $(document).on('keydown keyup keypress', function (event, characterCode) {

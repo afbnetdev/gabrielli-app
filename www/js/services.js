@@ -845,6 +845,8 @@ function getDipendentiFromPdv(idPdv,action){
                 populateDipendentiFromPdv(JSON.parse(data));
             if(action === "editPlico")
                 populateDipendentiFromPdvEdit(JSON.parse(data));
+            if(action === "createPlico")
+                populateDipendentiFromPdvCreatePlico(JSON.parse(data));
             myApp.hidePreloader();
             
         },

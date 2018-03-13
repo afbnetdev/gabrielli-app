@@ -548,14 +548,14 @@ var detailPlico = myApp.onPageInit("detailPlico", function (page) {
 var editPlico = myApp.onPageInit("editPlico", function (page) {
     var idPlico = page.query.idPlico;
     myApp.showPreloader();
-     var myCalendarIspezioni = myApp.calendar({
+     var myCalendar1editPlico = myApp.calendar({
         input: '.datePickerFrom',
         dateFormat: 'dd/mm/yyyy',
         closeOnSelect: true,
         monthNames: months,
         dayNamesShort: days
     });
-    var myCalendar2Ispezioni = myApp.calendar({
+    var myCalendar2editPlico = myApp.calendar({
         input: '.datePickerTo',
         dateFormat: 'dd/mm/yyyy',
         closeOnSelect: true,
@@ -566,7 +566,6 @@ var editPlico = myApp.onPageInit("editPlico", function (page) {
     
     getPlicoDetails(idPlico,"edit");
     
-    
     $$(".addKeyBtn").on('click', function () {
        addPlicoKey();  
     });
@@ -574,6 +573,61 @@ var editPlico = myApp.onPageInit("editPlico", function (page) {
     
     $$(".savePlicoModify").on('click', function () {
        preparePlicoSaveModify();  
+    });
+    
+    
+    
+    
+    
+});
+
+var createPlico = myApp.onPageInit("createPlico", function (page) {
+    
+    
+  if(!window.sessionStorage.getObj("puntiVendita")){
+         getPuntiVendita();
+     }  
+     populatePuntiVendita();
+       $$(".puntiVenditaPlicoChiaviSelectCreate").on('change', function (e) {
+       var idPdv = e.currentTarget.value;
+       // se seleziono null non effettuo la chiamata e rendo disabled il bottone di ricerca
+       if(!idPdv){
+            $('.dipendentiPlicoSelectCreate option').remove();
+            $('.dipendentiPlicoSelectCreate').val("");
+            $('.dipendentiPlicoSelectCreate').append($('<option value="">Selez.re un dipendente</option>'));
+            $('.dipendentiPlicoSelectCreate').siblings().find(".item-after").text("Selez.re un dipendente");
+            return;
+       }
+ 
+       myApp.showPreloader();
+       setTimeout(function () { getDipendentiFromPdv(idPdv,"createPlico");}, 1000);
+   });
+
+     var myCalendar1createPlico = myApp.calendar({
+        input: '.datePickerFrom',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+    var myCalendar2createPlico = myApp.calendar({
+        input: '.datePickerTo',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days,
+        minDate: new Date()
+    });
+    
+    
+    
+    $$(".addKeyBtn").on('click', function () {
+       addPlicoKey();  
+    });
+    
+    
+    $$(".createPlicoBtn").on('click', function () {
+       prepareCreatePlico();  
     });
     
     
