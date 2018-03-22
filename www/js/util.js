@@ -8,7 +8,7 @@ var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 //var TEST_URL = 'http://192.168.81.215:9080';
 var TEST_URL = 'http://portal.gabriellispa.it';
 
-var MACCHINA_VIRTUALE = 'http://192.168.81.220:9080';
+var MACCHINA_VIRTUALE = 'http://portal.gabriellispa.it';
 //Funzione per settare un obj nel sessionStorage
 
 Storage.prototype.setObj = function(key, obj) {
@@ -499,6 +499,11 @@ function verifyUserProfile(){
         }else{
             $$(".gestioneControlli").show();
         }
+        if(!isInArray(window.sessionStorage.userProfile,"sicurezza_patrimoniale")){
+            $$(".gestionePlichi").hide();
+        }else{
+            $$(".gestionePlichi").show();
+        }
 }
 
 function formatAmountToFloat(amount){
@@ -792,6 +797,25 @@ function populateListaIspezioni(objIspezioni){
     // rendo visibile la parte degli allegati
      $$(".divDocContainer").removeClass("displaynone");
       $$(".divImgContainer").removeClass("displaynone");
+    
+     if(objIspezione.allegatiIspezione && objIspezione.allegatiIspezione.length > 0){
+        $(".fileAllegatiPre").removeClass("displaynone");
+        
+        for(var i = 0; i < objIspezione.allegatiIspezione.length; i++){
+            var fileAllegato = "";
+            try{
+                fileAllegato = objIspezione.allegatiIspezione[i].pathAllegato;
+                fileAllegato = fileAllegato.split("/");
+                fileAllegato = fileAllegato[fileAllegato.length - 1];
+            }catch (exception) {
+                fileAllegato = "Nome del file non disponibile";
+            }
+
+            $(".fileAllegatiPre").append("<p>"+fileAllegato+"</p>");
+        }
+    }else{
+        $(".fileAllegatiPre").addClass("displaynone");
+    }
     
  }
  

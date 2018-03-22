@@ -569,7 +569,8 @@ function sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEve
     $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/create',
         method: 'POST',
@@ -605,7 +606,8 @@ function submitIspezioneDettaglio(status,jsonObj, commenti,controllore,dataIspez
         $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/merge',
         method: 'POST',
@@ -643,7 +645,8 @@ function getTipiEvento(){
     $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/tipiEvento',
         method: 'GET',
@@ -665,7 +668,8 @@ function getPuntiVendita(){
     $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/puntiVendita',
         method: 'GET',
@@ -690,6 +694,7 @@ function getControlliFromIdEvento(idTipoEvento, status){
         headers: {
            'Authorization': 'Bearer 102-token',
            'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
            
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/tipiEventoControlli?idTipoEvento='+idTipoEvento,
@@ -713,7 +718,8 @@ function getIspezioni(variableFilters){
       $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/listIspezioni'+variableFilters,
         method: 'GET',
@@ -737,7 +743,8 @@ function getIspezioneDetails(idIspezione){
       $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/getIspezione?idIspezione='+idIspezione,
         method: 'GET',
@@ -764,7 +771,8 @@ function saveAttach(formData, idIspezione){
         headers: {
            'Authorization': 'Bearer 102-token',
            'Access-Control-Allow-Origin': '*',
-           'idIspezione': parseInt(idIspezione)
+           'idIspezione': parseInt(idIspezione),
+           'jSessionID': window.sessionStorage.jsessionid
           
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/allegatoIspezione/create',
@@ -797,7 +805,7 @@ function convertFileToDataURLviaFileReader(url, callback) {
                           }
                           reader.readAsDataURL(xhr.response);
                         };
-                        xhr.open('GET', url);
+                        xhr.open('GET', url+"?JsessionId"+window.sessionStorage.jsessionid);
                         xhr.responseType = 'blob';
                         xhr.send();
 }
@@ -806,7 +814,8 @@ function createPdfFromSavedIsp(idIspezione){
          $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :TEST_URL+'/GabrielliAppV2WS/rest/pdf/create/'+idIspezione,
         method: 'GET',
@@ -815,7 +824,7 @@ function createPdfFromSavedIsp(idIspezione){
         crossDomain: true,
         
         success: function (data) {
-            myApp.hidePreloader();
+            sendReportIspezione(idIspezione);
             
         },
         error: function (data, status, xhr) {
@@ -829,7 +838,8 @@ function getDipendentiFromPdv(idPdv,action){
          $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/dipendenti',
         method: 'GET',
@@ -860,7 +870,8 @@ function getListaPlichi(filter){
          $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/getList',
         method: 'GET',
@@ -886,7 +897,8 @@ function getPlicoDetails(idPlico,editOrDetails){
       $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/getById/'+idPlico,
         method: 'GET',
@@ -917,7 +929,8 @@ function deletePlico(idPlico){
           $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/delete/'+idPlico,
         method: 'GET',
@@ -948,7 +961,8 @@ function updatePlico(plico){
           $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/update',
         method: 'POST',
@@ -978,7 +992,8 @@ function createPlico(plico){
           $$.ajax({
         headers: {
            'Authorization': 'Bearer 102-token',
-           'Access-Control-Allow-Origin': '*'
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
         },
         url :MACCHINA_VIRTUALE+'/GabrielliAppV2WS/rest/plichi/create',
         method: 'POST',
@@ -1000,6 +1015,30 @@ function createPlico(plico){
         },
         error: function (data, status, xhr) {
             myApp.alert('Errore nella crezione del plico',"Errore");
+            myApp.hidePreloader();
+        }
+    });
+}
+
+function sendReportIspezione(idIspezione){
+         $$.ajax({
+        headers: {
+           'Authorization': 'Bearer 102-token',
+           'Access-Control-Allow-Origin': '*',
+           'jSessionID': window.sessionStorage.jsessionid
+        },
+        url :TEST_URL+'/GabrielliAppV2WS/rest/ispezione/sendReport/'+idIspezione,
+        method: 'GET',
+        async: false,
+        contentType: 'application/json',
+        crossDomain: true,
+        
+        success: function (data) {
+             myApp.hidePreloader();
+            
+        },
+        error: function (data, status, xhr) {
+            myApp.alert('Invio Report non riuscito',"Errore");
             myApp.hidePreloader();
         }
     });
