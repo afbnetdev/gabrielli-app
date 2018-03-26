@@ -4,11 +4,7 @@ Initial setup
  ---------------------------------------*/
 
 var URL_ENDPOINT = 'https://portal.gabriellispa.it';
-//var URL_ENDPOINT = 'http://192.168.2.90:9080';
-//var TEST_URL = 'http://192.168.81.215:9080';
-var TEST_URL = 'https://portal.gabriellispa.it';
 
-var MACCHINA_VIRTUALE = 'https://portal.gabriellispa.it';
 //Funzione per settare un obj nel sessionStorage
 
 Storage.prototype.setObj = function(key, obj) {
@@ -956,7 +952,7 @@ function deleteImg(numeroImg){
 
 function openPdfIspezione(idIspezione){
     
-                var linkPdf = TEST_URL+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
+                var linkPdf = URL_ENDPOINT+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
                 myApp.showPreloader();
                 var fileURL = testPathCustom+idIspezione+".pdf";
                 var myBase64 = "";
