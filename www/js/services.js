@@ -621,7 +621,11 @@ function submitIspezioneDettaglio(status,jsonObj, commenti,controllore,dataIspez
            if(status === "I"){
                  createPdfFromSavedIsp(parseInt($$(".idIspezione").text()));
                  prepareSaveAttach();
+                 $$(".submitIspezioneDettaglio").addClass("displaynone");
+                 $$(".sendIspezione").addClass("displaynone");
+                  $$(".submitIspezioneDettaglioInvia").addClass("displaynone");
                  myApp.alert("Ispezione inviata", "Ispezione");
+                 
                  
            }else{
                 prepareSaveAttach();
