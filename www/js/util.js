@@ -954,39 +954,57 @@ function deleteImg(numeroImg){
 
 function openPdfIspezione(idIspezione){
     
-                var linkPdf = URL_ENDPOINT+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
-                myApp.showPreloader();
-                var fileURL = testPathCustom+idIspezione+".pdf";
-                var myBase64 = "";
-                convertFileToDataURLviaFileReader(encodeURI(linkPdf),function(base64Img) {
-                myBase64 = base64Img.split(',')[1];    
-               
-                // To define the type of the Blob
-                var contentType = "application/pdf";
-                // if cordova.file is not available use instead :
-                // var folderpath = "file:///storage/emulated/0/";
-                var folderpath = testPathCustom;
+         var linkPdf = URL_ENDPOINT+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
+          if(linkPdf){
+            if(typeof device !== 'undefined'){
                 
-                var filename = idIspezione+".pdf";
+                if(device.platform !== "Android" ){
+                    var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
 
-                savebase64AsPDF(folderpath,filename,myBase64,contentType);
-                
-                setTimeout(function () {
-                    cordova.plugins.fileOpener2.open(
-                    fileURL, 
-                    "application/pdf",
-                    { error : function(e) { 
-                        myApp.hidePreloader();
-                        myApp.alert("Errore","Impossibile aprire il pdf");
-                        },
-                     success : function(e) { 
-                        myApp.hidePreloader();
-                        
-                        }
-                    });
-                }, 4000);
-               
-                    });   
+                    }else{
+                       myApp.showPreloader();
+                        var fileURL = testPathCustom+"local.pdf";
+
+                        var myBase64 = "";
+                        convertFileToDataURLviaFileReader(encodeURI(linkPDF),function(base64Img) {
+                    myBase64 = base64Img.split(',')[1];    
+
+                    // To define the type of the Blob
+                    var contentType = "application/pdf";
+                    // if cordova.file is not available use instead :
+                    // var folderpath = "file:///storage/emulated/0/";
+                    var folderpath = testPathCustom;
+
+                    var filename = "local.pdf";
+
+                    savebase64AsPDF(folderpath,filename,myBase64,contentType);
+
+                    setTimeout(function () {
+                        cordova.plugins.fileOpener2.open(
+                        fileURL, 
+                        "application/pdf",
+                        { error : function(e) { 
+                            myApp.hidePreloader();
+                            myApp.alert("Errore","Impossibile aprire il pdf");
+                            },
+                         success : function(e) { 
+                            myApp.hidePreloader();
+
+                            }
+                        });
+                    }, 4000);
+
+                        });   
+
+
+                    }
+            }else{
+                window.open(linkPDF, '_system', 'location=yes');
+            }
+          //var ref = window.open(linkPDF, '_system', 'location=yes'); 
+         }else{
+             myApp.alert("Impossibile reperire il Pdf", "Errore");
+         }  
 }
 
 function verifyResult(selectElement){
