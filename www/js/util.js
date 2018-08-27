@@ -954,8 +954,8 @@ function deleteImg(numeroImg){
 
 function openPdfIspezione(idIspezione){
     
-         var linkPdf = URL_ENDPOINT+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
-          if(linkPdf){
+         var linkPDF = URL_ENDPOINT+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
+          if(linkPDF){
             if(typeof device !== 'undefined'){
                 
                 if(device.platform !== "Android" ){
