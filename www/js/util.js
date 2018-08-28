@@ -207,7 +207,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
             if(typeof device !== 'undefined'){
                 
                 if(device.platform !== "Android" ){
-                    var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
+                    var ref = cordova.InAppBrowser.open(linkPDF+"?jSessionID="+window.sessionStorage.jsessionid, '_system', 'location=yes');
 
                     }else{
                        myApp.showPreloader();
@@ -247,7 +247,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
 
                     }
             }else{
-                window.open(linkPDF, '_system', 'location=yes');
+                window.open(linkPDF+"?jSessionID="+window.sessionStorage.jsessionid, '_system', 'location=yes');
             }
           //var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
@@ -959,7 +959,7 @@ function openPdfIspezione(idIspezione){
             if(typeof device !== 'undefined'){
                 
                 if(device.platform !== "Android" ){
-                    var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
+                    var ref = cordova.InAppBrowser.open(linkPDF+"?jSessionID="+window.sessionStorage.jsessionid, '_system', 'location=yes');
 
                     }else{
                        myApp.showPreloader();
@@ -999,7 +999,7 @@ function openPdfIspezione(idIspezione){
 
                     }
             }else{
-                window.open(linkPDF, '_system', 'location=yes');
+                window.open(linkPDF+"?jSessionID="+window.sessionStorage.jsessionid, '_system', 'location=yes');
             }
           //var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
