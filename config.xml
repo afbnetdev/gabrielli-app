@@ -65,8 +65,8 @@
     <plugin name="cordova-plugin-whitelist" spec="~1.2.0" />
     <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="We need camera access to take pictures so you can attach them as part of your submissions." />
-        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="We need photo library access to get pictures from there so you can attach them as part of your submissions." />
+        <param name="CAMERA_USAGE_DESCRIPTION" value="We need camera access to take pictures so you can attach them as part of your submissions." />
+        <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="We need photo library access to get pictures from there so you can attach them as part of your submissions." />
     </plugin>
     <plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
     
