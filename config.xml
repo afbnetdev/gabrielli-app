@@ -57,7 +57,6 @@
         <preference name="BackupWebStorage" value="none" />
         <preference name="StatusBarBackgroundColor" value="#000000" />
     </platform>
-    <preference name="DisallowOverscroll" value="true" />
     <preference name="phonegap-version" value="cli-8.1.1" />
     <preference name="android-build-tool" value="gradle" />
     <plugin name="cordova-plugin-certificates" spec="0.6.4" />
