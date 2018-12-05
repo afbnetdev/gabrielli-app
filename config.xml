@@ -24,7 +24,6 @@
         <preference name="android-minSdkVersion" value="14" />    
         <preference name="android-defaultSdkVersion" value="27" />    
         <preference name="android-windowSoftInputMode" value="adjustPan" />
-        <preference name="android-build-tool" value="gradle" />
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
@@ -59,6 +58,7 @@
     </platform>
     <preference name="DisallowOverscroll" value="true" />
     <preference name="phonegap-version" value="cli-8.1.1" />
+    <preference name="android-build-tool" value="gradle" />
     <plugin name="cordova-plugin-certificates" spec="0.6.4" />
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
