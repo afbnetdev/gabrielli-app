@@ -58,7 +58,7 @@
         <preference name="StatusBarBackgroundColor" value="#000000" />
     </platform>
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="phonegap-version" value="cli-7.0.1" />
+    <preference name="phonegap-version" value="cli-7.1.0" />
     <plugin name="cordova-plugin-certificates" spec="0.6.4" />
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
