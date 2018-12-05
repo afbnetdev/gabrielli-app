@@ -405,10 +405,8 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
                 okControlli = ""
         });
         
-        
-        
         if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val() || !okControlli){
-            myApp.hidePreloader()
+            myApp.hidePreloader();
             myApp.alert("Per inviare l'ispezione tutti i campi devono essere compilati");
             return;
         }
