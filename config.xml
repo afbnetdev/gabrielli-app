@@ -22,8 +22,7 @@
         <icon density="xxhdpi" src="resources/android/icon/xxhdpi.png" />
         <icon density="xxxhdpi" src="resources/android/icon/xxxhdpi.png" />
         <preference name="android-minSdkVersion" value="19" />    
-        <preference name="android-defaultSdkVersion" value="28" />    
-        <preference name="android-compileSdkVersion" value="28" />    
+        <preference name="android-defaultSdkVersion" value="27" />    
         <preference name="android-windowSoftInputMode" value="adjustPan" />
         <allow-intent href="market:*" />
     </platform>
