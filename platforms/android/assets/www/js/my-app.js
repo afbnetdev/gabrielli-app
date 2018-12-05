@@ -249,7 +249,7 @@ var ticketPage = myApp.onPageInit('ticketPage', function (page) {
     var stringFilter = 'oslc.select=*&oslc.where=ticketid="'+ticketId+'"';
     var ticket = getMaximoTktList(stringFilter);
     if(!ticket){
-        myApp.alert("Dettagli del ticket "+ticketId+" non disponibili");
+        myApp.alert("Dettagli del ticket "+ticketId+" non disponibili","Attenzione");
         return;
     }
     populateTicketPageDetails(ticket.member[0]);
@@ -405,10 +405,8 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
                 okControlli = ""
         });
         
-        
-        
         if(!$$(".tipoIspezioneSelect").val() || !$$(".puntiVenditaIspezioneSelect").val() || !okControlli){
-            myApp.hidePreloader()
+            myApp.hidePreloader();
             myApp.alert("Per inviare l'ispezione tutti i campi devono essere compilati");
             return;
         }
@@ -426,7 +424,7 @@ var nuova_ispezione = myApp.onPageInit("nuova_ispezione", function (page) {
         capturePhotoWithDataMULTI();
     });
     $$(".allegatiIspezione").click(function () {
-        prepareSaveAttach();;
+        prepareSaveAttach();
     });
      
 });
@@ -486,7 +484,153 @@ var editIspezione = myApp.onPageInit("editIspezione", function (page) {
         var status = "B";
         setTimeout(function () { prepareSubmitIspezioneDettaglio(status);}, 1000);     
    });
+   $$(".btn-camera-upload").click(function () {
+        capturePhotoWithDataMULTI();
+    });
+    
+});
+
+var listaPlichi = myApp.onPageInit("listaPlichi", function (page) {
+    
+
+   if(!window.sessionStorage.getObj("puntiVendita")){
+       getPuntiVendita();
+   }  
+   populatePuntiVendita();
    
+   $$(".puntiVenditaPlicoChiaviSelect").on('change', function (e) {
+       var idPdv = e.currentTarget.value;
+       // se seleziono null non effettuo la chiamata e rendo disabled il bottone di ricerca
+       if(!idPdv){
+            $('.dipendentiPlicoSelect option').remove();
+            $('.dipendentiPlicoSelect').val("");
+            $('.dipendentiPlicoSelect').append($('<option value="">Tutti i dipendenti</option>'));
+            $('.dipendentiPlicoSelect').siblings().find(".item-after").text("Tutti i dipendenti");
+            $('.submitRicercaPlichi').addClass("disabled");
+            $$('.tbodyListaPlichi').empty();
+            return;
+       }
+       $$('.tbodyListaPlichi').empty();
+       myApp.showPreloader();
+       setTimeout(function () { getDipendentiFromPdv(idPdv,"formRicerca");}, 1000);
+   });
+   
+   $$(".submitRicercaPlichi").on('click', function () {
+        myApp.showPreloader();
+        setTimeout(function () { prepareRicercaPlichi();}, 1000);     
+   });
+   
+});
+
+var detailPlico = myApp.onPageInit("detailPlico", function (page) {
+    var idPlico = page.query.idPlico;
+    myApp.showPreloader();
+    getPlicoDetails(idPlico,"detail");
+    
+    $$(".deletePlico").on('click', function () {
+         myApp.confirm('Vuoi cancellare il plico?','Cancella', function () {
+            myApp.showPreloader();
+            setTimeout(function () { deletePlico(idPlico);}, 1000);
+        });     
+   });
+   $$(".editPlico").on('click', function () {
+        mainView.router.loadPage({
+                force : true,
+                ignoreCache : true,
+                url :"plicoChiavi/editPlico.html?idPlico="+idPlico
+        });
+    });
+    
+});
+
+var editPlico = myApp.onPageInit("editPlico", function (page) {
+    var idPlico = page.query.idPlico;
+    myApp.showPreloader();
+     var myCalendar1editPlico = myApp.calendar({
+        input: '.datePickerFrom',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+    var myCalendar2editPlico = myApp.calendar({
+        input: '.datePickerTo',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days,
+        minDate: new Date()
+    });
+    
+    getPlicoDetails(idPlico,"edit");
+    
+    $$(".addKeyBtn").on('click', function () {
+       addPlicoKey();  
+    });
+    
+    
+    $$(".savePlicoModify").on('click', function () {
+       preparePlicoSaveModify();  
+    });
+    
+    
+    
+    
+    
+});
+
+var createPlico = myApp.onPageInit("createPlico", function (page) {
+    
+    
+  if(!window.sessionStorage.getObj("puntiVendita")){
+         getPuntiVendita();
+     }  
+     populatePuntiVendita();
+       $$(".puntiVenditaPlicoChiaviSelectCreate").on('change', function (e) {
+       var idPdv = e.currentTarget.value;
+       // se seleziono null non effettuo la chiamata e rendo disabled il bottone di ricerca
+       if(!idPdv){
+            $('.dipendentiPlicoSelectCreate option').remove();
+            $('.dipendentiPlicoSelectCreate').val("");
+            $('.dipendentiPlicoSelectCreate').append($('<option value="">Selez.re un dipendente</option>'));
+            $('.dipendentiPlicoSelectCreate').siblings().find(".item-after").text("Selez.re un dipendente");
+            return;
+       }
+ 
+       myApp.showPreloader();
+       setTimeout(function () { getDipendentiFromPdv(idPdv,"createPlico");}, 1000);
+   });
+
+     var myCalendar1createPlico = myApp.calendar({
+        input: '.datePickerFrom',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+    var myCalendar2createPlico = myApp.calendar({
+        input: '.datePickerTo',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days,
+        minDate: new Date()
+    });
+    
+    
+    
+    $$(".addKeyBtn").on('click', function () {
+       addPlicoKey();  
+    });
+    
+    
+    $$(".createPlicoBtn").on('click', function () {
+       prepareCreatePlico();  
+    });
+    
+    
+    
+    
     
 });
 

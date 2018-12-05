@@ -3,11 +3,8 @@
 Initial setup
  ---------------------------------------*/
 
+//var URL_ENDPOINT = 'https://portal.gabriellispa.it';
 var URL_ENDPOINT = 'http://portal.gabriellispa.it';
-//var URL_ENDPOINT = 'http://192.168.2.90:9080';
-//var TEST_URL = 'http://192.168.81.215:9080';
-var TEST_URL = 'http://portal.gabriellispa.it';
-
 
 //Funzione per settare un obj nel sessionStorage
 
@@ -17,6 +14,7 @@ Storage.prototype.setObj = function(key, obj) {
 Storage.prototype.getObj = function(key) {
     return JSON.parse(this.getItem(key))
 }
+
 
 //FILTER STRING
 var pageSizeFilterTickets=20;
@@ -107,9 +105,6 @@ function capturePhotoWithFile() {
 /*
  * LOGICA SIMILE PER LE ISPEZIONI, CAMBIA LA POSSIBILITA' DI INSERIRE PIU' FOTO
  */
-
-
-
 
 function onPhotoDataSuccessMULTI(imageData) {
     var numeroImg = $$('.imgContent').length;
@@ -210,7 +205,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
             if(typeof device !== 'undefined'){
                 
                 if(device.platform !== "Android" ){
-                    var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
+                    var ref = cordova.InAppBrowser.open(linkPDF+"?jSessionID="+window.sessionStorage.jsessionid, '_system', 'location=yes');
 
                     }else{
                        myApp.showPreloader();
@@ -250,7 +245,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
 
                     }
             }else{
-                window.open(linkPDF, '_system', 'location=yes');
+                window.open(linkPDF+"?jSessionID="+window.sessionStorage.jsessionid, '_system', 'location=yes');
             }
           //var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
@@ -478,22 +473,30 @@ function setUserProfile(data){
     
    window.sessionStorage.setItem("userProfile", groupArray);
 }
+function isInArray(gruppi, gruppo) {
+    return gruppi.split(",").indexOf(gruppo.toLowerCase()) > -1;
+}
 function verifyUserProfile(){
-       if(!window.sessionStorage.userProfile.includes("ammin") && !window.sessionStorage.userProfile.includes("super_doc")){
+       if(!isInArray(window.sessionStorage.userProfile,"ammin") && !isInArray(window.sessionStorage.userProfile,"super_doc")){
             $$(".richiestaDocumenti").hide();
         }else{
             $$(".richiestaDocumenti").show();
         }
 
-        if(!window.sessionStorage.userProfile.includes("ticket")){
+        if(!isInArray(window.sessionStorage.userProfile,"ticket")){
             $$(".gestioneTicket").hide();
         }else{
             $$(".gestioneTicket").show();
         }
-        if(!window.sessionStorage.userProfile.includes("controllori")){
+	if(!isInArray(window.sessionStorage.userProfile,"controllori")){
             $$(".gestioneControlli").hide();
         }else{
             $$(".gestioneControlli").show();
+        }
+        if(!isInArray(window.sessionStorage.userProfile,"sicurezza_patrimoniale")){
+            $$(".gestionePlichi").hide();
+        }else{
+            $$(".gestionePlichi").show();
         }
 }
 
@@ -508,13 +511,34 @@ function formatAmountToFloat(amount){
 
 function populatePuntiVendita(){
     var jsonPuntiVendita = JSON.parse(window.sessionStorage.getObj("puntiVendita"));
-    $.each(jsonPuntiVendita, function (i, pv) {
-    $('.puntiVenditaIspezioneSelect').append($('<option>', { 
-        value: pv.idPdv,
-        text : pv.codicePdv+" - "+pv.localita
-    }));
-});
     
+    // popolo la select delle ispezioni
+    if($('.puntiVenditaIspezioneSelect').length > 0){
+        $.each(jsonPuntiVendita, function (i, pv) {
+            $('.puntiVenditaIspezioneSelect').append($('<option>', { 
+                value: pv.idPdv,
+                text : pv.codicePdv+" - "+pv.localita
+            }));
+        });
+    }
+    // popolo la select della ricerca plichi
+    if($('.puntiVenditaPlicoChiaviSelect').length > 0){
+        $.each(jsonPuntiVendita, function (i, pv) {
+            $('.puntiVenditaPlicoChiaviSelect').append($('<option>', { 
+                value: pv.idPdv,
+                text : pv.codicePdv+" - "+pv.localita
+            }));
+        });
+    }
+    if($('.puntiVenditaPlicoChiaviSelectCreate').length > 0){
+        $.each(jsonPuntiVendita, function (i, pv) {
+            $('.puntiVenditaPlicoChiaviSelectCreate').append($('<option>', { 
+                value: pv.idPdv,
+                text : pv.codicePdv+" - "+pv.localita
+            }));
+        });
+    }
+        
 }
 function populateTipiEvento(){
     var jsonTipiEvento = JSON.parse(window.sessionStorage.getObj("tipiEvento"));
@@ -579,6 +603,8 @@ function populateControlli(controlliObj, status){
     // Array with items data
     items: controlliObjSort ,
     height:98,
+    rowsBefore:100,
+    rowsAfter:100,    
     // Template 7 template to render each item
     template: '<li class="item-content">' +
                   '<div class="item-inner-row">' +
@@ -639,6 +665,9 @@ function prepareSubmitIspezioneDettaglio(status){
             obj.ispezione = {idIspezione: idIspezione};
             obj.controllo = {idControllo: $$(this).data("idControllo")};
             obj.esito = $$(this).val();
+            if(!obj.esito){
+                obj.esito = " ";
+            }
             var commento = $$(".commentoIdControllo"+$$(this).data("idControllo")+"").val();
             obj.commento = commento;
             if(obj.esito === "N"){ 
@@ -652,7 +681,6 @@ function prepareSubmitIspezioneDettaglio(status){
             myApp.alert("Valuta tutti i controlli", "Attenzione");
             return;
         }
-           
     }
     var commenti = $$(".commentiIspezioneText").val() ? $$(".commentiIspezioneText").val() : 'Nessun Commento';
     var controllore = window.sessionStorage.username;
@@ -764,6 +792,25 @@ function populateListaIspezioni(objIspezioni){
     // rendo visibile la parte degli allegati
      $$(".divDocContainer").removeClass("displaynone");
       $$(".divImgContainer").removeClass("displaynone");
+    
+     if(objIspezione.allegatiIspezione && objIspezione.allegatiIspezione.length > 0){
+        $(".fileAllegatiPre").removeClass("displaynone");
+        
+        for(var i = 0; i < objIspezione.allegatiIspezione.length; i++){
+            var fileAllegato = "";
+            try{
+                fileAllegato = objIspezione.allegatiIspezione[i].pathAllegato;
+                fileAllegato = fileAllegato.split("/");
+                fileAllegato = fileAllegato[fileAllegato.length - 1];
+            }catch (exception) {
+                fileAllegato = "Nome del file non disponibile";
+            }
+
+            $(".fileAllegatiPre").append("<p>"+fileAllegato+"</p>");
+        }
+    }else{
+        $(".fileAllegatiPre").addClass("displaynone");
+    }
     
  }
  
@@ -904,39 +951,57 @@ function deleteImg(numeroImg){
 
 function openPdfIspezione(idIspezione){
     
-                var linkPdf = TEST_URL+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
-                myApp.showPreloader();
-                var fileURL = testPathCustom+idIspezione+".pdf";
-                var myBase64 = "";
-                convertFileToDataURLviaFileReader(encodeURI(linkPdf),function(base64Img) {
-                myBase64 = base64Img.split(',')[1];    
-               
-                // To define the type of the Blob
-                var contentType = "application/pdf";
-                // if cordova.file is not available use instead :
-                // var folderpath = "file:///storage/emulated/0/";
-                var folderpath = testPathCustom;
+         var linkPDF = URL_ENDPOINT+"/GabrielliAppV2WS/rest/pdf/get/"+idIspezione;
+          if(linkPDF){
+            if(typeof device !== 'undefined'){
                 
-                var filename = idIspezione+".pdf";
+                if(device.platform !== "Android" ){
+                    var ref = cordova.InAppBrowser.open(linkPDF+"?jSessionID="+window.sessionStorage.jsessionid, '_system', 'location=yes');
 
-                savebase64AsPDF(folderpath,filename,myBase64,contentType);
-                
-                setTimeout(function () {
-                    cordova.plugins.fileOpener2.open(
-                    fileURL, 
-                    "application/pdf",
-                    { error : function(e) { 
-                        myApp.hidePreloader();
-                        myApp.alert("Errore","Impossibile aprire il pdf");
-                        },
-                     success : function(e) { 
-                        myApp.hidePreloader();
-                        
-                        }
-                    });
-                }, 4000);
-               
-                    });   
+                    }else{
+                       myApp.showPreloader();
+                        var fileURL = testPathCustom+"local.pdf";
+
+                        var myBase64 = "";
+                        convertFileToDataURLviaFileReader(encodeURI(linkPDF),function(base64Img) {
+                    myBase64 = base64Img.split(',')[1];    
+
+                    // To define the type of the Blob
+                    var contentType = "application/pdf";
+                    // if cordova.file is not available use instead :
+                    // var folderpath = "file:///storage/emulated/0/";
+                    var folderpath = testPathCustom;
+
+                    var filename = "local.pdf";
+
+                    savebase64AsPDF(folderpath,filename,myBase64,contentType);
+
+                    setTimeout(function () {
+                        cordova.plugins.fileOpener2.open(
+                        fileURL, 
+                        "application/pdf",
+                        { error : function(e) { 
+                            myApp.hidePreloader();
+                            myApp.alert("Errore","Impossibile aprire il pdf");
+                            },
+                         success : function(e) { 
+                            myApp.hidePreloader();
+
+                            }
+                        });
+                    }, 4000);
+
+                        });   
+
+
+                    }
+            }else{
+                window.open(linkPDF+"?jSessionID="+window.sessionStorage.jsessionid, '_system', 'location=yes');
+            }
+          //var ref = window.open(linkPDF, '_system', 'location=yes'); 
+         }else{
+             myApp.alert("Impossibile reperire il Pdf", "Errore");
+         }  
 }
 
 function verifyResult(selectElement){
@@ -976,6 +1041,243 @@ function verifyResult(selectElement){
     }
 }
 
+function populateDipendentiFromPdv(data){
+        if($('.dipendentiPlicoSelect').length > 0){
+            //SVUOTO LE OPTION DELLA SELECT E FACCIO VISUALIZZARE LA LABEL DI DEFAULT TUTTI I DIPENDENTI
+            $('.dipendentiPlicoSelect option').remove();
+            $('.dipendentiPlicoSelect').val("");
+            $('.dipendentiPlicoSelect').append($('<option value="">Tutti i dipendenti</option>'));
+            $('.dipendentiPlicoSelect').siblings().find(".item-after").text("Tutti i dipendenti");
+            $.each(data, function (i, d) {
+                $('.dipendentiPlicoSelect').append($('<option>', { 
+                    value: d.idDipendente,
+                    text : d.nome+" "+d.cognome
+                }));
+            });
+            $('.linkRicercaDipendenti').removeClass("disabled");
+            $('.submitRicercaPlichi').removeClass("disabled");
+    }
+    
+}
+function populateDipendentiFromPdvCreatePlico(data){
+        if($('.dipendentiPlicoSelectCreate').length > 0){
+            //SVUOTO LE OPTION DELLA SELECT E FACCIO VISUALIZZARE LA LABEL DI DEFAULT TUTTI I DIPENDENTI
+            $('.dipendentiPlicoSelectCreate option').remove();
+            $('.dipendentiPlicoSelectCreate').val("");
+            $('.dipendentiPlicoSelectCreate').append($('<option value="">Selez.re un dipendente</option>'));
+            $('.dipendentiPlicoSelectCreate').siblings().find(".item-after").text("Selez.re un dipendente");
+            $.each(data, function (i, d) {
+                $('.dipendentiPlicoSelectCreate').append($('<option>', { 
+                    value: d.idDipendente,
+                    text : d.nome+" "+d.cognome
+                }));
+            });
+            $('.linkRicercaDipendentiCreate').removeClass("disabled");
+   
+    }
+    
+}
+
+
+function prepareRicercaPlichi(){
+    var idPdv = $$('.puntiVenditaPlicoChiaviSelect').val() ? $$('.puntiVenditaPlicoChiaviSelect').val() : 0;
+    var idDipendente = $$('.dipendentiPlicoSelect').val() ? $$('.dipendentiPlicoSelect').val() : 0;
+    var reverse = false;
+    var pageSize = 500;
+    var key="validitaA";
+    
+    var objQueryParam = {
+        'firstResult': '0', 'pageSize': pageSize, 'sortKey': key, 'reverse' : reverse, 'selectedPuntoVendita' : idPdv, 'selectedDipendente' : idDipendente
+    };
+    
+    getListaPlichi(objQueryParam);
+}
+
+
+function populateListaPlichi(objPlichi){
+    $$('.tbodyListaPlichi').empty();
+   var header =  ['Id plico','Descrizione' ,'Inizio Validità', 'Fine Validità','Dipendente', 'Punto vendita'];
+   if ($$('.headerTable').length === 0 && objPlichi.length > 0) {
+        var headerTr$ = $$('<tr/>');
+        for (var i = 0; i < header.length; i++) {
+            headerTr$.append($$('<th class="headerTable"/>').html(header[i]));
+        }
+        $$(".data-table > table > thead").append(headerTr$);
+    }
+    if (objPlichi.length === 0) {
+        $$(".data-table > table > thead").empty();
+        myApp.alert("Nessun plico trovato","Ricerca plichi");
+    }
+    for (var i = 0; i < objPlichi.length; i++) {
+        var row$ = $$('<tr/>');
+        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="plicoChiavi/detailPlico.html?idPlico='+ objPlichi[i].idPlico +'" class="idPlicoList button button-fill button-raised yellow">' + objPlichi[i].idPlico + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="plicoDescrizione">' + objPlichi[i].descrizione + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[2] + '"/>').html('<a href="#" class="plicoValiditaDa">' + formatDateFromTimeStampToItalian(objPlichi[i].validitaDa) + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[3] + '"/>').html('<a href="#" class="plicoValiditaA">' + formatDateFromTimeStampToItalian(objPlichi[i].validitaA) + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[4] + '"/>').html('<a href="#" class="plicoDipendente">' + objPlichi[i].dipendente.cognome + ' '+objPlichi[i].dipendente.nome+'</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[5] + '"/>').html('<a href="#" class="plicoPdv">' + objPlichi[i].puntoVendita.denominazione + '</a>'));
+        
+        
+        $$(".data-table > table > tbody").append(row$);
+        
+    }
+    
+    
+}
+
+function populateDetailsPlico(objPlico){
+    
+    $$(".idPlicoClass").text(objPlico.idPlico);
+    $$(".puntoVenditaPlico").text(objPlico.puntoVendita.denominazione);
+    $$(".dipendentiPlicoSpan").text(objPlico.dipendente.cognome + " " + objPlico.dipendente.nome);
+    $$(".datePlicoDa").text(formatDateFromTimeStampToItalian(objPlico.validitaDa));
+    $$(".datePlicoA").text(formatDateFromTimeStampToItalian(objPlico.validitaA));
+    
+    
+    
+    //populate tabella chiavi
+    var header =  ['Id chiave','Descrizione'];
+    if ($$('.headerTable').length === 0 && objPlico.chiavi.length > 0) {
+        var headerTr$ = $$('<tr/>');
+        for (var i = 0; i < header.length; i++) {
+            headerTr$.append($$('<th class="headerTable"/>').html(header[i]));
+        }
+        $$(".data-table > table > thead").append(headerTr$);
+    }
+    if (objPlico.chiavi.length === 0) {
+        $$(".data-table > table > thead").empty();
+        
+    }
+    for (var i = 0; i < objPlico.chiavi.length; i++) {
+        var row$ = $$('<tr/>');
+        row$.append($$('<td data-collapsible-title="' + header[0] + '"/>').html('<a href="#" class="plicoId">' + objPlico.chiavi[i].idChiave + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + header[1] + '"/>').html('<a href="#" class="plicoDescrizione">' + objPlico.chiavi[i].descrizione + '</a>'));
+        $$(".data-table > table > tbody").append(row$);
+    }
+}
+
+function addPlicoKey(){
+     myApp.prompt('Inserisci la descrizione della chiave',' Nuova chiave', function (value) {
+            if(value){
+                var nuovaChiaveChips =   '<div class="chip">'
+                                            +'<div class="chip-label chipKeyValue">'+value+'</div><a href="#" onclick="deleteKey(this);" class="chip-delete deleteCustom"></a>'
+                                         +'</div>';
+                $('.containerListaChiavi').append($(nuovaChiaveChips));    
+            }       
+        }); 
+}
+
+function deleteKey(chip){
+        var keyChip =$$(chip);
+        myApp.confirm("Vuoi cancellare la chiave: <b>" + keyChip.parent().text() + "</b> ?", 'Cancellazione chiave', function() {
+            keyChip.parent().remove();
+        });
+}
+function populateEditPlico(objPlico){
+    $$(".idPlicoClass").text(objPlico.idPlico);
+    $$(".puntoVenditaPlicoEdit").text(objPlico.puntoVendita.denominazione);
+    $(".puntoVenditaPlicoEdit").data("idPuntoVendita",objPlico.puntoVendita.idPdv);
+    $$(".descrizionePlicoEdit").text(objPlico.descrizione);
+    $$(".datePlicoDa").val(formatDateFromTimeStampToItalian(objPlico.validitaDa));
+    $$(".datePlicoA").val(formatDateFromTimeStampToItalian(objPlico.validitaA));
+    
+    getDipendentiFromPdv(objPlico.puntoVendita.idPdv, "editPlico");
+    $.each($('.dipendentiPlicoSelectEdit option'), function (i, d){
+            if(objPlico.dipendente.idDipendente === parseInt(d.value)){
+                $(d).attr("selected",true);
+            }
+    });
+    $(".dipendentiPlicoSelectEdit").parent().find('.item-after').text($(".dipendentiPlicoSelectEdit").find("option:selected").text());
+    
+     $.each(objPlico.chiavi, function (i, d){
+          var nuovaChiaveChips =   '<div class="chip">'
+                                            +'<div class="chip-label chipKeyValue">'+d.descrizione+'</div><a href="#" onclick="deleteKey(this);" class="chip-delete deleteCustom"></a>'
+                                         +'</div>';
+        $$(".containerListaChiavi").append(nuovaChiaveChips);
+    });
+    
+}
+
+function populateDipendentiFromPdvEdit(dipendenti){
+    $.each(dipendenti, function (i, d){
+              $('.dipendentiPlicoSelectEdit').append($('<option>' , { 
+                  value: d.idDipendente,
+                  text : d.nome+" "+d.cognome
+              }));
+    });
+}
+
+
+function preparePlicoSaveModify(){
+    if($$(".dipendentiPlicoSelectEdit").val() === "" && (".chip").length === 0){
+        myApp.alert("Controllare di aver selezionato un dipendete e di aver inserito almeno una chiave nel plico","Errore");
+        return;
+    }
+    if(!$$(".datePickerFrom").val() && !$$(".datePickerTo").val()){
+        myApp.alert("Controllare di aver selezionato una data valida","Errore");
+        return;
+    }
+    
+    var chiaviPlicoList = [];
+    
+    $.each($$(".chipKeyValue"), function (i, d){ 
+        chiaviPlicoList.push({ 
+	        "descrizione" : d.textContent
+	});
+    });
+    
+    var data = {
+                idPlico: parseInt($$(".idPlicoClass").text()),
+                puntoVendita: { idPdv: $(".puntoVenditaPlicoEdit").data().idPuntoVendita },
+                descrizione:  $$(".descrizionePlicoEdit").text(),
+                chiavi: chiaviPlicoList,
+                validitaDa: new Date(formatDateFromItalian($$(".datePickerFrom").val())),
+                validitaA: new Date(formatDateFromItalian($$(".datePickerTo").val())),
+                dipendente: { idDipendente: parseInt($$(".dipendentiPlicoSelectEdit").val()) }
+		};
+    updatePlico(data);
+                
+}
+
+function prepareCreatePlico(){
+     if($$(".dipendentiPlicoSelectEdit").val() === "" && (".chip").length === 0){
+        myApp.alert("Controllare di aver selezionato un dipendete e di aver inserito almeno una chiave nel plico","Errore");
+        return;
+    }
+    if(!$$(".datePickerFrom").val() && !$$(".datePickerTo").val()){
+        myApp.alert("Controllare di aver selezionato una data valida","Errore");
+        return;
+    }
+    if(!$$(".descrizionePlicoEditCreate").val()){
+        myApp.alert("Controllare di aver inserito una descrizione","Errore");
+        return;
+    }
+        var chiaviPlicoList = [];
+    
+    $.each($$(".chipKeyValue"), function (i, d){ 
+        chiaviPlicoList.push({ 
+	        "descrizione" : d.textContent
+	});
+    });
+    
+    var data = {
+                
+                puntoVendita: { idPdv: $$(".puntiVenditaPlicoChiaviSelectCreate").val() },
+                descrizione:  $$(".descrizionePlicoEditCreate").val(),
+                chiavi: chiaviPlicoList,
+                validitaDa: new Date(formatDateFromItalian($$(".datePickerFrom").val())),
+                validitaA: new Date(formatDateFromItalian($$(".datePickerTo").val())),
+                dipendente: { idDipendente: parseInt($$(".dipendentiPlicoSelectCreate").val()) }
+		};
+    
+    createPlico(data);
+}
+
+function getConnectionStatus(){
+    if(!navigator.onLine){
+        myApp.alert("Connessione assente!", "Attenzione");
+    }
+}
 
 
 // VA TESTATO BENE, funzione che chiude la tastiera al click del pulsante 'vai'
