@@ -21,9 +21,7 @@
         <icon density="xhdpi" src="resources/android/icon/xhdpi.png" />
         <icon density="xxhdpi" src="resources/android/icon/xxhdpi.png" />
         <icon density="xxxhdpi" src="resources/android/icon/xxxhdpi.png" />
-        <preference name="android-minSdkVersion" value="27" />
-        <preference name="android-targetSdkVersion" value="27" />
-        <preference name="android-compileSdkVersion" value="27" />
+        <preference name="android-minSdkVersion" value="14" />
         <preference name="android-windowSoftInputMode" value="adjustPan" />
         <allow-intent href="market:*" />
     </platform>
@@ -58,7 +56,7 @@
         <preference name="StatusBarBackgroundColor" value="#000000" />
     </platform>
     <preference name="DisallowOverscroll" value="true" />
-    
+    <preference name="phonegap-version" value="cli-8.1.1" />
     <plugin name="cordova-plugin-certificates" spec="0.6.4" />
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
