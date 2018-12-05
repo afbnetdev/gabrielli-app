@@ -3,6 +3,7 @@
 Initial setup
  ---------------------------------------*/
 
+//var URL_ENDPOINT = 'https://portal.gabriellispa.it';
 var URL_ENDPOINT = 'https://portal.gabriellispa.it';
 
 //Funzione per settare un obj nel sessionStorage
@@ -104,9 +105,6 @@ function capturePhotoWithFile() {
 /*
  * LOGICA SIMILE PER LE ISPEZIONI, CAMBIA LA POSSIBILITA' DI INSERIRE PIU' FOTO
  */
-
-
-
 
 function onPhotoDataSuccessMULTI(imageData) {
     var numeroImg = $$('.imgContent').length;
@@ -683,7 +681,6 @@ function prepareSubmitIspezioneDettaglio(status){
             myApp.alert("Valuta tutti i controlli", "Attenzione");
             return;
         }
-           
     }
     var commenti = $$(".commentiIspezioneText").val() ? $$(".commentiIspezioneText").val() : 'Nessun Commento';
     var controllore = window.sessionStorage.username;
@@ -1275,6 +1272,13 @@ function prepareCreatePlico(){
     
     createPlico(data);
 }
+
+function getConnectionStatus(){
+    if(!navigator.onLine){
+        myApp.alert("Connessione assente!", "Attenzione");
+    }
+}
+
 
 // VA TESTATO BENE, funzione che chiude la tastiera al click del pulsante 'vai'
 

@@ -590,6 +590,7 @@ function sendIspezioneHeader(commenti,controllore,dataIspezione,presenti,tipoEve
         }
     });
 }
+
 function submitIspezioneDettaglio(status,jsonObj, commenti,controllore,dataIspezione,presenti,tipoEvento,puntoVendita){
     var obj = new Object();
     obj.idIspezione= $$(".idIspezione").text();
@@ -616,6 +617,14 @@ function submitIspezioneDettaglio(status,jsonObj, commenti,controllore,dataIspez
         contentType: 'application/json',
         crossDomain: true,
         
+        beforeSend: function(data){
+            //Before sending inspection check if there is an available connection
+            if(!navigator.onLine){
+                myApp.alert("Connessione assente, per non perdere i dati, non chiudere l'applicazione e salvare in presenza di connessione.", "Attenzione");
+                myApp.hidePreloader();
+                return;
+            }
+        },
         success: function (data) {
          
            if(status === "I"){
