@@ -3,8 +3,8 @@
 Initial setup
  ---------------------------------------*/
 
-//var URL_ENDPOINT = 'https://portal.gabriellispa.it';
-var URL_ENDPOINT = 'http://portal.gabriellispa.it';
+var URL_ENDPOINT = 'https://portal.gabriellispa.it';
+//var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 
 //Funzione per settare un obj nel sessionStorage
 
